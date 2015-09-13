@@ -1,0 +1,28 @@
+{
+  "name": "staddle",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mattbegent/staddle.git"
+  },
+  "main": [
+    "index.html",
+    "assets/js/main.js",
+    "assets/less/main.less"
+  ],
+  "devDependencies": {
+    "jquery": "1.11.0",
+    "respond": "latest",
+    "selectivizr": "latest"
+  },
+  "homepage": "https://github.com/mattbegent/boilerplate",
+  "_release": "c760c60889",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "c760c60889d39cef9c60c8477502da295d06bb1c"
+  },
+  "_source": "git://github.com/mattbegent/boilerplate.git",
+  "_target": "*",
+  "_originalSource": "boilerplate",
+  "_direct": true
+}
