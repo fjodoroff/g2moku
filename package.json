@@ -1,0 +1,22 @@
+{
+  "name": "funkyfunproject",
+  "version": "1.0.0",
+  "description": "Game like gamoku.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://maksim.maksimov1@hektor1.ttu.ee/git/scm/jekaterina_vesinik/funkyfunproject.git"
+  },
+  "keywords": [
+    "gamoku",
+    "gomoku",
+    "xo",
+    "gemoku",
+    "tic-tac-toe"
+  ],
+  "author": "Maksim Maksimov <maksim@infobig.ee>",
+  "license": "ISC"
+}
