@@ -14,6 +14,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="assets/css/main.css">  
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">  
+    <link rel="stylesheet" href="http://bootswatch.com/superhero/bootstrap.min.css">  
 
     <!-- For retina-display iPads -->
     <!-- <link href="assets/img/icons/retina_ipad_home.png" rel="apple-touch-icon-precomposed" sizes="144x144" type="image/png"/> -->
@@ -34,8 +36,6 @@
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <script type="text/javascript" src="assets/js/libs/respond/respond.min.js"></script>
     <![endif]-->
-	<script src="http://cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
-	<script src="assets/js/game.js"></script>
 	<style>
 		body {
 			padding: 0;
@@ -46,7 +46,42 @@
 </head>
 
 <body id="sitename">
-
+	<!-- Modal -->
+	<div class="modal fade" id="game-modal" tabindex="-1" role="dialog" aria-labelledby="game-modal-label">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<h4 class="modal-title" id="game-modal-label">G2moku</h4>
+		  </div>
+				<div class="modal-body">
+					<div class="btn-group-vertical" role="group" aria-label="game-menu-buttons">
+						<div class="modal-play-modes">
+							<button type="button" class="btn btn-primary play-btn">Player <span class="label label-default">VS</span> Player</button>
+							<label>Tile size:</label>
+							<input type="text" name="board-size" placeholder="Type size. widthXheight. For example 20x20..." value="20x20">
+						</div>
+						<div class="modal-main-btns">
+							<!-- <button type="button" class="btn btn-primary play-btn">Play</button> -->
+							<button type="button" class="btn btn-info">Game Statistics</button>
+						</div>
+					</div>
+				</div>
+<!-- 				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div> -->
+			</div>
+	    </div>
+	</div>
+	<style>
+		#game-modal .modal-body button,
+		#game-modal .modal-body div {
+			width: 100%;
+		}
+	</style>
     <!--[if lt IE 8]>
         <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/" target="_blank">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -62,6 +97,9 @@
         g.src='//www.google-analytics.com/ga.js';
         s.parentNode.insertBefore(g,s)}(document,'script'));
     </script> -->
-
+	<script src="http://cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
+	<script src="assets/js/libs/jquery/jquery.min.js"></script>
+	<script src="assets/js/libs/bootstrap/bootstrap.min.js"></script>
+	<script src="assets/js/game.js"></script>
 </body>
 </html>

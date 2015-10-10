@@ -182,6 +182,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default Tasks
+	grunt.registerTask('work', ['less', 'jshint', 'connect', 'watch']);
     grunt.registerTask('default', ['less','jshint','uglify','imagemin','clean','assemble','copy','connect','watch']);
 
 };
