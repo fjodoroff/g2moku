@@ -1,0 +1,27 @@
+.logo{
+	width:50%;
+}
+#game-modal .modal-body .logo {
+	width: 100%;
+}
+.selectType{
+	width:300px;
+}
+.settingsB{
+	margin-top:25px;
+	background-color:#23282D;
+}
+.backG{
+	background-color: #23313E !important;
+}
+.labelSize{
+	font-size:15px;
+}
+.faceI{
+	width:15%;
+}
+.mainBtns{
+margin:0 auto;
+width:325px;
+
+}
