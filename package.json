@@ -39,6 +39,7 @@
     "ejs": "^2.3.4",
     "express": "^4.13.3",
     "grunt": "*",
+    "grunt-concurrent": "^2.0.3",
     "grunt-contrib-clean": "*",
     "grunt-contrib-connect": "*",
     "grunt-contrib-copy": "*",
@@ -47,7 +48,16 @@
     "grunt-contrib-less": "*",
     "grunt-contrib-uglify": "*",
     "grunt-contrib-watch": "*",
+    "grunt-env": "^0.4.4",
+    "grunt-istanbul": "^0.6.1",
+    "grunt-mocha-test": "^0.12.7",
+    "grunt-nodemon": "^0.4.0",
+    "mocha": "^2.3.3",
+    "nock": "^2.15.0",
     "path": "^0.12.7",
-    "serve-favicon": "^2.3.0"
+    "request": "^2.65.0",
+    "serve-favicon": "^2.3.0",
+    "should": "^7.1.0",
+    "supertest": "^1.1.0"
   }
 }
