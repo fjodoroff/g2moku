@@ -13,7 +13,7 @@ var favicon = require('serve-favicon');
 	// host     : 'localhost',
 	// user     : 'root',
 	// password : '',
-	// database : 'bot4vk'
+	// database : ''
 // });
 
 var app = global.app = express();
@@ -27,8 +27,15 @@ app.set('PORT', port);
 app.use('/coverage', express.static(__dirname + '/../test/coverage/reports'));
 // use middleware
 //app.use(morgan('dev'))
-app.use(cookieParser('secret')); 
-app.use(express.static(path.join(__dirname, '/../_site')));
+app.use(cookieParser('secret'));
+
+var dirs = __dirname.split('/'),
+	onProduction = false;
+for(var i = 0; i < dirs.length; i++) {
+	if(dirs[i].indexOf('axive') != -1) onProduction = true;
+}
+
+app.use(express.static(path.join(__dirname, !onProduction ? '/../_site' : '_site')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 //app.use(favicon(path.join(__dirname, '../_site/favicon.ico')));

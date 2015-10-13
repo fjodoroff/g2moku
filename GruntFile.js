@@ -91,7 +91,10 @@ module.exports = function(grunt) {
             '<%= pkg.staddle.js %>/libs/selectivizr/**/*',
             '!<%= pkg.staddle.js %>/libs/selectivizr/selectivizr.js'
           ],
-          html: ['<%= pkg.staddle.site %>/**/*.html','!<%= pkg.staddle.site %>/<%= pkg.staddle.assets %>/**/*.html']
+          html: ['<%= pkg.staddle.site %>/**/*.html','!<%= pkg.staddle.site %>/<%= pkg.staddle.assets %>/**/*.html'],
+		  production: [
+			'dist'
+		  ]
 		},
 
 
@@ -112,6 +115,58 @@ module.exports = function(grunt) {
               }
             ]
           },
+		production: {
+			files: [
+				{
+					expand: true,
+					cwd    : 'app',
+					src: [
+						'**/*',
+					], 
+					dest: 'dist'
+				},
+				{
+					expand: true,
+					cwd    : 'bower_components',
+					src: [
+						'phaser/build/**/*',
+						'jquery/dist/**/*',
+						'bootstrap/dist/**/*',
+						'backbone/*.js',
+					], 
+					dest: 'dist/bower_components/'
+				},
+				{
+					expand: true,
+					cwd    : '_site',
+					src: [
+						'**/*',
+					], 
+					dest: 'dist/_site/'
+				},
+				{
+					expand: true,
+					cwd    : 'assets',
+					src: [
+						'**/*',
+					], 
+					dest: 'dist/assets/'
+				},
+				{
+					expand: true,
+					cwd    : 'node_modules',
+					src: [
+						'ejs/**/*',
+						'body-parser/**/*',
+						'cookie-parser/**/*',
+						'express/**/*',
+						'path/**/*',
+						'serve-favicon/**/*',
+					], 
+					dest: 'dist/node_modules'
+				},				
+			]
+		},
           jslibs: { 
             files: [
               { 
@@ -245,7 +300,7 @@ module.exports = function(grunt) {
           watchcontent: {
             files: [
               '<%= pkg.staddle.content %>/**/*.hbs'
-            ], 
+            ],
             tasks: ['clean:html','assemble']
           }
         }    
@@ -270,6 +325,7 @@ module.exports = function(grunt) {
 
     // Default Tasks
 	grunt.registerTask('server', ['concurrent:target']);
+	grunt.registerTask('dist', ['clean:production', 'copy:production']);
 	grunt.registerTask('work', ['less', 'jshint', 'connect', 'watch']);
 	grunt.registerTask('test', ['mochaTest:unit', 'mochaTest:route']);
 	grunt.registerTask('coverage', ['jshint', 'clean:coverage', 'copy:views', 'env:coverage',
