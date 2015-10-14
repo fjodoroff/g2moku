@@ -169,10 +169,10 @@ $(document).ready(function(){
 		// map.replace(24, 46);
 		// map.replace(12, 34);
 		// setInterval(function(){
-			// map.forEach(function(tile){
-				// console.log(tile.x + "x" + tile.y);
-				// map.putTile(3, tile.x, tile.y);
-			// }, game, 0, 0, 10, 10);
+			map.forEach(function(tile){
+				console.log(tile.x + "x" + tile.y);
+				map.putTile(0, tile.x, tile.y);
+			}, game, 0, 0, map.width, map.height);
 		// });
 		//map.removeAllLayers();
 	});

@@ -18,6 +18,7 @@ Thumbs.db
 ######################
 
 /node_modules/*
+/dist/*
 
 # Ignore node files #
 ######################
