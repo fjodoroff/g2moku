@@ -56,7 +56,9 @@
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
-			<h2 class="modal-title" id="game-modal-label">G2moku game</h2>
+			<!-- <h2 class="modal-title" id="game-modal-label">G2moku game</h2> -->
+			<!-- <h3 class="titleName">G2moku game</h3> -->
+			<p class="mode">Player vs Player</p>
 		  </div>
 				<div class="modal-body">
 					<form>
@@ -64,21 +66,29 @@
 							<img src="assets/img/l_05.PNG"/>
 						</div>
 							<div class="row inputs">
-									 <div class="col-md-6">
+									 <div class="col-md-5">
 										<div class="form-group">
-											<label class="labelSize">Input the name:</label>	
+											<label class="labelSize">Player one:</label>	
 											<!-- <input type="text" name="username" class="form-control" placeholder="Username"> -->
 											<input type="text" class="form-control" id="inputSuccess" placeholder="Username">
 											</div>
 										</div>
-									  <div class="col-md-4">
+										<!-- <button type="button" class="btn settingsB"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button> -->
+										 <div class="col-md-5">
+										<div class="form-group">
+											<label class="labelSize">Player two:</label>	
+											<input type="text" class="form-control" id="inputSuccess" placeholder="Username">
+											</div>
+										</div>
+										
+									  <!-- <div class="col-md-4">
 										<label class="labelSize">Select sign</label>
 										<select class="form-control selectType sign">
 										  <option>X</option>
 										   <option>O</option>
 										</select>
-									 </div>
-									<button type="button" class="btn settingsB"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+									 </div> -->
+								
 							</div>
 					</form>
 						
@@ -94,8 +104,10 @@
 
 						<div class="modal-main-btns">
 							<div class="mainBtns">
-							<button type="button" class="btn btn-success play">Play as Guest</button>
-							<button type="button" class="btn btn-primary play"><img class="faceI"src="assets/img/face.png">Log in</button>
+							<button type="button" class="btn btn-success play">Play</button>
+							<button type="button" class="btn btn-warning play">Rules</button>
+							<button type="button" class="btn btn-info play">Game statistics</button>
+							<!-- <button type="button" class="btn btn-primary play"><img class="faceI"src="assets/img/face.png">Log in</button> -->
 						
 							</div>
 							

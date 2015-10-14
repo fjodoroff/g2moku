@@ -1,5 +1,5 @@
 .logo{
-	width:50%;
+	width:30%;
 }
 #game-modal .modal-body .logo {
 	width: 100%;
@@ -22,6 +22,17 @@
 }
 .mainBtns{
 margin:0 auto;
-width:325px;
+width:270px;
 
+}
+.mode{
+	font-size: 21px;
+    font-weight: 500;
+    color: #ECB861;
+    margin: 0 auto;
+    width: 170px;
+}
+.titleName{
+	width: 200px;
+    margin: 0 auto;
 }
