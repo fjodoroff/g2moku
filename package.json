@@ -33,15 +33,31 @@
     "port": 8080
   },
   "devDependencies": {
-    "grunt": "*",
-    "grunt-contrib-less": "*",
-    "grunt-contrib-watch": "*",
-    "grunt-contrib-jshint": "*",
-    "grunt-contrib-clean": "*",
-    "grunt-contrib-imagemin": "*",
     "assemble": "*",
+    "body-parser": "^1.14.1",
+    "cookie-parser": "^1.4.0",
+    "ejs": "^2.3.4",
+    "express": "^4.13.3",
+    "grunt": "*",
+    "grunt-concurrent": "^2.0.3",
+    "grunt-contrib-clean": "*",
     "grunt-contrib-connect": "*",
     "grunt-contrib-copy": "*",
-    "grunt-contrib-uglify": "*"
+    "grunt-contrib-imagemin": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-less": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-env": "^0.4.4",
+    "grunt-istanbul": "^0.6.1",
+    "grunt-mocha-test": "^0.12.7",
+    "grunt-nodemon": "^0.4.0",
+    "mocha": "^2.3.3",
+    "nock": "^2.15.0",
+    "path": "^0.12.7",
+    "request": "^2.65.0",
+    "serve-favicon": "^2.3.0",
+    "should": "^7.1.0",
+    "supertest": "^1.1.0"
   }
 }

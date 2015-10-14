@@ -14,6 +14,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="assets/css/main.css">  
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">  
+    <link rel="stylesheet" href="http://bootswatch.com/superhero/bootstrap.min.css">  
 
     <!-- For retina-display iPads -->
     <!-- <link href="assets/img/icons/retina_ipad_home.png" rel="apple-touch-icon-precomposed" sizes="144x144" type="image/png"/> -->
@@ -34,63 +36,27 @@
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <script type="text/javascript" src="assets/js/libs/respond/respond.min.js"></script>
     <![endif]-->
-
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+			background: black;
+		}
+	</style>
 </head>
 
 <body id="sitename">
-
+	<% include game_modal.ejs %>
+	<style>
+		#game-modal .modal-body button,
+		#game-modal .modal-body div {
+			width: 100%;
+		}
+	</style>
     <!--[if lt IE 8]>
         <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/" target="_blank">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-
-    <header class="wrapper-header" role="banner">
     
-        <div class="grid">
-            <div class="col-1">
-
-                <h1 class="title-primary">Header</h1>
-
-            </div>
-        </div>
-
-    </header><!-- .wrapper-header -->
-
-    <main class="wrapper-primary" role="main">  
-
-        
-        <div class="grid">
-            <div class="col-1"> 
-
-                <h2>Main Content</h2> 
-                <p><strong>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur massa.</strong></p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.</p>
-                <p>For help getting started with <a href="https://github.com/mattbegent/staddle" rel="external" target="_blank">Staddle</a>, see README.md and take a look at the <a href="examples/index.html">example templates</a>.</p>
-
-            </div>
-        </div>
-
-    </main><!-- .wrapper-primary -->
-
-    <footer class="wrapper-footer" role="contentinfo">
-
-        <div class="grid">
-            <div class="col-1">
-            
-                <p><small>&copy; 2015 Copyright Information</small></p>
-
-            </div>
-        </div>
-
-    </footer><!-- .wrapper-footer --> 
-
-    <!-- JavaScript -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="assets/js/libs/jquery.min.js"><\/script>')</script>
-    <script src="assets/js/main.min.js"></script>
-    
-    <script src="http://localhost:35729/livereload.js"></script> 
-    
-
     <!--[if lt IE 9]>
     <script type="text/javascript" src="assets/js/libs/selectivizr/selectivizr.js"></script>
     <![endif]-->
@@ -102,6 +68,9 @@
         g.src='//www.google-analytics.com/ga.js';
         s.parentNode.insertBefore(g,s)}(document,'script'));
     </script> -->
-
+	<script src="http://cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
+	<script src="assets/js/libs/jquery/jquery.min.js"></script>
+	<script src="assets/js/libs/bootstrap/bootstrap.min.js"></script>
+	<script src="assets/js/game.js"></script>
 </body>
 </html>
