@@ -27,12 +27,12 @@ app.set('PORT', port);
 app.use('/coverage', express.static(__dirname + '/../test/coverage/reports'));
 // use middleware
 //app.use(morgan('dev'))
-app.use(cookieParser('secret'));
+app.use(cookieParser('secret')); 
 
 var dirs = __dirname.split('/'),
 	onProduction = false;
 for(var i = 0; i < dirs.length; i++) {
-	if(dirs[i].indexOf('axive') != -1) onProduction = true;
+	if(dirs[i].indexOf('axive') !== -1) onProduction = true;
 }
 
 app.use(express.static(path.join(__dirname, !onProduction ? '/../_site' : '_site')));

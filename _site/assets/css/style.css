@@ -1,38 +1,54 @@
-.logo{
-	width:30%;
-}
-#game-modal .modal-body .logo {
+#game-modal .modal-body {
 	width: 100%;
 }
-.selectType{
-	width:300px;
+.logo{
+		max-width: 75%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
 }
-.settingsB{
-	margin-top:25px;
-	background-color:#23282D;
+.iconB{
+	margin-top:20px; 
+	background-color:#F2BD60 !important;
 }
-.backG{
-	background-color: #23313E !important;
+.iconB:hover,.setB:hover{
+	background-color:#333A7E !important;
 }
+ .setB{
+	margin-top:20px; 
+	background-color:#3D447C !important;
+
+} 
 .labelSize{
 	font-size:15px;
 }
-.faceI{
-	width:15%;
-}
-.mainBtns{
-margin:0 auto;
-width:270px;
+
+.but{
+margin:15px auto;
+/* height: 100px; */
+/* width:275px !important;  */
 
 }
-.mode{
+.title{
 	font-size: 21px;
     font-weight: 500;
-    color: #ECB861;
+    color: #02030E;
     margin: 0 auto;
     width: 170px;
 }
-.titleName{
+.players_form{
+	background-color: rgb(14, 17, 43);
+    margin-top: 5px;
+    border-style: double;
+    border-color: #0F0F1F;
+    padding: 5px;
+
+}
+.player{
+	    background-color: #2F4252;
+		padding:5px;
+}
+/* .titleName{
 	width: 200px;
     margin: 0 auto;
-}
+} */
