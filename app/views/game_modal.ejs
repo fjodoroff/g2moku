@@ -1,30 +1,145 @@
-	<!-- Modal -->
-	<div class="modal fade" id="game-modal" tabindex="-1" role="dialog" aria-labelledby="game-modal-label">
-	  <div class="modal-dialog" role="document">
-		<div class="modal-content">
-		  <div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-			<h4 class="modal-title" id="game-modal-label">G2moku</h4>
-		  </div>
-				<div class="modal-body">
-					<div class="btn-group-vertical" role="group" aria-label="game-menu-buttons">
-						<div class="modal-play-modes">
-							<button type="button" class="btn btn-primary play-btn">Player <span class="label label-default">VS</span> Player</button>
-							<label>Tile size:</label>
-							<input type="text" name="board-size" placeholder="Type size. widthXheight. For example 20x20..." value="20x20">
-						</div>
-						<div class="modal-main-btns">
-							<!-- <button type="button" class="btn btn-primary play-btn">Play</button> -->
-							<button type="button" class="btn btn-info">Game Statistics</button>
-						</div>
-					</div>
-				</div>
-<!-- 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
-				</div> -->
-			</div>
-	    </div>
-	</div>
+
+<body id="sitename" class="modal-open" style="padding-right: 17px;">
+        <!-- Modal -->
+    <div class="modal fade in" id="game-modal" tabindex="-1" role="dialog" aria-labelledby="game-modal-label" style="display: block;">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <p class="title">Player vs Player</p>
+          </div>
+						<div class="logo">
+                            <!-- <img  src="assets/img/l_12_size.PNG"> -->
+							<img  src="assets/img/l_12_size.PNG">
+                        </div>
+                <div class="modal-body">
+ 
+                    
+						<form class="row players_form">
+						
+						
+                                <div class="player col-sm-10 col-md-12 ">
+                                        <div class="row">
+                                            <div class=" col-xs-6 col-sm-4 col-md-4">
+                                                    <label class="labelSize">Player one:</label>  
+                                                    <input type="text" class="form-control" id="inputSuccess" placeholder="Username">
+                                            </div>
+                                            <div class="col-xs-4 col-sm-2 col-md-2">
+                                                <button type="button" class="btn btn-default iconB"><img src="assets/img/circle1.png" ></button>
+                                            </div>
+                                            <div class="col-xs-5 col-sm-2 col-md-2">
+                                                <button type="button" class="btn btn-default setB"><img src="assets/img/icon2.png"></button>
+                                            </div>
+                                            <div class="player col-md-2">
+                                            
+                                            </div>
+                                        </div>
+										
+                                </div>
+								    <div class="player  col-sm-10 col-md-12">
+                                        <div class="row">
+                                            <div class="col-xs-6 col-sm-4 col-md-4">
+                                                    <label class="labelSize">Player two:</label>  
+                                                    <input type="text" class="form-control" id="inputSuccess" placeholder="Username">
+                                            </div>
+                                            <div class="col-xs-4 col-sm-2 col-md-2">
+                                                 <button type="button" class="btn btn-default iconB"><img src="assets/img/square.png"></button>
+                                            </div>
+                                            <div class="col-xs-5 col-sm-2  col-md-2">
+                                                <button type="button" class="btn btn-default setB"><img src="assets/img/icon2.png" ></button>
+                                            </div>
+                                            <div class="player col-md-2">
+                                            
+                                            </div>
+                                        </div>
+										
+                                </div>
+								  <!--player inputs -->
+								<div class="but">
+								<button type="button" class="btn btn-success but">Play</button>
+								<button type="button" class="btn btn-warning but">Rules</button>
+								<button type="button" class="btn btn-info but">Game statistics</button>
+								</div>
+							  </form>
+							<!-- 	<div class="row">
+									<div class="col-md-12">
+										<div class="row">
+											<div class="col-md-3">
+												<button type="button" class="btn btn-success but">Play</button>
+											</div>
+											<div class="col-md-6">
+													<button type="button" class="btn btn-info but">Game statistics</button>
+											</div>
+											<div class="col-md-3">
+													<button type="button" class="btn btn-warning but">Rules</button>
+											</div>
+										</div>
+									</div>
+								
+								</div> 
+							<!-- 	<div class="mainBtns">
+									<button type="button" class="btn btn-success">Play</button>
+									<button type="button" class="btn btn-warning">Rules</button>
+									<button type="button" class="btn btn-info">Game statistics</button>                        
+								</div>
+                            
+                             -->
+                       
+ 
+						
+
+                         
+ 
+ 
+ 
+	
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+                            </div>
+ 
+                                        
+                                        <!-- <button type="button" class="btn iconB"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button> -->
+                                    <!--      <div class="col-md-5"> 
+                                        <div class="form-group">
+ 
+                                        </div>
+ 
+                                
+                                        </div> -->
+            <!--         </form> -->
+                        
+                        
+                        <!-- <div class="btn-group-vertical" role="group" aria-label="game-menu-buttons"> -->
+                        <!-- <div class="modal-play-modes">
+                        <br>
+                            
+                            <button type="button" class="btn btn-primary play-btn">Player <span class="label label-default">VS</span> Player</button>
+                            <label>Tile size:</label>                           
+                            <input type="text" name="board-size" placeholder="Type size. widthXheight. For example 20x20..." value="20x20">
+                        </div> -->
+ 
+
+                <!--     </div> -->
+                </div>
+<!--                 <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div> -->
+            </div>
+        </div>
+<body>
