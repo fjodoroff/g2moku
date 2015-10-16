@@ -8,6 +8,7 @@ Player.prototype = {
 		this.moving = false;
 		this.playingTile = false;
 		this.moves = [];
+		this.timer = false;
 		if(isObject(name)) {
 			this.name = name.name;
 			this.playingTile = new Phaser.Tile(g2moku.layer, name.playingTileIndex);
@@ -23,23 +24,55 @@ Player.prototype = {
 			//g.playingTile = g.map.getImageIndex(index);
 		}
 	},
+	startTimer: function(){
+		var p = this;
+		this.startMove();
+		this.timer = new Timer(1000, function(tim){
+			var numbers = (new Date((tim.count * 1000))).toISOString().match(/(\d{2}:\d{2}:\d{2})/);
+			p.$box.find('.time-elapsed').text(numbers[0]);
+		});
+	},
 	startMove: function(tile){
 		this.moving = true;
+		this.$box.addClass('active');
 	},
 	endMove: function(tile){
+		this.$box.removeClass('active');
+		this.timer.clear();
+		
 		this.moving = false;
-		g2moku.players.willPlay(this);
+		//g2moku.players.willPlay(this);
 	},
 	moveToTile: function(tile) {
 		//this.startMoving(tile);
 		var g = g2moku,
 			p = this;
-		this.startMove(tile);
 		this.moves.push(tile);
 		if(this.playingTile === false) this.playingTile = new Phaser.Tile(g2moku.layer, 15);
 		g.map.putTile(p.playingTile, g.layer.getTileX(g.marker.x), g.layer.getTileY(g.marker.y));
 		//callback('asas');
 		this.endMove(tile);
+	}
+};
+function Timer(interval, callback) {
+	this.count = 0;
+	this.callback = callback;
+	this.interval = interval;
+	this.startTimestamp = 0;
+	t = this;
+	this.clear = function() {
+		clearInterval(this.id);
+	};
+	this.initialize();
+	return this;
+}
+Timer.prototype = {
+	initialize: function() {
+		this.startTimestamp = +new Date();
+		this.id = setInterval(function(){
+			t.count++;
+			t.callback(t);
+		}, this.interval);
 	}
 };
 var PlayerBot = Class.create();

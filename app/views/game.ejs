@@ -14,6 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
 	
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">  
 	<link rel="stylesheet" href="assets/css/style.css">
@@ -50,8 +51,7 @@
 
 <body id="sitename">
 	<% include game_modal.ejs %>
-	<style>
-	</style>
+
     <!--[if lt IE 8]>
         <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/" target="_blank">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -67,11 +67,16 @@
         g.src='//www.google-analytics.com/ga.js';
         s.parentNode.insertBefore(g,s)}(document,'script'));
     </script> -->
+	<!--<script src="assets/libs/phaser/phaser.min.js"></script>-->
+	<script>
+		var g2moku = {};
+	</script>
 	<script src="http://cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
 	<script src="assets/js/libs/phaser-debug/phaser-debug.js"></script>
 	<script src="assets/js/libs/jquery/jquery.min.js"></script>
 	<script src="assets/js/libs/prototype/prototype.js"></script>
 	<script src="assets/js/libs/bootstrap/bootstrap.min.js"></script>
+	<script src="assets/js/exceptions.js"></script>
 	<script src="assets/js/player.js"></script>
 	<script src="assets/js/game.js"></script>
 </body>

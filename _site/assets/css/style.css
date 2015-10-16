@@ -1,33 +1,44 @@
+html {
+	overflow: hidden!important;
+}
+#game-modal {
+	padding-right: 10px!important;
+    padding-left: 10px!important;
+}
 #game-modal .modal-body {
 	width: 100%;
+	padding: 0;
 }
 .logo{
-		max-width: 75%;
-        height: auto;
-        display: block;
-        margin: 0 auto;
+	max-width: 100%;
+	height: auto;
+	display: block;
+	margin: 0 auto;
 }
 .iconB{
 	margin-top:20px; 
 	background-color:#F2BD60 !important;
 }
-.iconB:hover,.setB:hover{
-	background-color:#333A7E !important;
-}
- .setB{
-	margin-top:20px; 
-	background-color:#3D447C !important;
-
-} 
 .labelSize{
 	font-size:15px;
 }
 
 .but{
-margin:15px auto;
+	display: inline;
+	margin:15px auto;
+    margin-bottom: 3px;
 /* height: 100px; */
 /* width:275px !important;  */
 
+}
+.but .btn-play {
+	background-color: #378037!important;
+}
+.but .btn-rules {
+	background-color: #AB6B12!important;
+}
+.but .btn-statistics {
+	background-color: #2989A5!important;
 }
 .title{
 	font-size: 21px;
@@ -38,15 +49,161 @@ margin:15px auto;
 }
 .players_form{
 	background-color: rgb(14, 17, 43);
-    margin-top: 5px;
     border-style: double;
     border-color: #0F0F1F;
     padding: 5px;
-
+    margin-top: 0;
 }
-.player{
-	    background-color: #2F4252;
-		padding:5px;
+.players_form .player .alert .close{
+	position: static;
+    padding-left: 6px;
+}
+.players_form .player .alert{
+	position: absolute;
+    right: 0;
+    top: 0;
+    padding: 7px;
+    background-color: #B61313;
+}
+.players_form .player{
+	background-color: rgb(23, 23, 58);
+	padding: 10px 15px;
+	border-bottom: 10px solid #0E112B;
+}
+.players_form .player button.square-btn {
+	height: 41px;
+    padding: 0;
+    width: 41px;
+    border: 2px solid #4F9FB7;
+    margin-top: 26px;
+    float: left;
+	margin-left: 5px;
+}
+.players_form .player button.square-btn:first-of-type {
+    margin-left: 0;
+}
+.players_form .player button.square-btn-right {
+    height: 41px;
+    padding: 0;
+    margin-top: 26px;
+    border: 1px solid #3E396A;	
+	background-color:#3D447C !important;
+}
+.players_form .player button.square-btn-right img,
+.players_form .player button.square-btn img{
+	height: 100%;
+    width: auto;
+    padding: 0;
+}
+.iconB:hover,
+.players_form .player button.square-btn:hover{
+	background-color:#333A7E !important;
+}
+.players_form .player button.btn-remove-player,
+.players_form .player button.btn-add-player{
+	margin-right: 5px;
+}
+.modal-header .title .label{
+	background-color: #2E672E;
+}
+.modal-header .title{
+	width: 100%;
+}
+.modal-header {
+	position: absolute;
+    right: 0;
+    left: 0;
+    background-color: transparent!important;
+}
+.player-boxes {
+	position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.player-box .avatar span{
+	line-height: 128px;
+    vertical-align: middle;
+    display: block;
+    font-size: 50px;
+    text-align: center;
+    font-weight: bold;
+}
+.player-box .avatar{
+	position: relative;
+    height: 100%;
+}
+.player-box .playing-tile{
+	width: 34px;
+	height: 34px;
+	position: absolute;
+	top: 2px;
+	right: 2px;
+}
+.player-box:hover,
+.player-box.active{
+	opacity: 1!important;	
+}
+.player-box .bottom-panel{
+	position: absolute;
+    bottom: 10px;
+    width: 128px;
+    text-align: center;
+}
+.player-box {
+	position: absolute;
+	width: 128px;
+	height: 128px;
+	opacity: 0.5;
+}
+.player-box-top-left {
+	left: 0;
+	top: 0;
+	background: red;
+}
+.player-box-top-right {
+	right: 0;
+	top: 0;
+	background: green;
+}
+.player-box-bottom-left {
+	left: 0;
+	bottom: 0;
+	background: blue;
+}
+.player-box-bottom-right {
+	right: 0;
+	bottom: 0;
+	background: yellow;
+}
+.game-mode.player-vs-player .player-square-btns .btn-add-player {
+	width: 41px;
+	background: url('/assets/img/plus.png') no-repeat;
+	background-size: 34px;
+	background-position: 3px 4px;
+	padding: 2px!important;
+	background-color: #378037!important;
+	border: none;
+}
+.game-mode.player-vs-player .player-square-btns .btn-remove-player {
+	width: 41px;
+	background: url('/assets/img/minus.png') no-repeat;
+	background-size: 34px;
+	background-position: 3px 4px;
+	padding: 2px!important;
+	background-color: #B71414!important;
+	border: none;
+}
+.game-mode.player-vs-player .btn-player-tile {
+	background: url('/assets/tiles/gridtiles.png');
+    background-position: 152px 40px;
+    /* background-size: 105%; */
+    background-size: 530px 400px;
+}
+.game-mode.player-vs-player .btn-player-tile.active {
+	border-color: #B51313 !important;
+	outline: none!important;
 }
 /* .titleName{
 	width: 200px;
