@@ -65,6 +65,9 @@ html {
     padding: 7px;
     background-color: #B61313;
 }
+/* .players_form .player:hover{
+	background-color: rgb(40, 40, 103);
+} */
 .players_form .player{
 	background-color: rgb(23, 23, 58);
 	padding: 10px 15px;
@@ -81,6 +84,21 @@ html {
 }
 .players_form .player button.square-btn:first-of-type {
     margin-left: 0;
+}
+.players_form .player .btn-player-tile {
+	opacity: 0.65;
+}
+.players_form .player .btn-player-tile.player-tile-disabled {
+    border: 2px solid red!important;
+	outline: red;
+    outline-style: dashed;
+	opacity: 0.4;	
+}
+.players_form .player .btn-player-tile.player-tile-selected {
+    border: 2px solid #17173A!important;
+	outline: #5CB85C;
+    outline-style: dashed;
+	opacity: 1;
 }
 .players_form .player button.square-btn-right {
     height: 41px;

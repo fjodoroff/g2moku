@@ -1,5 +1,39 @@
+gameTile = Class.create();
+gameTile.prototype = {
+	selected: false,
+	$player: null,
+	key: null,
+	//classes: ,
+	imgPath: '',
+	$element: null,
+	initialize: function(key, imgPath) {
+		this.key = key;	
+		this.imgPath = imgPath;
+		this.classes = ['btn', 'btn-default', 'square-btn', 'btn-player-tile'];
+	},
+	setPlayer: function($player){
+		if(!this.selected) {
+			this.selected = true;
+			this.$player = $player;
+		}
+	},
+	removeClass: function(cl){
+		this.cl = '';
+	},
+	setClass: function(cl){
+		this.cl = cl;
+	},
+	unsetPlayer: function(){
+		this.$player = null;		
+		this.selected = false;		
+	},
+	getHTML: function(){
+		var btnHTML = '<button type="button" class="' + this.classes.join(' ') + " " + this.cl +'"><img src="' + this.imgPath + '"></button>'; 
+		return btnHTML;
+	}
+};	
 jQuery(document).ready(function(){
-	var newG2moku = {
+	var newG2moku = {		
 		debug: true,
 		$gameModal: null,
 		$playerBoxes: jQuery('.player-boxes'),
@@ -7,13 +41,62 @@ jQuery(document).ready(function(){
 		game: new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO),
 		map: null,
 		MAX_PLAYERS: 4,
-		layer: null,
+		layer: null,  
 		cursors: null,
 		marker: null,
-		currentTile: null,
+		currentTile: null, 
 		sprites: null,
 		canvas: null,
 		gameStarted: false,
+		gameTiles: {
+			availableTiles: [],
+			allTiles: [],
+			next: function(){
+				return this.availableTiles.length > 0 ? this.availableTiles.pop() : false;
+			},
+			push: function(tile){
+				this.availableTiles.push(tile);
+			},
+			selectTile: function($tile, $player){
+				console.log($player.index());
+				this.availableTiles.each(function(e, i){
+					//console.log(this.availableTiles[$tile.index()]);
+					if(e.key == g2moku.gameTiles.availableTiles[$tile.index()].key) {
+						console.log('setPlayer');
+						e.setPlayer($player);
+					}
+				});
+			},
+			selectedTile: function($player){
+				var tile = null;
+				this.availableTiles.each(function(e, i){
+					//console.log(this.availableTiles[$tile.index()]);
+					if(e.selected && e.$player.index() == $player.index()) {
+						return e;
+					}
+				});
+				return tile;
+			},
+			deselectTile: function($tile){
+				var tile = this.availableTiles[$tile.index()];
+				tile.unsetPlayer();
+			},
+			parseFromServer: function(callback){
+				var serverResponse = {
+					'green': '/assets/img/tiles/square1.png',
+					'yellow': '/assets/img/tiles/square2.png',
+					'rose': '/assets/img/tiles/square3.png',
+					'blue': '/assets/img/tiles/square5.png'
+				};
+				for(key in serverResponse) {
+					var tile = new gameTile(key, serverResponse[key]);
+					this.allTiles.push(tile);
+					this.availableTiles.push(tile);
+				}
+				console.log(this.availableTiles);
+				callback(this);//returning back this object
+			}
+		},
 		gameErrors: {
 			gameMenu: []
 		},
@@ -266,25 +349,15 @@ jQuery(document).ready(function(){
 			jQuery('body').prepend(player.$box);
 			player.$box.fadeIn(300);
 		},
-		getGameMenuPlayerRowTileButtonHTML: function(object){
-			var btnHTML = '<button type="button" class="btn btn-default square-btn btn-player-tile">' +
-					'<img src="assets/img/square.png">' +
-				'</button>'; 
-			if(isObject(object)) {
-				return btnHTML;
-			} else {
-				
-			}
-		},
-		makeGameMenuPlayerRow: function(tilesNum, addButton) {//in second iteration tilesNum will be depreceted
+		makeGameMenuPlayerRow: function(tiles, addButton) {//in second iteration tilesNum will be depreceted
 			var buttonsContent = '',
 				addButtonContent = '',
 				uniqNumber = +new Date(),
 				numbers = [
 					"one", "two", "three", "four", "five", "six"
 				];
-			for(var i = 0; i < tilesNum; i++) {
-				buttonsContent += g2moku.getGameMenuPlayerRowTileButtonHTML({});
+			for(var i = 0; i < tiles.length; i++) {
+				buttonsContent += tiles[i].getHTML();
 			}
 			if(addButton) {
 				addButtonContent += ('<button type="button" class="btn btn-default square-btn-right btn-add-player pull-right">' +
@@ -293,7 +366,7 @@ jQuery(document).ready(function(){
 			var $playerRow = jQuery('<div class="player col-xs-12 col-sm-12 col-md-12" style="display: none">' +
 				'<div class="row">' +
 					'<div class="col-xs-12 col-sm-5 col-md-5">' +
-							'<label class="labelSize" for="player-input-' + uniqNumber + '">Player ' + numbers[tilesNum - 1] + ':</label>' +
+							'<label class="labelSize" for="player-input-' + uniqNumber + '">Player ' + numbers[tiles.length - 1] + ':</label>' +
 							'<input type="text" class="form-control input-player-name" id="player-input-' + uniqNumber + '" placeholder="Player name...">' +
 					'</div>' +
 					'<div class="col-xs-12 col-sm-7 col-md-7 player-square-btns"><div class="left-buttons">' + buttonsContent + "</div>" +
@@ -317,6 +390,26 @@ jQuery(document).ready(function(){
 			g2moku.$gameModal.find('.game-mode.player-vs-player').append($playerRow);
 			$playerRow.slideDown(300);			
 		},
+		reinitPlayerTiles: function(tiles){
+			console.log('reinitting');
+			console.log(tiles);
+			g2moku.$gameModal.find('.game-mode.player-vs-player').children().each(function(i, e){
+				var buttonsNum = jQuery(this).parent().children().length,
+					newButtons = '';
+				for(var k = 0; k < tiles.length; k++) {
+					console.log();
+					if(tiles[k].selected) {
+						if(tiles[k].$player.index() == i) {
+							tiles[k].setClass('player-tile-selected');
+						} else {
+							tiles[k].setClass('player-tile-disabled');
+						}
+					}
+					newButtons += tiles[k].getHTML();
+				}
+				jQuery(this).find('.left-buttons').html(newButtons);			
+			});
+		},
 		gameStart: function(gameMode, data){
 			var g = this;
 			switch (gameMode) {
@@ -338,7 +431,7 @@ jQuery(document).ready(function(){
 					break
 			}
 
-		},
+		}
 	};
 	//adding properties to g2moku object
 	for(var property in newG2moku) {
@@ -375,6 +468,7 @@ jQuery(document).ready(function(){
 				if($input.val().length == 0) throw new g2moku.exceptions.GameFormException("Please type player name", $input[0]);
 				if($input.val().length <= 4) throw new g2moku.exceptions.GameFormException("Player name must be more than 4", $input[0]);
 				data.push({
+					tile: g2moku.gameTiles.selectedTile($this),
 					input: $input.val()
 				});
 			} catch(e) {
@@ -386,57 +480,60 @@ jQuery(document).ready(function(){
 		});//(e instanceof TypeError)
 		if(g2moku.gameErrors.gameMenu.length == 0) {
 			g2moku.$gameModal.modal('hide');
+			console.log(data);
 			g2moku.gameStart('playerVSplayer', data);			
 		}		
 		e.preventDefault();
 	});
+	g2moku.$gameModal.on('click', '.btn-player-tile', function(e){
+		var $tile = jQuery(this),
+			$player = $tile.parent().parent().parent().parent(),
+			players = g2moku.$gameModal.find('.game-mode.player-vs-player').children().length;
+		$tile.toggleClass('player-tile-selected');
+		//if()
+		if($tile.hasClass('player-tile-selected')) {
+			g2moku.gameTiles.selectTile($tile, $player);
+		} else {
+			g2moku.gameTiles.deselectTile($tile);
+		}
+		g2moku.reinitPlayerTiles(g2moku.gameTiles.availableTiles.slice(0, players));
+		e.preventDefault();
+	});
 	g2moku.$gameModal.on('click', '.btn-add-player, .btn-remove-player', function(e){
 		var players = g2moku.$gameModal.find('.game-mode.player-vs-player').children().length;
-		if(jQuery(this).parent().parent().parent().index() !== g2moku.MAX_PLAYERS - 1)  {
+		if(jQuery(this).parent().parent().parent().index() !== g2moku.MAX_PLAYERS - 1) {
 			jQuery(this).toggleClass('btn-remove-player btn-add-player');
 			if(jQuery(this).hasClass('btn-remove-player')) {
 				if(players < g2moku.MAX_PLAYERS) {
-					g2moku.makeGameMenuPlayerRow(players + 1, true);
-					
-					g2moku.$gameModal.find('.game-mode.player-vs-player').children().each(function(i, e){
-						var buttonsNum = jQuery(this).parent().children().length,
-							newButtons = '';
-						for(var k = 0; k < (jQuery(this).hasClass('btn-remove-player') ? players - 1: players + 1); k++) {
-							newButtons += g2moku.getGameMenuPlayerRowTileButtonHTML({});
-						}
-						jQuery(this).find('.left-buttons').html(newButtons);			
-					});
+					g2moku.makeGameMenuPlayerRow(g2moku.gameTiles.availableTiles.slice(0, players + 1), true);
+					g2moku.reinitPlayerTiles(g2moku.gameTiles.availableTiles.slice(0, players + 1));
 				}
 			} else {
 				jQuery(this).parent().parent().parent().slideUp(250, function(){
 					$(this).remove();
 				});
-				g2moku.$gameModal.find('.game-mode.player-vs-player').children().each(function(i, e){
-				var buttonsNum = jQuery(this).parent().children().length,
-					newButtons = '';
-				for(var k = 0; k < players - 1; k++) {
-					newButtons += g2moku.getGameMenuPlayerRowTileButtonHTML({});
-				}
-				jQuery(this).find('.left-buttons').html(newButtons);			
-			});
+				g2moku.reinitPlayerTiles(g2moku.gameTiles.availableTiles.slice(0, players - 1));			
 			}
 		}
 	});
 	g2moku.$gameModal.find('.btn-play').on('click', function(e){
 		var $players = g2moku.$gameModal.find('.game-mode.player-vs-player'),
 			$bar = g2moku.$gameModal.find('.modal-header .title');
+		g2moku.gameTiles.parseFromServer(function(gameTiles){
+			var tiles = gameTiles.availableTiles;
 			$players.empty();
-		g2moku.makeGameMenuPlayerRow(1, false);
-		g2moku.makeGameMenuPlayerRow(2, true);
-		$players.slideToggle({
-			duration: 450
-			//easing: 'easeInOutExpo'
+			g2moku.makeGameMenuPlayerRow(tiles.slice(0, 2), false);
+			g2moku.makeGameMenuPlayerRow(tiles.slice(0, 2), true);
+			$players.slideToggle({
+				duration: 450
+				//easing: 'easeInOutExpo'
+			});
+			$bar.fadeToggle(350);
+			g2moku.$gameModal.find('.btn-play-game').fadeToggle(350);
+			//g2moku.$gameModal.modal('hide');
+			//g2moku.gameStart('playerVSplayer');
+			console.log(g2moku);
 		});
-		$bar.fadeToggle(350);
-		g2moku.$gameModal.find('.btn-play-game').fadeToggle(350);
-		//g2moku.$gameModal.modal('hide');
-		//g2moku.gameStart('playerVSplayer');
-		console.log(g2moku);
 		//map.setTileSize(20, 20);
 		// map.replace(24, 46);
 		// map.replace(12, 34); 
