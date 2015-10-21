@@ -2,14 +2,20 @@ gameTile = Class.create();
 gameTile.prototype = {
 	selected: false,
 	$player: null,
+	index: 0,
 	key: null,
 	//classes: ,
 	imgPath: '',
 	$element: null,
-	initialize: function(key, imgPath) {
-		this.key = key;	
-		this.imgPath = imgPath;
+	initialize: function(key, o) {
+		this.key = key;
 		this.classes = ['btn', 'btn-default', 'square-btn', 'btn-player-tile'];
+		if(isObject(o)) {
+			this.index = o.index;
+			this.imgPath = o.imgPath;
+		} else {
+			this.imgPath = imgPath;
+		}
 	},
 	setPlayer: function($player){
 		if(!this.selected) {
@@ -28,7 +34,7 @@ gameTile.prototype = {
 		this.selected = false;		
 	},
 	getHTML: function(){
-		var btnHTML = '<button type="button" class="' + this.classes.join(' ') + " " + this.cl +'"><img src="' + this.imgPath + '"></button>'; 
+		var btnHTML = '<button type="button" data-tile-index="' + this.index + '" class="' + this.classes.join(' ') + " " + this.cl +'"><img src="' + this.imgPath + '"></button>'; 
 		return btnHTML;
 	}
 };	
@@ -48,55 +54,6 @@ jQuery(document).ready(function(){
 		sprites: null,
 		canvas: null,
 		gameStarted: false,
-		gameTiles: {
-			availableTiles: [],
-			allTiles: [],
-			next: function(){
-				return this.availableTiles.length > 0 ? this.availableTiles.pop() : false;
-			},
-			push: function(tile){
-				this.availableTiles.push(tile);
-			},
-			selectTile: function($tile, $player){
-				console.log($player.index());
-				this.availableTiles.each(function(e, i){
-					//console.log(this.availableTiles[$tile.index()]);
-					if(e.key == g2moku.gameTiles.availableTiles[$tile.index()].key) {
-						console.log('setPlayer');
-						e.setPlayer($player);
-					}
-				});
-			},
-			selectedTile: function($player){
-				var tile = null;
-				this.availableTiles.each(function(e, i){
-					//console.log(this.availableTiles[$tile.index()]);
-					if(e.selected && e.$player.index() == $player.index()) {
-						return e;
-					}
-				});
-				return tile;
-			},
-			deselectTile: function($tile){
-				var tile = this.availableTiles[$tile.index()];
-				tile.unsetPlayer();
-			},
-			parseFromServer: function(callback){
-				var serverResponse = {
-					'green': '/assets/img/tiles/square1.png',
-					'yellow': '/assets/img/tiles/square2.png',
-					'rose': '/assets/img/tiles/square3.png',
-					'blue': '/assets/img/tiles/square5.png'
-				};
-				for(key in serverResponse) {
-					var tile = new gameTile(key, serverResponse[key]);
-					this.allTiles.push(tile);
-					this.availableTiles.push(tile);
-				}
-				console.log(this.availableTiles);
-				callback(this);//returning back this object
-			}
-		},
 		gameErrors: {
 			gameMenu: []
 		},
@@ -121,12 +78,21 @@ jQuery(document).ready(function(){
 			},
 			parseFromGameModal: function(data){
 				var pl = this;
-				data.each(function(i, e){
+				console.log('//parsefromgameModal each data');
+				console.log(data);
+				data.each(function(e, i){
+					console.log('//tile i');
+					console.log(i);
+					console.log('//tile e');
+					console.log(e);
 					pl.arr.push(new Player({
 						name: e.input,
-						playingTileIndex: 23
+						tile: e.tile,
+						//playingTileIndex: e.tileIndex
+						playingTileIndex: e.index
 					}));				
 				});
+				console.log(pl.arr);
 				if(g2moku.gameStarted) this.playing = this.arr;
 				return this.arr;
 			},
@@ -335,15 +301,16 @@ jQuery(document).ready(function(){
 			var corners = [
 				'player-box-top-left', 'player-box-top-right', 'player-box-bottom-left', 'player-box-bottom-right'
 			];
+			console.log(player);
 			player.$box = jQuery('<div class="player-box ' + corners[i] + '" style="display: none;">' +
 				'<div class="avatar">' +
-					'<span>' + (player.name.substr(0, 2) + player.name.substr(-1, 1)) + '</span>' +
+					'<span>' + player.name + '</span>' +
 				'</div>' +
 				'<div class="bottom-panel">' +
 					'<span class="label label-primary time-elapsed">00:00:00</span>' +
 				'</div>' +
 				'<div class="playing-tile">' +
-					'<img src="assets/img/square.png">' +
+					'<img src="' + player.tile.imgPath + '">' +
 				'</div>' +
 			'</div>');
 			jQuery('body').prepend(player.$box);
@@ -417,8 +384,8 @@ jQuery(document).ready(function(){
 					g.gameStarted = true;
 					g.players.parseFromGameModal(data);
 					//add player box for each playing player.
-					g.players.playing.each(function(i, e){
-						g2moku.preparePlayerBlock(i, e);				
+					g.players.playing.each(function(e, i){
+						g2moku.preparePlayerBlock(e, i);				
 					});
 					//g.players.getLast()
 					//while(!this.gameStarted || !this.players.next()) {
@@ -469,6 +436,7 @@ jQuery(document).ready(function(){
 				if($input.val().length <= 4) throw new g2moku.exceptions.GameFormException("Player name must be more than 4", $input[0]);
 				data.push({
 					tile: g2moku.gameTiles.selectedTile($this),
+					tileIndex: $input.data('tile-index') ? $input.data('tile-index') : 0,
 					input: $input.val()
 				});
 			} catch(e) {

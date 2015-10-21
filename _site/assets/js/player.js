@@ -4,14 +4,15 @@ function isObject(val) {
 }
 var Player = Class.create();
 Player.prototype = {
-	initialize: function(name) {
+	initialize: function(o) {
 		this.moving = false;
 		this.playingTile = false;
 		this.moves = [];
 		this.timer = false;
-		if(isObject(name)) {
-			this.name = name.name;
-			this.playingTile = new Phaser.Tile(g2moku.layer, name.playingTileIndex);
+		if(isObject(o)) {
+			this.name = o.name;
+			this.tile = o.tile;
+			this.playingTile = new Phaser.Tile(g2moku.layer, o.playingTileIndex);
 		} else {
 			this.name = name;
 		}
