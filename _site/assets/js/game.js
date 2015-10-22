@@ -42,9 +42,11 @@ jQuery(document).ready(function(){
 	var newG2moku = {		
 		debug: true,
 		$gameModal: null,
+		$gameRules: null,
+		$gameStatistics: null,
 		$playerBoxes: jQuery('.player-boxes'),
 		$box: null,
-		game: new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO),
+		game: new Phaser.Game('100%', '100%', Phaser.AUTO),
 		map: null,
 		MAX_PLAYERS: 4,
 		layer: null,  
@@ -89,7 +91,7 @@ jQuery(document).ready(function(){
 						name: e.input,
 						tile: e.tile,
 						//playingTileIndex: e.tileIndex
-						playingTileIndex: e.index
+						playingTileIndex: e.tileIndex
 					}));				
 				});
 				console.log(pl.arr);
@@ -302,9 +304,9 @@ jQuery(document).ready(function(){
 				'player-box-top-left', 'player-box-top-right', 'player-box-bottom-left', 'player-box-bottom-right'
 			];
 			console.log(player);
-			player.$box = jQuery('<div class="player-box ' + corners[i] + '" style="display: none;">' +
+			player.$box = jQuery('<div class="player-box ' + corners[i] + '" style="display: none;" title="' + player.name + '">' +
 				'<div class="avatar">' +
-					'<span>' + player.name + '</span>' +
+					'<span>' + player.name.substring(0, 3) + '.</span>' +
 				'</div>' +
 				'<div class="bottom-panel">' +
 					'<span class="label label-primary time-elapsed">00:00:00</span>' +
@@ -407,6 +409,8 @@ jQuery(document).ready(function(){
 	g2moku.game.state.add('GameState', g2moku.gameState);
 	g2moku.game.state.start('GameState');
 	g2moku.$gameModal = jQuery('#game-modal');
+	g2moku.$gameRules = jQuery('#game-rules');
+	g2moku.$gameStatistics = jQuery('#game-statistics');
 	g2moku.$gameModal.modal({
 		backdrop: 'static'
 	});
@@ -430,13 +434,15 @@ jQuery(document).ready(function(){
 		}
 		g2moku.$gameModal.find('.game-mode.player-vs-player .player').each(function(i, e){
 			var $input = jQuery(this).find("input.input-player-name"),
-				$this = jQuery(this);
+				$this = jQuery(this),
+				selectedTile = g2moku.gameTiles.selectedTile($this);				
 			try {
+				if(selectedTile == null) throw new g2moku.exceptions.GameFormException("Choose tile", $input[0]);
 				if($input.val().length == 0) throw new g2moku.exceptions.GameFormException("Please type player name", $input[0]);
 				if($input.val().length <= 4) throw new g2moku.exceptions.GameFormException("Player name must be more than 4", $input[0]);
 				data.push({
-					tile: g2moku.gameTiles.selectedTile($this),
-					tileIndex: $input.data('tile-index') ? $input.data('tile-index') : 0,
+					tile: selectedTile,
+					tileIndex: selectedTile.index ? selectedTile.index : 0,
 					input: $input.val()
 				});
 			} catch(e) {
@@ -483,6 +489,14 @@ jQuery(document).ready(function(){
 				g2moku.reinitPlayerTiles(g2moku.gameTiles.availableTiles.slice(0, players - 1));			
 			}
 		}
+	});
+	g2moku.$gameModal.find('.btn-rules').on('click', function(e){
+		g2moku.$gameRules.slideToggle(300);
+		e.preventDefault();
+	});	
+	g2moku.$gameModal.find('.btn-statistics').on('click', function(e){
+		g2moku.$gameStatistics.slideToggle(300);
+		e.preventDefault();
 	});
 	g2moku.$gameModal.find('.btn-play').on('click', function(e){
 		var $players = g2moku.$gameModal.find('.game-mode.player-vs-player'),

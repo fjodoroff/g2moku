@@ -1,11 +1,10 @@
 var request = require('supertest');
 var express = require('express');
-var requireHelper = require('../require_helper');
-var app = express();
+var testingApp = require('../../app/main.js');
 var nock = require('nock');
 
 
-describe('game route', function () {
+describe('Game routes', function () {
 
 
   // it('should respond with a 200 with no query parameters', function (done) {
@@ -52,25 +51,11 @@ describe('game route', function () {
   // });
 
 
-  it('should respond with a 500 error due to bad jsonp data', function (done) {
-
-    // mock the flickr public feed api endpoint with invalid jsonp data that's missing parentheses
-    var jsonpData = 'jsonFlickrFeed{"items": [' +
-      '{ "title": "Boating",' +
-        '"media": {"m":"http://farm4.staticflickr.com/3727/12608622365_9e9b8b377d_m.jpg"} },' +
-      '{ "title": "Signs",' +
-        '"media": {"m":"http://farm8.staticflickr.com/7446/12608714423_efaf73400c_m.jpg"} }' +
-      ']}';
-
-    var flickrFeedApi = nock('http://api.flickr.com')
-      .get('/services/feeds/photos_public.gne?tags=california&tagmode=all&format=json')
-      .reply(200, jsonpData);
-
-    request(app)
-      .get('/?tags=california&tagmode=all')
-      .expect(404, done);
-
-  });
-
+	it('Main page should respond with a 200 answer and html as a content-type', function (done) {
+		request(testingApp)
+			.get('/')
+			.expect('Content-Type', /html/)
+			.expect(200, done);
+	});
 
 });

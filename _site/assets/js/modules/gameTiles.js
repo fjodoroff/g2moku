@@ -32,25 +32,29 @@ g2moku.gameTiles = {
 	},
 	deselectTile: function($tile){
 		var tile = this.availableTiles[$tile.index()];
-		tile.unsetPlayer();
+		console.log('deselect: ');
+		console.log(tile);
+		if(tile.selected) {
+			tile.unsetPlayer();
+		}
 	},
 	parseFromServer: function(callback){
 		var serverResponse = {
 			'green': {
 				imgPath: '/assets/img/tiles/square1.png',
-				index: 5
+				index: 61
 			},
 			'yellow': {
 				imgPath: '/assets/img/tiles/square2.png',
-				index: 28
+				index: 95
 			},
 			'rose': {
 				imgPath: '/assets/img/tiles/square3.png',
-				index: 54
+				index: 105
 			},
 			'blue': {
 				imgPath: '/assets/img/tiles/square5.png',
-				index: 45
+				index: 38
 			}
 		};
 		for(key in serverResponse) {

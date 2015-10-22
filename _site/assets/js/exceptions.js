@@ -1,3 +1,4 @@
+//if(!g2moku) var g2moku;
 g2moku.exceptions = {};
 g2moku.exceptions.ExceptionWithAlert = Class.create();
 g2moku.exceptions.ExceptionWithAlert.prototype = {

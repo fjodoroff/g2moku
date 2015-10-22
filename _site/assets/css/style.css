@@ -9,6 +9,9 @@ html {
 	width: 100%;
 	padding: 0;
 }
+.logo img{
+    width: 100%;
+}
 .logo{
 	max-width: 100%;
 	height: auto;
@@ -222,6 +225,46 @@ html {
 .game-mode.player-vs-player .btn-player-tile.active {
 	border-color: #B51313 !important;
 	outline: none!important;
+}
+.game-rules {
+	border: 2px dashed #645034;
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+	background: #0A0C20;
+}
+.game-rules h4{
+    padding-top: 40px;
+}
+.game-rules h3{
+    border-bottom: 1px dashed #362B1C;
+    display: inline-block;
+}
+.game-statistics table td,
+.game-statistics table th {
+	border: 1px solid #4E5D6C!important;
+	border-left: none!important;
+	border-top: none!important;
+}
+.game-statistics table tbody tr:last-child th,
+.game-statistics table tr:last-child td {
+	border-bottom: none!important;	
+}
+.game-statistics table tr th:last-child,
+.game-statistics table tr td:last-child {
+	border-right: none!important;	
+}
+.game-statistics h3 {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+.game-statistics table {
+    border-collapse: separate;
+    margin-bottom: 25px!important;	
+}
+.bg-green {
+    background-color: #378037;
+    padding: 10px 7px;
+    display: inline-block;
 }
 /* .titleName{
 	width: 200px;

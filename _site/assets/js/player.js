@@ -9,12 +9,15 @@ Player.prototype = {
 		this.playingTile = false;
 		this.moves = [];
 		this.timer = false;
-		if(isObject(o)) {
-			this.name = o.name;
-			this.tile = o.tile;
-			this.playingTile = new Phaser.Tile(g2moku.layer, o.playingTileIndex);
-		} else {
-			this.name = name;
+		this.name = 'Player';
+		if(o) {
+			if(isObject(o)) {
+				this.name = o.name;
+				this.tile = o.tile;
+				this.playingTile = new Phaser.Tile(g2moku.layer, o.playingTileIndex);
+			} else {
+				this.name = o;
+			}
 		}
 	},
 	setPlayingTile: function(index){
