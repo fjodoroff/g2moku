@@ -24,7 +24,7 @@ define(function(require){
 			var g = g2moku;
 			if(isObject(index)) {
 				//g.map.getTile(0, 0);
-			} else {//if number
+			} else {//if number 
 				//g.playingTile = g.map.getImageIndex(index);
 			}
 		},
