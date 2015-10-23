@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">24.64% </span>
+        <span class="strong">24.66% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>933/3787</span>
+        <span class='fraction'>934/3787</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">8.47% </span>
+        <span class="strong">8.54% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>223/2634</span>
+        <span class='fraction'>225/2634</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">13.72% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>101/736</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">25.68% </span>
+        <span class="strong">25.71% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>917/3571</span>
+        <span class='fraction'>918/3571</span>
       </div>
     </div>
   </div>
@@ -7823,7 +7823,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">76×</span>
-<span class="cline-any cline-yes">907×</span>
+<span class="cline-any cline-yes">883×</span>
 <span class="cline-any cline-yes">76×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -12205,10 +12205,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">19×</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">69×</span>
+<span class="cline-any cline-yes">5×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">19×</span>
+<span class="cline-any cline-yes">69×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -12689,7 +12689,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -14538,7 +14538,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -16028,8 +16028,8 @@ Object.extend(String.prototype, (function() {
     isJSON:         isJSON,
     evalJSON:       NATIVE_JSON_PARSE_SUPPORT ? parseJSON : <span class="branch-1 cbranch-no" title="branch not covered" >evalJSON,</span>
     include:        include,
-    startsWith:     String.prototype.startsWith || <span class="branch-1 cbranch-no" title="branch not covered" >startsWith,</span>
-    endsWith:       String.prototype.endsWith || <span class="branch-1 cbranch-no" title="branch not covered" >endsWith,</span>
+    startsWith:     String.prototype.startsWith || startsWith,
+    endsWith:       String.prototype.endsWith || endsWith,
     empty:          empty,
     blank:          blank,
     interpolate:    interpolate
@@ -19793,8 +19793,8 @@ var i,
 	tokenCache = createCache(),
 	compilerCache = createCache(),
 	sortOrder = function( a, b ) {
-		<span class="missing-if-branch" title="if path not taken" >I</span>if ( a === b ) {
-<span class="cstat-no" title="statement not covered" >			hasDuplicate = true;</span>
+		if ( a === b ) {
+			hasDuplicate = true;
 		}
 		return 0;
 	},
@@ -20276,8 +20276,8 @@ setDocument = Sizzle.setDocument = function( node ) {
 <span class="cstat-no" title="statement not covered" >				rbuggyQSA.push( "\\[" + whitespace + "*(?:value|" + booleans + ")" );</span>
 			}
 &nbsp;
-			<span class="missing-if-branch" title="if path not taken" >I</span>if ( !div.querySelectorAll(":checked").length ) {
-<span class="cstat-no" title="statement not covered" >				rbuggyQSA.push(":checked");</span>
+			<span class="missing-if-branch" title="else path not taken" >E</span>if ( !div.querySelectorAll(":checked").length ) {
+				rbuggyQSA.push(":checked");
 			}
 		});
 &nbsp;
@@ -20312,7 +20312,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 		});
 	}
 &nbsp;
-	rbuggyQSA = rbuggyQSA.length &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >new RegExp( rbuggyQSA.join("|") );</span>
+	rbuggyQSA = rbuggyQSA.length &amp;&amp; new RegExp( rbuggyQSA.join("|") );
 	rbuggyMatches = rbuggyMatches.length &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >new RegExp( rbuggyMatches.join("|") );</span>
 &nbsp;
 	/* Contains
@@ -21906,7 +21906,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
   var DIV = document.createElement('div');
   var docEl = document.documentElement;
   var MOUSEENTER_MOUSELEAVE_EVENTS_SUPPORTED = 'onmouseenter' in docEl
-   &amp;&amp; 'onmouseleave' in docEl;
+   &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >'onmouseleave' in docEl;</span>
 &nbsp;
   var Event = {
     KEY_BACKSPACE: 8,
@@ -22125,8 +22125,8 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 <span class="cstat-no" title="statement not covered" >    return EVENT_TRANSLATIONS[eventName] || eventName;</span>
   }
 &nbsp;
-  <span class="missing-if-branch" title="else path not taken" >E</span>if (MOUSEENTER_MOUSELEAVE_EVENTS_SUPPORTED)
-    getDOMEventName = Prototype.K;
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (MOUSEENTER_MOUSELEAVE_EVENTS_SUPPORTED)
+<span class="cstat-no" title="statement not covered" >    getDOMEventName = Prototype.K;</span>
 &nbsp;
 <span class="fstat-no" title="function not covered" >  function getUniqueElementID(element) {</span>
 <span class="cstat-no" title="statement not covered" >    if (element === window) <span class="cstat-no" title="statement not covered" >return 0;</span></span>
@@ -22466,7 +22466,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 &nbsp;
   var docEl = document.documentElement;
   var MOUSEENTER_MOUSELEAVE_EVENTS_SUPPORTED = 'onmouseenter' in docEl
-    &amp;&amp; 'onmouseleave' in docEl;
+    &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >'onmouseleave' in docEl;</span>
 &nbsp;
 <span class="fstat-no" title="function not covered" >  function isSimulatedMouseEnterLeaveEvent(eventName) {</span>
 <span class="cstat-no" title="statement not covered" >    return !MOUSEENTER_MOUSELEAVE_EVENTS_SUPPORTED &amp;&amp;</span>

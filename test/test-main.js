@@ -25,10 +25,29 @@
 		baseUrl: baseUrl,
 
 		paths: {
+			'prototype': '_site/assets/js/libs/prototype/prototype',
+			'phaser': '_site/assets/js/libs/phaser/phaser.min',
+			'utils': '_site/assets/js/utils',
 			'chai':  'node_modules/chai/chai',
-			'Player':  '_site/assets/js/player'
+			'player':  '_site/assets/js/modules/Player',
+			'gameTile':  '_site/assets/js/modules/GameTile'
 		},
-
+		shim: {
+			'prototype': {
+				exports: 'Prototype'
+			},
+			'phaser': {
+				exports: 'Phaser'
+			},
+			'player': {
+				deps: ['utils', 'gameTile', 'phaser'],
+				exports: 'Player'
+			},
+			'gameTile': {
+				deps: ['utils'],
+				exports: 'GameTile'
+			}
+		},
 		// ask Require.js to load these files (all our tests)
 		deps: specFiles,
 

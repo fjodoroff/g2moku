@@ -30,7 +30,42 @@ g2moku.exceptions.GameFormException.prototype = Object.extend(new g2moku.excepti
 		this.element = element;
 	}	
 });
+
+
+function isObject(val) {
+    if (val === null) { return false;}
+    return ( (typeof val === 'function') || (typeof val === 'object') );
+}
 // g2moku.GameFormException = function(msg, element) {
 	// this.message = msg;
 	// this.element = element;
 // };
+function Timer(interval, callback) {
+	this.count = 0;
+	this.callback = callback;
+	this.interval = interval;
+	this.startTimestamp = 0;
+	t = this;
+	this.clear = function() {
+		clearInterval(this.id);
+	};
+	this.initialize();
+	return this;
+}
+Timer.prototype = {
+	initialize: function() {
+		this.startTimestamp = +new Date();
+		this.id = setInterval(function(){
+			t.count++;
+			t.callback(t);
+		}, this.interval);
+	}
+};
+var PlayerBot = Class.create();
+// inherit from Person class:
+PlayerBot.prototype = Object.extend(new Player(), {
+	// redefine the speak method
+	say: function(message) {
+		return this.name + ': ' + message + ', yarr!';
+	}
+}); 
