@@ -23,22 +23,35 @@ module.exports = function (config) {
 		],
 
 
-// list of files to exclude
+		// list of files to exclude
         exclude: [
-            'karma.conf.js'
+            'karma.conf.js',
+			'node_modules/grunt**/*.js'
         ],
 
 
-// use dots reporter, as travis terminal does not support escaping sequences
-// possible values: 'dots', 'progress', 'junit', 'teamcity'
-// CLI --reporters progress
-        reporters: ['progress', 'junit', 'coverage'],
+		// use dots reporter, as travis terminal does not support escaping sequences
+		// possible values: 'dots', 'progress', 'junit', 'teamcity'
+		// CLI --reporters progress
+        reporters: ['progress', 'junit', 'coverage', 'html'],
 
         junitReporter: {
             // will be resolved to basePath (in the same way as files/exclude patterns)
-            outputFile: 'junit-report/test-results.xml'
+            outputFile: 'test-results.xml',
+			outputDir: 'test/frontend/'
         },
-
+		htmlReporter: {
+			outputFile: 'test/frontend/units.html',
+				
+			// Optional 
+			pageTitle: 'G2moku Frontend Unit Tests',
+			subPageTitle: 'Multiplayer game, like gomoku'
+		},
+		coverageReporter: {
+			// cf. http://gotwarlost.github.com/istanbul/public/apidocs/
+			type: 'html',
+			dir: 'coverage/'
+		},
         preprocessors: {
             '_site/assets/js/**/*.js': 'coverage'
         },
@@ -47,17 +60,13 @@ module.exports = function (config) {
 		  'karma-mocha',
 		  'karma-requirejs',
 		  'karma-chai',
-		  'karma-chrome-launcher',
 		  'karma-junit-reporter',
           'karma-coverage',
-		  //'karma-firefox-launcher',
-		  'karma-junit-reporter'
+		  'karma-htmlfile-reporter',
+		  'karma-chrome-launcher',
+		  'karma-firefox-launcher',
+		  'karma-safari-launcher'
 		],
-		coverageReporter: {
-			// cf. http://gotwarlost.github.com/istanbul/public/apidocs/
-			type: 'html',
-			dir: 'coverage/'
-		},
 
         port: 9876,
         colors: true,
@@ -68,7 +77,7 @@ module.exports = function (config) {
         // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
         logLevel: config.LOG_INFO,
 
-        browsers: ['Chrome']
+        browsers: ['Chrome', 'Firefox', 'Safari']
 
     });
 };
