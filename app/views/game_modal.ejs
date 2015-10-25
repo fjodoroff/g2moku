@@ -16,7 +16,9 @@
 			</div>
 			<div class="modal-body">
 				<form class="row players_form">
-					<div id="game-rules" class='game-rules col-xs-12' style="display: none"></div>
+					<div id="game-rules" class='game-rules col-xs-12' style="display: none">
+					<% include game_rules.ejs %>
+					</div>
 					<div id="game-statistics" class='game-statistics col-xs-12' style="display: none">
 						<h3>Game statistics</h3>
 						<table class="table table-bordered">

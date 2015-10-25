@@ -1,4 +1,4 @@
-define(function(require){
+define(['require', 'G2moku'], function(require, g2moku){
     require('prototype'); // Ensure Prototype is present
 	
     return Class.create({
@@ -42,18 +42,13 @@ define(function(require){
 		},
 		endMove: function(tile){
 			this.$box.removeClass('active');
-			this.timer.clear();
-			
+			this.timer.clear();			
 			this.moving = false;
 			//g2moku.players.willPlay(this);
 		},
-		moveToTile: function(tile) {
-			//this.startMoving(tile);
-			var g = g2moku,
-				p = this;
+		moveToTile: function(tile, layer) {
 			this.moves.push(tile);
-			if(this.playingTile === false) this.playingTile = new Phaser.Tile(g2moku.layer, 15);
-			g.map.putTile(p.playingTile, g.layer.getTileX(g.marker.x), g.layer.getTileY(g.marker.y));
+			if(this.playingTile === false) this.playingTile = new Phaser.Tile(layer, 15);
 			//callback('asas');
 			this.endMove(tile);
 		}
