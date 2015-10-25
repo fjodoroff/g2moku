@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
+var clc = require('cli-color');
+var counter = 0;
 
 // define routes
 router.get('/', function (req, res) {
 	//if(req.user) console.log(req.user.get('id'));
-	console.log("Just opened game page =)");
-	res.render('game', {
-		template: 'game'
-	});
+	console.log(clc.green("Game page opened " + (++counter) + " time"));
+	res.render('game', {});
 });
 
 // router.get('/bot/:bot', function (req, res) {
@@ -16,21 +16,10 @@ router.get('/', function (req, res) {
 	// });
 // });
 
-// app.get ('/docs', function (req, res) {
-
-   // // Allow the docs.html template to 'include' markdown files
-   // var marked = require ('marked');
-
-   // var md = function (filename) {
-      // var path = __dirname +"/views/docs/" + filename;
-      // var include = fs.readFileSync (path, 'utf8');
-      // var html = marked (include);
-
-      // return html;
-   // };
-
-   // res.render ('docs', {"md": md});
-// });
+app.get ('/rules', function (req, res) {
+	console.log(clc.green("Parsing rules..."));
+	res.render('game_rules', {});
+}); 
 
 
 // In the template, do this:
