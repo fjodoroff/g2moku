@@ -8,7 +8,8 @@ require.config({
 		'utils': 'utils',
 		'exceptions': 'modules/exceptions',
 		'gameTiles':  'modules/gameTiles',
-		'Player':  'classes/Player',
+		'AbstractPlayer':  'classes/AbstractPlayer',
+		'Player':  'classes/frontend/Player',
 		'GameTile':  'classes/GameTile',
 		//'Timer':  'classes/Timer',
 		'G2moku':  'G2moku',
@@ -23,8 +24,12 @@ require.config({
 		'bootstrap': {
 			deps: ['jquery']
 		},
+		// 'AbstractPlayer': {
+			// deps: ['utils', 'GameTile'],
+			// exports: 'AbstractPlayer'
+		// },
 		'Player': {
-			deps: ['utils', 'GameTile', 'phaser'],
+			//deps: ['AbstractPlayer'],
 			exports: 'Player'
 		},		
 		'G2moku': {
