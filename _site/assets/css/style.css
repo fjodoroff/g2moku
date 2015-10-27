@@ -172,11 +172,21 @@ html {
     width: 128px;
     text-align: center;
 }
+.player-box .bottom-block thead th{
+	border-bottom: 1px solid #4E5D6C;
+}
+.player-box .bottom-block thead{
+	background: black;
+}
+.player-box .bottom-block{
+	background: #151515;
+}
 .player-box {
 	position: absolute;
 	width: 128px;
 	height: 128px;
 	opacity: 0.5;
+	z-index: 10;
 }
 .player-box-top-left {
 	left: 0;
@@ -265,6 +275,32 @@ html {
     background-color: #378037;
     padding: 10px 7px;
     display: inline-block;
+}
+.game-topbar > div h2{
+	text-align: center;
+    line-height: 60px;
+    margin: 0;
+    font-weight: bold;
+}
+.game-topbar > div{
+	margin: 0 auto;
+    width: 35%;
+    padding: 1px;
+    margin-top: 2px;
+    background: black;
+    vertical-align: middle;
+}
+.game-topbar {
+	position: absolute;
+    height: 64px;
+    top: 0;
+    left: 0;
+    line-height: 64px;
+    right: 0;
+    z-index: 0;
+}
+.game-topbar.invisible{
+	display: none;
 }
 /* .titleName{
 	width: 200px;

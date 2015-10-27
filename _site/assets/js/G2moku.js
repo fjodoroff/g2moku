@@ -10,6 +10,7 @@ define(['require', 'Player'], function(require, Player){
 		g.$gameRules = null;
 		g.$gameStatistics = null;
 		g.$playerBoxes = jQuery('.player-boxes');
+		g.$gameTopBar = jQuery('.game-topbar');
 		g.$box = null;
 		g.map = null;
 		g.layer = null;  
@@ -200,6 +201,7 @@ define(['require', 'Player'], function(require, Player){
 					try {
 						if(g.players.currentPlaying === false) {//first turn
 							g.players.currentPlaying = g.players.next();
+							g.$gameTopBar.find('.game-play-text').html("<span='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
 							g.players.currentPlaying.startTimer();
 						} else {
 							g.gameState.getTileProperties();
@@ -209,6 +211,7 @@ define(['require', 'Player'], function(require, Player){
 							g.map.putTile(g.players.currentPlaying.playingTile, g.layer.getTileX(g.marker.x), g.layer.getTileY(g.marker.y));
 							g.players.willPlay(g.players.currentPlaying);
 							g.players.currentPlaying = g.players.next();//take next player in queue
+							g.$gameTopBar.find('.game-play-text').html("<span='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
 							g.players.currentPlaying.startTimer();
 						}
 					} catch(e) {
@@ -243,6 +246,13 @@ define(['require', 'Player'], function(require, Player){
 			}
 
 		};
+		g.addDataToPlayerBlock = function(data){
+			if(data.history) {
+				data.each(function(e, i){
+					
+				});
+			}
+		};
 		g.preparePlayerBlock = function(player, i){ //adding jquery player box, as a additional property
 			var corners = [
 				'player-box-top-left', 'player-box-top-right', 'player-box-bottom-left', 'player-box-bottom-right'
@@ -257,6 +267,19 @@ define(['require', 'Player'], function(require, Player){
 				'</div>' +
 				'<div class="playing-tile">' +
 					'<img src="' + player.tile.imgPath + '">' +
+				'</div>' +
+				'<div class="bottom-block">' +
+					'<table class="table table-bordered player-game-history" style="display: none">' +
+						'<thead>' +
+							'<tr><th>#</th><th>Time</th><th>Pos</th></tr>' +
+						'</thead>' +
+						'<tbody>' +
+							// '<tr>'
+							  // <th scope="row">1</th>
+							  // <td>00:56</td><td>[20; 30]</td>
+							// </tr>
+						'</tbody>' +
+					'</table>' +
 				'</div>' +
 			'</div>');
 			jQuery('body').prepend(player.$box);
@@ -332,6 +355,13 @@ define(['require', 'Player'], function(require, Player){
 					g.players.playing.each(function(e, i){
 						g2moku.preparePlayerBlock(e, i);				
 					});
+					g.$gameTopBar.find('.game-play-text').html("<span='game-next-player'>Player</span> be ready for the game YOU ARE FIRST!<br/><b>Click to start the game!</b>");
+					g.$gameTopBar.removeClass('invisible').addClass('fadeInDown animated');
+					setInterval(function(){
+						g.$gameTopBar.find('b').removeClass().addClass('tada animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+							jQuery(this).removeClass();
+						});
+					}, 4000);
 					//g.players.getLast()
 					//while(!this.gameStarted || !this.players.next()) {
 					// var player = g.players.next();
