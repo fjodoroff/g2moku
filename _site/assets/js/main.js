@@ -2,6 +2,7 @@ require.config({
 	baseUrl: '/assets/js/',
 	paths: {
 		'jquery': 'libs/jquery/jquery.min',
+		'jquery.nanoscroller': 'libs/jquery/jquery.nanoscroller.min',
 		'bootstrap':  'libs/bootstrap/bootstrap.min',
 		'prototype': 'libs/prototype/prototype',
 		'phaser': 'libs/phaser/phaser.min',
@@ -9,9 +10,11 @@ require.config({
 		'exceptions': 'modules/exceptions',
 		'gameTiles':  'modules/gameTiles',
 		'AbstractPlayer':  'classes/AbstractPlayer',
+		'AbstractPlayerMove':  'classes/AbstractPlayerMove',
 		'Player':  'classes/frontend/Player',
+		'PlayerMove':  'classes/frontend/PlayerMove',
 		'GameTile':  'classes/GameTile',
-		//'Timer':  'classes/Timer',
+		'Timer':  'classes/Timer',
 		'G2moku':  'G2moku',
 	},
 	shim: {
@@ -21,6 +24,10 @@ require.config({
 		'phaser': {
 			exports: 'Phaser'
 		},
+		'jquery.jscrollpane': {
+			deps: ['jquery'],
+			exports: 'jQuery.NanoScroller'
+		},		
 		'bootstrap': {
 			deps: ['jquery']
 		},
@@ -28,12 +35,16 @@ require.config({
 			// deps: ['utils', 'GameTile'],
 			// exports: 'AbstractPlayer'
 		// },
-		'Player': {
-			//deps: ['AbstractPlayer'],
-			exports: 'Player'
-		},		
+		// 'Player': {
+			// //deps: ['AbstractPlayer'],
+			// exports: 'Player'
+		// },
+		// 'PlayerMove': {
+			// //deps: ['AbstractPlayer'],
+			// exports: 'PlayerMove'
+		// },			
 		'G2moku': {
-			deps: ['utils', 'phaser', 'GameTile', 'jquery', 'bootstrap', 'gameTiles', 'exceptions'],
+			deps: ['utils', 'phaser', 'GameTile', 'jquery', 'bootstrap', 'gameTiles', 'exceptions', 'jquery.nanoscroller'],
 			exports: 'g2moku'
 		},
 		'GameTile': {
@@ -101,6 +112,24 @@ require([
 			g2moku.gameStart('playerVSplayer', data);			
 		}		
 		e.preventDefault();
+	});
+	jQuery('body').on('click', '.player-turn-xy', function(e){
+		g2moku.canUpdateMarker = false;
+		console.log('clicked');
+		var $this = jQuery(this);
+		$this.parent().addClass('bg-primary');
+		g2moku.marker.lineStyle(2, 0x000000, 1);
+		console.log(g2moku.marker);
+		g2moku.marker.x = g2moku.layer.getTileX($this.data('x')) * 32;
+		g2moku.marker.y = g2moku.layer.getTileY($this.data('y')) * 32;
+		setTimeout(function(){
+			g2moku.canUpdateMarker = true;
+			$this.parent().removeClass('bg-primary');
+		}, 3000);
+		console.log(g2moku.marker);
+		// setTimeout(function(){
+			// g2moku.canUpdateMarker = false;					
+		// }, 2000);
 	});
 	g2moku.$gameModal.on('click', '.btn-player-tile', function(e){
 		var $tile = $(this),

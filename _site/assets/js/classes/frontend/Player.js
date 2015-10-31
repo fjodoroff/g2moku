@@ -1,4 +1,4 @@
-define(['require', 'G2moku', 'AbstractPlayer'], function(require, g2moku, AbstractPlayer){
+define(['require', 'G2moku', 'AbstractPlayer', 'Timer'], function(require, g2moku, AbstractPlayer, Timer){
     require('prototype'); // Ensure Prototype is present
 	var p = Class.create();
 	// inherit from Person class:
@@ -23,14 +23,14 @@ define(['require', 'G2moku', 'AbstractPlayer'], function(require, g2moku, Abstra
 		afterStartMove: function(tile){
 			this.$box.addClass('active');
 		},
-		afterEndMove: function(tile){
-			this.$box.removeClass('active');
+		afterEndMove: function(playerMove){
+			//this.$box.removeClass('active');
 		},
-		moveToTile: function(tile, layer) {
-			this.moves.push(tile);
+		moveToTile: function(tile, layer, callback) {
+			//this.moves.push(tile);
 			if(this.playingTile === false) this.playingTile = new Phaser.Tile(layer, 15);
 			//callback('asas');
-			this.endMove(tile);
+			this.endMove(tile, callback);
 		}
 	});
     return p;

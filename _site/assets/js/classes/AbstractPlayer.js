@@ -1,4 +1,4 @@
-define(['require', 'G2moku'], function(require, g2moku){
+define(['require', 'PlayerMove'], function(require, PlayerMove){
     require('prototype'); // Ensure Prototype is present
 	
     return Class.create({
@@ -19,17 +19,25 @@ define(['require', 'G2moku'], function(require, g2moku){
 				}
 			}
 		},
-		endMove: function(tile){
-			this.timer.clear();	
+		endMove: function(tile, callback){
+			this.timer.clear();
+			var playerMove = new PlayerMove({
+				tile: tile,
+				timer: this.timer
+			});
+			this.moves.push(playerMove);
+			//g2moku.history.push(playerMove);		
 			this.moving = false;
-			this.afterEndMove(tile);
+			console.log('moving = false');
+			callback(playerMove);
+			this.afterEndMove(playerMove);
 			//g2moku.players.willPlay(this);
 		},
 		startMove: function(tile){
 			this.moving = true;
 			this.afterStartMove(tile);
 		},
-		afterEndMove: function() {},
+		afterEndMove: function(playerMove) {},
 		afterStartMove: function() {},
 		setPlayingTile: function(index){
 			var g = g2moku;

@@ -172,6 +172,9 @@ html {
     width: 128px;
     text-align: center;
 }
+.player-box .bottom-block tbody td{
+	font-size: 11px;
+}
 .player-box .bottom-block thead th{
 	border-bottom: 1px solid #4E5D6C;
 }
@@ -179,7 +182,25 @@ html {
 	background: black;
 }
 .player-box .bottom-block{
+	width: 100%;
+	/* display: table; */
+    max-height: 200%;
+	min-height:20px;
+	overflow: auto;
+}
+.horizontal-only
+{
+	display: none;
+	height: auto;
+	max-height: 200px;
+}	
+.player-box .bottom-block{
 	background: #151515;
+}
+.player-box .time-elapsed{
+    font-size: 23px;
+    font-weight: 300;
+    background: rgba(39, 27, 27, 0.52);
 }
 .player-box {
 	position: absolute;
@@ -302,7 +323,62 @@ html {
 .game-topbar.invisible{
 	display: none;
 }
-/* .titleName{
-	width: 200px;
-    margin: 0 auto;
-} */
+/** initial setup **/
+.nano {
+  position : relative;
+  width    : 100%;
+  height   : 100%;
+  overflow : hidden;
+}
+.nano > .nano-content {
+  position      : absolute;
+  overflow      : scroll;
+  overflow-x    : hidden;
+  top           : 0;
+  right         : 0;
+  bottom        : 0;
+  left          : 0;
+}
+.nano > .nano-content:focus {
+  outline: thin dotted;
+}
+.nano > .nano-content::-webkit-scrollbar {
+  display: none;
+}
+.has-scrollbar > .nano-content::-webkit-scrollbar {
+  display: block;
+}
+.nano > .nano-pane {
+  background : rgba(0,0,0,.25);
+  position   : absolute;
+  width      : 10px;
+  right      : 0;
+  top        : 0;
+  bottom     : 0;
+  visibility : hidden\9; /* Target only IE7 and IE8 with this hack */
+  opacity    : .01;
+  -webkit-transition    : .2s;
+  -moz-transition       : .2s;
+  -o-transition         : .2s;
+  transition            : .2s;
+  -moz-border-radius    : 5px;
+  -webkit-border-radius : 5px;
+  border-radius         : 5px;
+}
+.nano > .nano-pane > .nano-slider {
+  background: #444;
+  background: rgba(0,0,0,.5);
+  position              : relative;
+  margin                : 0 1px;
+  -moz-border-radius    : 3px;
+  -webkit-border-radius : 3px;
+  border-radius         : 3px;
+}
+.nano:hover > .nano-pane, .nano-pane.active, .nano-pane.flashed {
+  visibility : visible\9; /* Target only IE7 and IE8 with this hack */
+  opacity    : 0.99;
+}
+.nano { background: #bba; width: 100%; height: 150px; }
+.nano .nano-content { }
+.nano .nano-pane   { background: #888; }
+.nano .nano-slider { background: #111; }

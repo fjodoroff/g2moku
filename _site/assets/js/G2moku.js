@@ -13,6 +13,7 @@ define(['require', 'Player'], function(require, Player){
 		g.$gameTopBar = jQuery('.game-topbar');
 		g.$box = null;
 		g.map = null;
+		g.history = [];
 		g.layer = null;  
 		g.cursors = null;
 		g.marker = null;
@@ -20,6 +21,8 @@ define(['require', 'Player'], function(require, Player){
 		g.sprites = null;
 		g.canvas = null;
 		g.gameStarted = false;
+		g.playerMoving = false;
+		g.canUpdateMarker = true;
 		g.gameErrors = {
 			gameMenu: []
 		};
@@ -160,8 +163,10 @@ define(['require', 'Player'], function(require, Player){
 				}
 			},
 			update: function(){
-				g.marker.x = g.layer.getTileX(g.game.input.activePointer.worldX) * 32;
-				g.marker.y = g.layer.getTileY(g.game.input.activePointer.worldY) * 32;
+				if(g.canUpdateMarker) {
+					g.marker.x = g.layer.getTileX(g.game.input.activePointer.worldX) * 32;
+					g.marker.y = g.layer.getTileY(g.game.input.activePointer.worldY) * 32;				
+				}
 				
 				//g.sprites.setAll('x', 1, true, true, 1);
 
@@ -197,22 +202,35 @@ define(['require', 'Player'], function(require, Player){
 				
 			},
 			clickHandler: function(){
-				if(g.gameStarted) { // IF Game started
+				if(g.gameStarted && !g.playerMoving) { // IF Game started
 					try {
+						g.playerMoving = true;
 						if(g.players.currentPlaying === false) {//first turn
 							g.players.currentPlaying = g.players.next();
 							g.$gameTopBar.find('.game-play-text').html("<span='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
 							g.players.currentPlaying.startTimer();
+							g.playerMoving = false;
 						} else {
 							g.gameState.getTileProperties();
 							var tile = g.map.getTile(g.layer.getTileX(g.marker.x), g.layer.getTileY(g.marker.y));
-							g.players.currentPlaying.moveToTile(tile, g.layer);
-							//Put tile on map
-							g.map.putTile(g.players.currentPlaying.playingTile, g.layer.getTileX(g.marker.x), g.layer.getTileY(g.marker.y));
-							g.players.willPlay(g.players.currentPlaying);
-							g.players.currentPlaying = g.players.next();//take next player in queue
-							g.$gameTopBar.find('.game-play-text').html("<span='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
-							g.players.currentPlaying.startTimer();
+							g.players.currentPlaying.moveToTile(tile, g.layer, function(playerMove){
+								playerMove.player = g.players.currentPlaying;
+								playerMove.id = g.history.length;
+								g.history.push(playerMove);
+								//Put tile on map
+								g.map.putTile(g.players.currentPlaying.playingTile, g.layer.getTileX(g.marker.x), g.layer.getTileY(g.marker.y));
+								//g.players.currentPlaying.moveToTile
+								g.players.willPlay(g.players.currentPlaying);
+								g.addDataToPlayerBlock(playerMove, function(){
+									g.players.currentPlaying.$box.removeClass('active');
+									g.players.currentPlaying = g.players.next();//take next player in queue
+									g.players.currentPlaying.$box.addClass('active');
+									g.$gameTopBar.find('.game-play-text').html("<span='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
+									g.players.currentPlaying.startTimer();
+									g.playerMoving = false;
+									console.log(g);		
+								});
+							});	
 						}
 					} catch(e) {
 						
@@ -220,8 +238,10 @@ define(['require', 'Player'], function(require, Player){
 				}
 			},
 			updateMarker: function() {
-				g.marker.x = g.layer.getTileX(g.game.input.activePointer.worldX) * 32;
-				g.marker.y = g.layer.getTileY(g.game.input.activePointer.worldY) * 32;
+				if(g.canUpdateMarker) {
+					g.marker.x = g.layer.getTileX(g.game.input.activePointer.worldX) * 32;
+					g.marker.y = g.layer.getTileY(g.game.input.activePointer.worldY) * 32;
+				}
 			}, 
 			createSprite: function() {
 				var mummy = g.sprites.create(0, g.game.world.randomY, 'mummy');
@@ -246,12 +266,25 @@ define(['require', 'Player'], function(require, Player){
 			}
 
 		};
-		g.addDataToPlayerBlock = function(data){
-			if(data.history) {
-				data.each(function(e, i){
-					
-				});
-			}
+		g.addDataToPlayerBlock = function(playerMove, callback){
+			console.log(playerMove);
+			// playerMove.moves.each(function(e, i){
+				// console.log('start');
+				// console.log(e);
+				// console.log(i);
+			var $playerMove = jQuery('<tr class="player-turn invisible">' +
+				'<th scope="row">' + playerMove.id + '</th>' +
+				'<td>' + playerMove.timer.getTimestampDiff(true) + '</td><td class="player-turn-xy" data-x="' + playerMove.tile.worldX + '" data-y="' + playerMove.tile.worldY + '">[' + playerMove.tile.worldX + ';' + playerMove.tile.worldY + ']</td>' +
+			'</tr>');				
+			//});
+			playerMove.player.$box.find('.player-game-history tbody').prepend($playerMove);
+			$playerMove.removeClass("invisible").addClass('fadeInDown animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+				jQuery(this).removeClass();
+				playerMove.player.$box.find('.bottom-block').height(300);
+				playerMove.player.$box.find(".nano").nanoScroller();
+				callback();
+			});
+			return $playerMove;
 		};
 		g.preparePlayerBlock = function(player, i){ //adding jquery player box, as a additional property
 			var corners = [
@@ -269,17 +302,17 @@ define(['require', 'Player'], function(require, Player){
 					'<img src="' + player.tile.imgPath + '">' +
 				'</div>' +
 				'<div class="bottom-block">' +
-					'<table class="table table-bordered player-game-history" style="display: none">' +
-						'<thead>' +
-							'<tr><th>#</th><th>Time</th><th>Pos</th></tr>' +
-						'</thead>' +
-						'<tbody>' +
-							// '<tr>'
-							  // <th scope="row">1</th>
-							  // <td>00:56</td><td>[20; 30]</td>
-							// </tr>
-						'</tbody>' +
-					'</table>' +
+					'<div class="nano">' +
+						'<div class="nano-content">' +
+							'<table class="table table-bordered player-game-history">' +
+								'<thead>' +
+									'<tr><th>#</th><th>Time</th><th>Pos</th></tr>' +
+								'</thead>' +
+								'<tbody>' +
+								'</tbody>' +
+							'</table>' +						
+						'</div>' +
+					'</div>' +
 				'</div>' +
 			'</div>');
 			jQuery('body').prepend(player.$box);
