@@ -20,28 +20,28 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">11.54% </span>
+        <span class="strong">50% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>3/26</span>
+        <span class='fraction'>13/26</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">10% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/10</span>
+        <span class='fraction'>1/10</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">16.67% </span>
+        <span class="strong">50% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>1/6</span>
+        <span class='fraction'>3/6</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">13.04% </span>
+        <span class="strong">52.17% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>3/23</span>
+        <span class='fraction'>12/23</span>
       </div>
     </div>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line medium'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -86,12 +86,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -111,25 +111,25 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">define(function(require){
     require('prototype'); // Ensure Prototype is present
 	
     return Class.create({
-		initialize: <span class="fstat-no" title="function not covered" >function(interval, callback) {</span>
-<span class="cstat-no" title="statement not covered" >			this.count = 0;</span>
-<span class="cstat-no" title="statement not covered" >			if(callback) <span class="cstat-no" title="statement not covered" >this.callback = callback;</span></span>
-<span class="cstat-no" title="statement not covered" >			this.interval = interval;</span>
-<span class="cstat-no" title="statement not covered" >			this.startTimestamp = +new Date();</span>
-<span class="cstat-no" title="statement not covered" >			this.endTimestamp = null;</span>
-<span class="cstat-no" title="statement not covered" >			this.id = this.start();</span>
+		initialize: function(interval, callback) {
+			this.count = 0;
+			<span class="missing-if-branch" title="else path not taken" >E</span>if(callback) this.callback = callback;
+			this.interval = interval;
+			this.startTimestamp = +new Date();
+			this.endTimestamp = null;
+			this.id = this.start();
 		},
 		getTimestampDiff: <span class="fstat-no" title="function not covered" >function(formated){</span>
 <span class="cstat-no" title="statement not covered" >			var ret = 0;</span>
@@ -148,13 +148,13 @@
 <span class="cstat-no" title="statement not covered" >			this.endTimestamp = +new Date();</span>
 <span class="cstat-no" title="statement not covered" >			clearInterval(this.id);</span>
 		},
-		start: <span class="fstat-no" title="function not covered" >function(){</span>
-<span class="cstat-no" title="statement not covered" >			var t = this;</span>
-<span class="cstat-no" title="statement not covered" >			var id = setInterval(<span class="fstat-no" title="function not covered" >function(){</span></span>
+		start: function(){
+			var t = this;
+			var id = setInterval(<span class="fstat-no" title="function not covered" >function(){</span>
 <span class="cstat-no" title="statement not covered" >				t.count++;</span>
 <span class="cstat-no" title="statement not covered" >				if(t.callback) <span class="cstat-no" title="statement not covered" >t.callback(t);</span></span>
 			}, this.interval);
-<span class="cstat-no" title="statement not covered" >			return id;</span>
+			return id;
 		}
 	});
 });</pre></td></tr>
@@ -163,7 +163,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Oct 31 2015 14:17:56 GMT+0200 (Финляндия (зима))
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Oct 31 2015 19:36:46 GMT+0200 (FLE Standard Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

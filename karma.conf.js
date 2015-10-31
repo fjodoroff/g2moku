@@ -15,7 +15,7 @@ module.exports = function (config) {
         // ],
 		
 		files: [
-			{pattern: 'node_modules/**/*.js', included: false},   // allow to load any *.js from node_modules by karma web-server
+			{pattern: 'node_modules/chai/*.js', included: false},   // allow to load any *.js from node_modules by karma web-server
 			{pattern: '_site/assets/js/**/*.js', included: false},
 			//{pattern: '_site/assets/js/player.js', included: false},
 			{pattern: 'test/frontend/**/*Spec.js', included: false},

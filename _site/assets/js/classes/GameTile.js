@@ -14,9 +14,9 @@ define(function(require){
 			this.classes = ['btn', 'btn-default', 'square-btn', 'btn-player-tile'];
 			if(isObject(o)) {
 				this.index = o.index;
-				this.imgPath = o.imgPath;
+				if(o.imgPath) this.imgPath = o.imgPath;
 			} else {
-				this.imgPath = imgPath;
+				this.imgPath = o;
 			}
 		},
 		setPlayer: function($player){
