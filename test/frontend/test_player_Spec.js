@@ -1,4 +1,4 @@
-define(['chai', 'player', 'gameTile', 'phaser'], function(chai, Player, GameTile, Phaser) {
+define(['chai', 'Player', 'GameTile', 'phaser'], function(chai, Player, GameTile, Phaser) {
 	var assert = chai.assert,
 		expect = chai.expect;
 	describe("Player", function() {	
@@ -31,7 +31,14 @@ define(['chai', 'player', 'gameTile', 'phaser'], function(chai, Player, GameTile
 					
 				expect(player.name).to.be.a('string').and.equal(object.name);
 				expect(player.tile).to.be.an.instanceof(GameTile);
-				expect(player.playingTile).to.be.an.instanceof(Phaser.Tile);
+				expect(player.playingTile).to.be.false;
+			});
+			it("setting PlayingTile, cheking for Phaser.Tile instance", function() {
+				var player = new Player(),
+					testTile = new Phaser.Tile(0, 0, 0, 0, 32, 32);
+				expect(player.playingTile).to.be.an.false;
+				player.setPlayingTile(testTile);
+				expect(player.playingTile).to.be.an.instanceof(Phaser.Tile).and.not.empty;
 			});
 		}); 
 	});

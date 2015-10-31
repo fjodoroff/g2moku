@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<testsuite name="Chrome 46.0.2490 (Windows 7 0.0.0)" package="" timestamp="2015-10-31T12:17:52" id="0" hostname="Maxim-PC" tests="4" errors="0" failures="0" time="0.011">
+  <properties>
+    <property name="browser.fullName" value="Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36"/>
+  </properties>
+  <testcase name="should set player's name, passing string as argument" time="0.004" classname="Chrome_46_0_2490_(Windows_7_0_0_0).Player"/>
+  <testcase name="should have a correct default properties" time="0.004" classname="Chrome_46_0_2490_(Windows_7_0_0_0).Player"/>
+  <testcase name="should set player's properties, passing object as argument (without layer property)" time="0.001" classname="Chrome_46_0_2490_(Windows_7_0_0_0).Player"/>
+  <testcase name="setting PlayingTile, cheking for Phaser.Tile instance" time="0.002" classname="Chrome_46_0_2490_(Windows_7_0_0_0).Player"/>
+  <system-out>
+    <![CDATA[Chrome 46.0.2490 (Windows 7 0.0.0) LOG: '%c %c %c Phaser v2.2.2 | Pixi.js v2.2.0 | WebGL | WebAudio  %c %c %c http://phaser.io %c♥%c♥%c♥', 'background: #3db79f', 'background: #329582', 'color: #ffffff; background: #226558;', 'background: #329582', 'background: #3db79f', 'background: #ffffff', 'color: #ff2424; background: #fff', 'color: #ff2424; background: #fff', 'color: #ff2424; background: #fff'
+
+]]>
+  </system-out>
+  <system-err/>
+</testsuite>

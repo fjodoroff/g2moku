@@ -39,13 +39,8 @@ define(['require', 'PlayerMove'], function(require, PlayerMove){
 		},
 		afterEndMove: function(playerMove) {},
 		afterStartMove: function() {},
-		setPlayingTile: function(index){
-			var g = g2moku;
-			if(isObject(index)) {
-				//g.map.getTile(0, 0);
-			} else {//if number 
-				//g.playingTile = g.map.getImageIndex(index);
-			}
+		setPlayingTile: function(tile){
+			this.playingTile = tile;
 		}
 	})
 });

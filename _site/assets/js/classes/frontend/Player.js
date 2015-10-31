@@ -4,14 +4,14 @@ define(['require', 'G2moku', 'AbstractPlayer', 'Timer'], function(require, g2mok
 	// inherit from Person class:
 	p.prototype = Object.extend(new AbstractPlayer(), {
 		//playingTile: new Phaser.Tile(this.layer, o.playingTileIndex),
-		setPlayingTile: function(index){
-			var g = g2moku;
-			if(isObject(index)) {
-				//g.map.getTile(0, 0);
-			} else {//if number 
-				//g.playingTile = g.map.getImageIndex(index);
-			}
-		},
+		// setPlayingTile: function(index){
+			// var g = g2moku;
+			// if(isObject(index)) {
+				// //g.map.getTile(0, 0);
+			// } else {//if number 
+				// //g.playingTile = g.map.getImageIndex(index);
+			// }
+		// },
 		startTimer: function(){
 			var p = this;
 			this.startMove();
