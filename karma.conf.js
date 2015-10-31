@@ -63,9 +63,9 @@ module.exports = function (config) {
 		  'karma-junit-reporter',
           'karma-coverage',
 		  'karma-htmlfile-reporter',
-		  'karma-chrome-launcher',
-		  'karma-firefox-launcher',
-		  'karma-safari-launcher'
+		  'karma-chrome-launcher'
+		  //'karma-firefox-launcher',
+		  //'karma-safari-launcher'
 		],
 
         port: 9876,
@@ -77,7 +77,7 @@ module.exports = function (config) {
         // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
         logLevel: config.LOG_INFO,
 
-        browsers: ['Chrome', 'Firefox', 'Safari']
+        browsers: ['Chrome']//, 'Firefox', 'Safari']
 
     });
 };

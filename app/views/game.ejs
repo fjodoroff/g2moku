@@ -17,9 +17,9 @@
     <link rel="stylesheet" href="assets/css/animate.min.css">
 	
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">  
-	<link rel="stylesheet" href="assets/css/style.css">
+	<link rel="stylesheet" href="assets/css/bootstrap.theme.min.css">
 	
-    <link rel="stylesheet" href="assets/css/bootstrap.theme.min.css">
+	<link rel="stylesheet" href="assets/css/style.css">
 	
 	<script data-main="assets/js/main" src="assets/js/libs/requirejs/require.js"></script>
     <!-- For retina-display iPads -->
@@ -51,6 +51,9 @@
 </head>
 
 <body id="sitename">
+	<div class="game-topbar invisible">
+		<div><h2 id="game-play-text" class="game-play-text">sad. Your turn!</h2></div>
+	</div>
 	<% include game_modal.ejs %>
 
     <!--[if lt IE 8]>
