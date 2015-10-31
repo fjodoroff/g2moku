@@ -1,6 +1,12 @@
 define(['require', 'Player'], function(require, Player){
     require('prototype'); // Ensure Prototype is present
     var g2moku = (function(g) {
+		// Ячейки игрового поля будут в виде объекта this.board[id игровой ячейки] = чем ходили
+		g.board = [];
+		// Шагов до победы
+		g.stepsToWin = 5;
+		// Кол-во сделанных ходов
+		g.steps = 0;
 		g.MAX_PLAYERS = 4;
 		g.gameTiles = null;
 		g.gameTiles = require('gameTiles');
@@ -54,12 +60,14 @@ define(['require', 'Player'], function(require, Player){
 					console.log(i);
 					console.log('//tile e');
 					console.log(e);
-					pl.arr.push(new Player({
+					var player = new Player({
 						name: e.input,
 						tile: e.tile,
-						//playingTileIndex: e.tileIndex
 						playingTileIndex: e.tileIndex
-					}));				
+					});
+					console.log('setPLayingTile');
+					player.setPlayingTile(new Phaser.Tile(g.layer, e.tileIndex));
+					pl.arr.push(player);				
 				});
 				console.log(pl.arr);
 				if(g2moku.gameStarted) this.playing = this.arr;
@@ -156,8 +164,8 @@ define(['require', 'Player'], function(require, Player){
 			},
 			render: function(){
 				if(g.debug) {
-					g.game.debug.cameraInfo(g.game.camera, 32, 32);
-					g.game.debug.inputInfo(32, 130);
+					g.game.debug.cameraInfo(g.game.camera, 32, 432);
+					g.game.debug.inputInfo(32, 530);
 					//g.game.debug.spriteInputInfo(g.sprite, 32, 130);
 					g.game.debug.pointer(g.game.input.activePointer );
 				}
@@ -216,6 +224,12 @@ define(['require', 'Player'], function(require, Player){
 							g.players.currentPlaying.moveToTile(tile, g.layer, function(playerMove){
 								playerMove.player = g.players.currentPlaying;
 								playerMove.id = g.history.length;
+								g.step(playerMove.tile.x, playerMove.tile.y, playerMove.player, function(win, turn) {
+									console.log('win-turn callback');
+									console.log(win);
+									console.log(turn);
+									// Она нам вернёт значения ходе, если победитель, а так же чем ходили всё передадим как есть в событие пользователям
+								});
 								g.history.push(playerMove);
 								//Put tile on map
 								g.map.putTile(g.players.currentPlaying.playingTile, g.layer.getTileX(g.marker.x), g.layer.getTileY(g.marker.y));
@@ -274,14 +288,18 @@ define(['require', 'Player'], function(require, Player){
 				// console.log(i);
 			var $playerMove = jQuery('<tr class="player-turn invisible">' +
 				'<th scope="row">' + playerMove.id + '</th>' +
-				'<td>' + playerMove.timer.getTimestampDiff(true) + '</td><td class="player-turn-xy" data-x="' + playerMove.tile.worldX + '" data-y="' + playerMove.tile.worldY + '">[' + playerMove.tile.worldX + ';' + playerMove.tile.worldY + ']</td>' +
-			'</tr>');				
+				'<td>' + playerMove.timer.getTimestampDiff(true) + '</td>' + 
+				'<td class="player-turn-xy" data-x="' + playerMove.tile.worldX + '" data-y="' + playerMove.tile.worldY + '">' +
+				'<span class="player-turn-x">x ' + playerMove.tile.x + '</span>' +
+				'<span class="player-turn-y">y ' + playerMove.tile.y + '</span>' +
+			'</tr>'),
+			anim = playerMove.player.$box.hasClass('player-box-bottom-left') || playerMove.player.$box.hasClass('player-box-bottom-right') ? 'fadeInUp' : 'fadeInDown';
 			//});
 			playerMove.player.$box.find('.player-game-history tbody').prepend($playerMove);
-			$playerMove.removeClass("invisible").addClass('fadeInDown animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+			$playerMove.removeClass("invisible").addClass(anim + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
 				jQuery(this).removeClass();
-				playerMove.player.$box.find('.bottom-block').height(300);
-				playerMove.player.$box.find(".nano").nanoScroller();
+				//playerMove.player.$box.find('.bottom-block').height(300);
+				//playerMove.player.$box.find(".nano").nanoScroller();
 				callback();
 			});
 			return $playerMove;
@@ -289,30 +307,31 @@ define(['require', 'Player'], function(require, Player){
 		g.preparePlayerBlock = function(player, i){ //adding jquery player box, as a additional property
 			var corners = [
 				'player-box-top-left', 'player-box-top-right', 'player-box-bottom-left', 'player-box-bottom-right'
-			];
+			], headers = '<tr><th>#</th><th>Time</th><th>Pos</th></tr>',
+			theader = '', tfooter = '';
+			if(i >=2) {
+				tfooter = '<tfoot>' + headers + '</tfoot>';
+			} else {
+				theader = '<thead>' + headers + '</thead>';				
+			}
 			console.log(player);
 			player.$box = jQuery('<div class="player-box ' + corners[i] + '" style="display: none;" title="' + player.name + '">' +
-				'<div class="avatar">' +
-					'<span>' + player.name.substring(0, 3) + '.</span>' +
-				'</div>' +
-				'<div class="bottom-panel">' +
-					'<span class="label label-primary time-elapsed">00:00:00</span>' +
-				'</div>' +
-				'<div class="playing-tile">' +
-					'<img src="' + player.tile.imgPath + '">' +
+				'<div class="main-block">' +
+					'<div class="avatar">' +
+						'<span>' + player.name.substring(0, 3) + '.</span>' +
+					'</div>' +
+					'<div class="bottom-panel">' +
+						'<span class="label label-primary time-elapsed">00:00:00</span>' +
+					'</div>' +
+					'<div class="playing-tile">' +
+						'<img src="' + player.tile.imgPath + '">' +
+					'</div>' +
 				'</div>' +
 				'<div class="bottom-block">' +
-					'<div class="nano">' +
-						'<div class="nano-content">' +
-							'<table class="table table-bordered player-game-history">' +
-								'<thead>' +
-									'<tr><th>#</th><th>Time</th><th>Pos</th></tr>' +
-								'</thead>' +
-								'<tbody>' +
-								'</tbody>' +
-							'</table>' +						
-						'</div>' +
-					'</div>' +
+					'<table class="table table-bordered player-game-history">' + theader + 
+						'<tbody>' +
+						'</tbody>' + tfooter +
+					'</table>' +						
 				'</div>' +
 			'</div>');
 			jQuery('body').prepend(player.$box);
@@ -386,7 +405,7 @@ define(['require', 'Player'], function(require, Player){
 					g.players.parseFromGameModal(data);
 					//add player box for each playing player.
 					g.players.playing.each(function(e, i){
-						g2moku.preparePlayerBlock(e, i);				
+						g2moku.preparePlayerBlock(e, i);
 					});
 					g.$gameTopBar.find('.game-play-text').html("<span='game-next-player'>Player</span> be ready for the game YOU ARE FIRST!<br/><b>Click to start the game!</b>");
 					g.$gameTopBar.removeClass('invisible').addClass('fadeInDown animated');
@@ -406,7 +425,112 @@ define(['require', 'Player'], function(require, Player){
 					break
 			}
 
-		};	
+		};
+		g.step = function(x, y, player, cb) {
+			// Проверяем что в этой клетке ничего нет
+			if(g.board[x + 'x' + y] !== undefined) return;
+			// Получаем параметры X и Y куда был сделан ход, добавляем в объект ходов на эти координаты кто пошёл
+			g.board[x + 'x' + y] = player.playingTile.index;
+			// Увеличиваем счётчик сделанных ходов
+			//this.steps++;
+			// Обратный вызов у нас срабатывает после выполнения функции проверки на 
+			console.log('cb checkwiNNER');
+			console.log(g.board);		
+			cb(g.checkWinner(x, y, player.playingTile.index), player.playingTile.index);
+		};
+		g.checkWinner = function(x, y, turn) {
+			// // Проверка на ничью, если нет больше свободных полей
+			// if(this.steps == (this.x * this.y)) {
+				// // Ничья
+				// return 'none';
+				// // Проверка на победителя
+			if(
+				// Проверка комбинаций на победу пользователя
+				g.checkWinnerDynamic('-', x, y, turn)
+					|| g.checkWinnerDynamic('|', x, y, turn)
+					|| g.checkWinnerDynamic('\\', x , y, turn)
+					|| g.checkWinnerDynamic('/', x, y, turn)
+				) {
+				// есть победитель
+				alert('WIN');
+				return true;
+			} else {
+				// // нет победителя
+				return false;
+			}
+		};
+		g.checkWinnerDynamic = function(a, x, y, turn) {
+			// будем проверять динамически 4 комбинации: горизонталь, вертикаль и 2 диагонали
+			// при этом мы не знаем на какой позиции текущий ход,, проверять будем во всех 4 направлениях
+			var win = 1;
+			switch(a) {
+
+				// поиск по горизонтали
+				case '-':
+					var toLeft = toRight = true,
+						min = x - g.stepsToWin, max = x + g.stepsToWin;
+					min = (min < 1) ? 1 : min;
+					max = (max > g.map.width) ? g.map.width : max;
+					for(var i = 1; i <= g.stepsToWin; i++) {
+						if(win >= g.stepsToWin) return true;
+						if(!toLeft && !toRight) return false;
+						if(toLeft && min <= (x-i) && g.board[(x-i) + 'x' + y] == turn) { win++; } else { toLeft = false; }
+						if(toRight && (x+i) <= max && g.board[(x+i) + 'x' + y] == turn) { win++; } else { toRight = false; }
+					}
+					break;
+
+				// поиск по вертикали
+				case '|':
+					var toUp = toDown = true,
+						min = y - g.stepsToWin, max = y + g.stepsToWin;
+					min = (min < 1) ? 1 : min;
+					max = (max > g.map.height) ? g.map.height : max;
+					for(var i = 1; i <= g.stepsToWin; i++) {
+					   if(win >= g.stepsToWin) return true;
+					   if(!toUp && !toDown) return false;
+					   if(toUp && min <= (y-i) && g.board[x + 'x' + (y-i)] == turn) { win++; } else { toUp = false; }
+					   if(toDown && (y+i) <= max && g.board[x + 'x' + (y+i)] == turn) { win++; } else { toDown = false; }
+					}
+				break;
+
+				// поиск по диагонали сверху вниз
+				case '\\':
+					var toUpLeft = toDownRight = true,
+						minX = x - g.stepsToWin, maxX = x + g.stepsToWin,
+						minY = y - g.stepsToWin, maxY = y + g.stepsToWin;
+					minX = (minX < 1) ? 1 : minX;
+					maxX = (maxX > g.map.width) ? g.map.width : maxX;
+					minY = (minY < 1) ? 1 : minY;
+					maxY = (maxY > g.map.height) ? g.map.height : maxY;
+					for(var i = 1; i <= g.stepsToWin; i++) {
+					   if(win >= g.stepsToWin) return true;
+					   if(!toUpLeft && !toDownRight) return false;
+					   if(toUpLeft && minX <= (x-i) && minY <= (y-i) && g.board[(x-i) + 'x' + (y-i)] == turn) { win++; } else { toUpLeft = false; }
+					   if(toDownRight && (x+i) <= maxX && (y+i) <= maxY && g.board[(x+i) + 'x' + (y+i)] == turn) { win++; } else { toDownRight = false; }
+					}
+				break;
+
+				// поиск по диагонали снизу вверх
+				case '/':
+					var toDownLeft = toUpRight = true,
+						minX = x - g.stepsToWin, maxX = x + g.stepsToWin,
+						minY = y - g.stepsToWin, maxY = y + g.stepsToWin;
+					minX = (minX < 1) ? 1 : minX;
+					maxX = (maxX > g.map.width) ? g.map.width : maxX;
+					minY = (minY < 1) ? 1 : minY;
+					maxY = (maxY > g.map.height) ? g.map.height : maxY;
+					for(var i = 1; i <= g.stepsToWin; i++) {
+						if(win >= g.stepsToWin) return true;
+						if(!toDownLeft && !toUpRight) return false;
+						if(toDownLeft && minX <= (x-i) && (y+i) <= maxY && g.board[(x-i) + 'x' + (y+i)] == turn) { win++; } else { toDownLeft = false; }
+						if(toUpRight && (x+i) <= maxX && (y-i) <= maxY && g.board[(x+i) + 'x' + (y-i)] == turn) { win++; } else { toUpRight = false; }
+					}
+				break;
+
+				default: return false; break;
+			}
+			return(win >= g.stepsToWin);
+		};
 		return g;
 	}(g2moku || {}));	
 	return g2moku;
