@@ -9,8 +9,7 @@ define([/*'AbstractPlayer'*/], function(){
 		// define routes
 		global.app.get('/', function (req, res) {
 			//if(req.user) console.log(req.user.get('id'));
-			console.json(req);
-			console.log("[" + "]" + clc.green("REQUEST: ") + "Game page opened " + (++counter) + " time");
+			console.log(clc.yellow("REQUEST: ") + "Game page opened " + (++counter) + " time");
 			//console.log(req);
 			//req.io.broadcast('log', req);	
 			res.render('game', {});
@@ -44,10 +43,12 @@ define([/*'AbstractPlayer'*/], function(){
 					index: 38
 				}
 			};
+			console.log(clc.black.bgWhite.underline("[ " + req.socket.id + " ]" + " Getting availableTiles"));
 			req.io.emit('response.tiles.available', serverResponse);
 		});
 		global.app.io.route('ready', function(req) {
-			console.log(clc.yellow("RESPONSE: ++Online | ") + "ScreenSize: " + req.data.screenSize.x + "x" + req.data.screenSize.y);
+			console.log(req.socket.id);
+			console.log(clc.black.bgWhite.underline("[ " + req.socket.id + " ]") + " " +clc.green("RESPONSE: ++Online | ") + "ScreenSize: " + req.data.screenSize.x + "x" + req.data.screenSize.y);
 			req.io.broadcast('online');
 			//console.log(req);
 			req.io.emit('welcome', {
