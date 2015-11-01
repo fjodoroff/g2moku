@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js\modules\gameTiles.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">js/modules/</a> gameTiles.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">7.14% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>2/28</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/10</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">11.11% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>1/9</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">7.14% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>2/28</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">define(['GameTile'], function(GameTile) {
+	return {
+		availableTiles: [],
+		allTiles: [],
+		next: <span class="fstat-no" title="function not covered" >function(){</span>
+<span class="cstat-no" title="statement not covered" >			return this.availableTiles.length &gt; 0 ? this.availableTiles.pop() : false;</span>
+		},
+		push: <span class="fstat-no" title="function not covered" >function(tile){</span>
+<span class="cstat-no" title="statement not covered" >			this.availableTiles.push(tile);</span>
+		},
+		selectTile: <span class="fstat-no" title="function not covered" >function($tile, $player){</span>
+<span class="cstat-no" title="statement not covered" >			console.log($player.index());</span>
+			//function(g){
+<span class="cstat-no" title="statement not covered" >			var g = this;</span>
+<span class="cstat-no" title="statement not covered" >			this.availableTiles.each(<span class="fstat-no" title="function not covered" >function(e, i){</span></span>
+				//console.log(this.availableTiles[$tile.index()]);
+<span class="cstat-no" title="statement not covered" >				if(e.key == g.availableTiles[$tile.index()].key) {</span>
+<span class="cstat-no" title="statement not covered" >					console.log('setPlayer');</span>
+<span class="cstat-no" title="statement not covered" >					e.setPlayer($player);</span>
+				}
+			});
+			//}(this);
+		},
+		selectedTile: <span class="fstat-no" title="function not covered" >function($player){</span>
+<span class="cstat-no" title="statement not covered" >			var tile = null;</span>
+<span class="cstat-no" title="statement not covered" >			this.availableTiles.each(<span class="fstat-no" title="function not covered" >function(e, i){</span></span>
+				//console.log(this.availableTiles[$tile.index()]);
+				//console.log(e.selected + " | " + e.$player.index() + "| " + $player.index());
+<span class="cstat-no" title="statement not covered" >				if(e.selected &amp;&amp; e.$player.index() == $player.index()) {</span>
+					//console.log('gotcha');
+<span class="cstat-no" title="statement not covered" >					console.log(e);</span>
+<span class="cstat-no" title="statement not covered" >					tile = e;</span>
+				}
+			});
+<span class="cstat-no" title="statement not covered" >			return tile;</span>
+		},
+		deselectTile: <span class="fstat-no" title="function not covered" >function($tile){</span>
+<span class="cstat-no" title="statement not covered" >			var tile = this.availableTiles[$tile.index()];</span>
+<span class="cstat-no" title="statement not covered" >			console.log('deselect: ');</span>
+<span class="cstat-no" title="statement not covered" >			console.log(tile);</span>
+<span class="cstat-no" title="statement not covered" >			if(tile.selected) {</span>
+<span class="cstat-no" title="statement not covered" >				tile.unsetPlayer();</span>
+			}
+		},
+		parseFromServer: <span class="fstat-no" title="function not covered" >function(callback){</span>
+<span class="cstat-no" title="statement not covered" >			var serverResponse = {</span>
+				'green': {
+					imgPath: '/assets/img/tiles/square1.png',
+					index: 61
+				},
+				'yellow': {
+					imgPath: '/assets/img/tiles/square2.png',
+					index: 95
+				},
+				'rose': {
+					imgPath: '/assets/img/tiles/square3.png',
+					index: 105
+				},
+				'blue': {
+					imgPath: '/assets/img/tiles/square5.png',
+					index: 38
+				}
+			};
+<span class="cstat-no" title="statement not covered" >			for(key in serverResponse) {</span>
+<span class="cstat-no" title="statement not covered" >				var tile = new GameTile(key, serverResponse[key]);</span>
+<span class="cstat-no" title="statement not covered" >				this.allTiles.push(tile);</span>
+<span class="cstat-no" title="statement not covered" >				this.availableTiles.push(tile);</span>
+			}
+<span class="cstat-no" title="statement not covered" >			console.log(this.availableTiles);</span>
+<span class="cstat-no" title="statement not covered" >			callback(this);/</span>/returning back this object
+		}
+	};
+});</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Nov 01 2015 02:07:13 GMT+0200 (FLE Standard Time)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

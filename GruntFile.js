@@ -41,7 +41,7 @@ module.exports = function(grunt) {
 		},
 		concurrent: {
 		  target: {
-			tasks: ['nodemon', 'watch'],
+			tasks: ['nodemon'],
 			options: {
 			  logConcurrentOutput: true
 			}
@@ -278,8 +278,11 @@ module.exports = function(grunt) {
             tasks: ['less']
           },
           watchjs: {
-            files: ['<%= pkg.staddle.js %>/main.js','<%= pkg.staddle.js %>/modules/*.js'], 
+            files: ['**/*.js'], 
             tasks: ['jshint','uglify']
+          },          
+		  watchcss: {
+            files: ['**/*.css']
           },
           watchimages: {
             files: [
@@ -299,7 +302,7 @@ module.exports = function(grunt) {
           },
           watchcontent: {
             files: [
-              '<%= pkg.staddle.content %>/**/*.hbs'
+              '<%= pkg.staddle.content %>/**/*.ejs'
             ],
             tasks: ['clean:html','assemble']
           }
