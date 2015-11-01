@@ -145,6 +145,11 @@ require([
 		g2moku.reinitPlayerTiles(g2moku.gameTiles.availableTiles.slice(0, players));
 		e.preventDefault();
 	});
+	jQuery('body').on('click', '.play-more', function(e){
+		g2moku.$gameModal.modal('show');
+		g2moku.finalEndGame();
+		e.preventDefault();
+	});
 	g2moku.$gameModal.on('click', '.btn-add-player, .btn-remove-player', function(e){
 		var players = g2moku.$gameModal.find('.game-mode.player-vs-player').children().length;
 		if($(this).parent().parent().parent().index() !== g2moku.MAX_PLAYERS - 1) {

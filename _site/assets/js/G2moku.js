@@ -1,4 +1,4 @@
-define(['require', 'Player'], function(require, Player){
+define(['require', 'Player', 'Timer'], function(require, Player, Timer){
     require('prototype'); // Ensure Prototype is present
     var g2moku = (function(g) {
 		// Ячейки игрового поля будут в виде объекта this.board[id игровой ячейки] = чем ходили
@@ -26,6 +26,7 @@ define(['require', 'Player'], function(require, Player){
 		g.currentTile = null;
 		g.sprites = null;
 		g.canvas = null;
+		g.firstTime = true;
 		g.gameStarted = false;
 		g.playerMoving = false;
 		g.canUpdateMarker = true;
@@ -90,9 +91,8 @@ define(['require', 'Player'], function(require, Player){
 				// text.anchor.set(0.5);
 				// text.alpha = 0.1;
 				// g.game.add.tween(text).to( { alpha: 1 }, 2000, "Linear", true);
-				
 				g.game.physics.startSystem(Phaser.Physics.ARCADE);
-
+				
 				g.map = g.game.add.tilemap('map', 32, 32);
 
 				g.map.addTilesetImage('tiles');
@@ -110,17 +110,16 @@ define(['require', 'Player'], function(require, Player){
 				g.marker.drawRect(0, 0, 32, 32);
 
 				g.sprites = g.game.add.group();
-				//game.time.events.loop(1050, this.createSprite, this);
-				
-				g.game.input.addMoveCallback(this.updateMarker, this);
-
-				g.game.input.onDown.add(this.clickHandler, this);
+				//game.time.events.loop(1050, this.createSprite, this)
 
 				g.cursors = g.game.input.keyboard.createCursorKeys();
 				
 				//g.sprite = g.game.add.sprite(40, 100, 'ms');
 				console.log(g.map.width);
 						
+				g.game.input.addMoveCallback(this.updateMarker, this);
+				g.game.input.onDown.add(this.clickHandler, this);
+				
 				g.canvas = window.document.getElementsByTagName('canvas')[0],
 					prevX = 0, prevY = 0, mouseDown = false;
 			
@@ -215,7 +214,7 @@ define(['require', 'Player'], function(require, Player){
 						g.playerMoving = true;
 						if(g.players.currentPlaying === false) {//first turn
 							g.players.currentPlaying = g.players.next();
-							g.$gameTopBar.find('.game-play-text').html("<span='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
+							g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
 							g.players.currentPlaying.startTimer();
 							g.playerMoving = false;
 						} else {
@@ -226,6 +225,11 @@ define(['require', 'Player'], function(require, Player){
 								playerMove.id = g.history.length;
 								g.step(playerMove.tile.x, playerMove.tile.y, playerMove.player, function(win, turn) {
 									console.log('win-turn callback');
+									if(win) {
+										g.gameEnd(g.players.currentPlaying, function(timer){
+											
+										});
+									}
 									console.log(win);
 									console.log(turn);
 									// Она нам вернёт значения ходе, если победитель, а так же чем ходили всё передадим как есть в событие пользователям
@@ -239,7 +243,7 @@ define(['require', 'Player'], function(require, Player){
 									g.players.currentPlaying.$box.removeClass('active');
 									g.players.currentPlaying = g.players.next();//take next player in queue
 									g.players.currentPlaying.$box.addClass('active');
-									g.$gameTopBar.find('.game-play-text').html("<span='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
+									g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
 									g.players.currentPlaying.startTimer();
 									g.playerMoving = false;
 									console.log(g);		
@@ -398,17 +402,63 @@ define(['require', 'Player'], function(require, Player){
 				jQuery(this).find('.left-buttons').html(newButtons);			
 			});
 		};
+		g.gameEnd = function(winnerPlayer, callback){
+			jQuery('body').addClass('win');
+			g.timer.clear();
+			g.gameStarted = false;
+			g.canUpdateMarker = false;
+			g.$gameTopBar.addClass('invisible');
+			var animate = function($obj, anim){
+				$obj.removeClass('invisible').addClass(anim + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+					jQuery(this).removeClass(anim + ' animated');
+				});				
+			};
+			g.$gameTopBar.find('.game-play-text').html("<span class='game-win-player'>" + winnerPlayer.name + "</span> WIN!<br/><div class='brief-stats'>Time: <span>" + g.timer.getTimestampDiff(true) + "</span> | Moves: <span>" + winnerPlayer.moves.length + "</span></div><a href='#' class='btn btn-lg btn-primary play-more'>Wanna Play more?</a>");
+			animate(g.$gameTopBar, 'tada');
+			winnerPlayer.$box.addClass('winner');
+			animate(winnerPlayer.$box, 'pulse');
+			g.winningTimerID = setInterval(function(){
+				animate(g.$gameTopBar, 'tada');
+				animate(winnerPlayer.$box, 'pulse');
+			}, 4000);
+			g.playerMoving = false;		
+			callback(g.timer);
+		};
+		g.finalEndGame = function(){
+			jQuery('body').removeClass('win');
+			g.$gameTopBar.find('.game-play-text').addClass('invisible');
+			if(g.winningTimerID) clearInterval(g.winningTimerID);
+			g.players.playing.each(function(e, i){
+				e.$box.remove();
+			});
+			g.players.playing = [];
+			g.history = [];
+			g.players.arr = [];
+			g.board = [];
+			g.firstTime = false;
+		};
 		g.gameStart = function(gameMode, data){
+			if(!g.firstTime) {
+				g.game.state.start('GameState',true,false);
+				console.log(g);
+			}
 			switch (gameMode) {
 				case 'playerVSplayer':
 					g.gameStarted = true;
+					g.canUpdateMarker = true;
+					g.timer = new Timer(1000, function(timer){
+						
+					});
 					g.players.parseFromGameModal(data);
 					//add player box for each playing player.
 					g.players.playing.each(function(e, i){
 						g2moku.preparePlayerBlock(e, i);
 					});
 					g.$gameTopBar.find('.game-play-text').html("<span='game-next-player'>Player</span> be ready for the game YOU ARE FIRST!<br/><b>Click to start the game!</b>");
-					g.$gameTopBar.removeClass('invisible').addClass('fadeInDown animated');
+					g.$gameTopBar.find('.game-play-text').removeClass('invisible');
+					g.$gameTopBar.removeClass('invisible').addClass('fadeInDown animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+						jQuery(this).removeClass('fadeInDown animated');
+					});
 					setInterval(function(){
 						g.$gameTopBar.find('b').removeClass().addClass('tada animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
 							jQuery(this).removeClass();
@@ -452,7 +502,6 @@ define(['require', 'Player'], function(require, Player){
 					|| g.checkWinnerDynamic('/', x, y, turn)
 				) {
 				// есть победитель
-				alert('WIN');
 				return true;
 			} else {
 				// // нет победителя

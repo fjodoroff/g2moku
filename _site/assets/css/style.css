@@ -143,13 +143,18 @@ html {
     right: 0;
     bottom: 0;
 }
+.player-box.winner {
+    opacity: 1;
+}
 .player-box .avatar span{
-	line-height: 128px;
+	height: 128px;
     vertical-align: middle;
     display: block;
+    padding-top: 22px;
     font-size: 50px;
     text-align: center;
     font-weight: bold;
+	text-shadow: 2px 0px 6px rgb(10, 10, 10);
 }
 .player-box .avatar{
 	position: relative;
@@ -268,10 +273,23 @@ html {
 	top: 0;
 	background: red;
 }
+.player-box.player-box-top-left .playing-tile{
+	left: 2px;
+	right: inherit;
+}
 .player-box-top-right {
 	right: 0;
 	top: 0;
 	background: green;
+}
+.player-box-bottom-left .avatar span,
+.player-box-bottom-right .avatar span{
+	padding-top: 32px;
+}
+.player-box-bottom-left .bottom-panel,
+.player-box-bottom-right .bottom-panel{
+	top: 10px;
+	bottom: inherit;
 }
 .player-box-bottom-left .bottom-block,
 .player-box-bottom-right .bottom-block{
@@ -283,10 +301,20 @@ html {
 	bottom: 0;
 	background: blue;
 }
+.player-box.player-box-bottom-left .playing-tile{
+    left: 2px;
+    bottom: 2px;
+    right: inherit;
+    top: inherit;
+}
 .player-box-bottom-right {
 	right: 0;
 	bottom: 0;
 	background: yellow;
+}
+.player-box.player-box-bottom-right .playing-tile{
+    top: inherit;
+    bottom: 2px;
 }
 .game-mode.player-vs-player .player-square-btns .btn-add-player {
 	width: 41px;
@@ -362,6 +390,14 @@ html {
     margin: 0;
     font-weight: bold;
 }
+.game-topbar .game-play-text .brief-stats span{
+	background: #424242;
+    padding: 2px 7px;
+}
+.game-topbar .game-play-text {
+	text-transform: uppercase;
+	margin-bottom: 20px;
+}
 .game-topbar > div{
 	margin: 0 auto;
     width: 35%;
@@ -369,6 +405,9 @@ html {
     margin-top: 2px;
     background: black;
     vertical-align: middle;
+}
+body.win .game-topbar > div{
+    background: #489248;
 }
 .game-topbar {
 	position: absolute;
