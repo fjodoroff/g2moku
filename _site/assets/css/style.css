@@ -143,13 +143,18 @@ html {
     right: 0;
     bottom: 0;
 }
+.player-box.winner {
+    opacity: 1;
+}
 .player-box .avatar span{
-	line-height: 128px;
+	height: 128px;
     vertical-align: middle;
     display: block;
+    padding-top: 22px;
     font-size: 50px;
     text-align: center;
     font-weight: bold;
+	text-shadow: 2px 0px 6px rgb(10, 10, 10);
 }
 .player-box .avatar{
 	position: relative;
@@ -172,21 +177,75 @@ html {
     width: 128px;
     text-align: center;
 }
+.player-box .bottom-block table{
+	margin-bottom: 0;
+}
+.player-box .bottom-block tbody td.player-turn-xy span{
+	display: block;
+    text-align: center;
+}
+.player-box .bottom-block tbody td.player-turn-xy{
+    padding-left: 0;
+}
+.player-box .bottom-block tbody tr:first-of-type{
+	background-color: #313131;
+}
+.player-box .bottom-block tbody tr.bg-primary{
+	color: #fff;
+    background-color: #df691a;
+}
+.player-box .bottom-block tbody th[scope='row'],
 .player-box .bottom-block tbody td{
-	font-size: 11px;
+	font-size: 11px;	
+    vertical-align: middle;
 }
 .player-box .bottom-block thead th{
 	border-bottom: 1px solid #4E5D6C;
 }
+.player-box .bottom-block tfoot,
 .player-box .bottom-block thead{
 	background: black;
+}
+.player-box .bottom-block::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+.player-box .bottom-block::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+.player-box .bottom-block::-webkit-scrollbar-thumb {
+  background: #cacaca;
+  border: 3px none #ffffff;
+  border-radius: 50px;
+}
+.player-box .bottom-block::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+}
+.player-box .bottom-block::-webkit-scrollbar-thumb:active {
+  background: #ffffff;
+}
+.player-box .bottom-block::-webkit-scrollbar-track {
+  background: #484848;
+  border: 1px none #ffffff;
+  border-radius: 26px;
+}
+.player-box .bottom-block::-webkit-scrollbar-track:hover {
+  background: #666666;
+}
+.player-box .bottom-block::-webkit-scrollbar-track:active {
+  background: #333333;
+}
+.player-box .bottom-block::-webkit-scrollbar-corner {
+  background: transparent;
 }
 .player-box .bottom-block{
 	width: 100%;
 	/* display: table; */
-    max-height: 200%;
+	max-height: 170%;
 	min-height:20px;
-	overflow: auto;
+    overflow-x: hidden;
+	overflow-y: scroll;
 }
 .horizontal-only
 {
@@ -214,20 +273,48 @@ html {
 	top: 0;
 	background: red;
 }
+.player-box.player-box-top-left .playing-tile{
+	left: 2px;
+	right: inherit;
+}
 .player-box-top-right {
 	right: 0;
 	top: 0;
 	background: green;
+}
+.player-box-bottom-left .avatar span,
+.player-box-bottom-right .avatar span{
+	padding-top: 32px;
+}
+.player-box-bottom-left .bottom-panel,
+.player-box-bottom-right .bottom-panel{
+	top: 10px;
+	bottom: inherit;
+}
+.player-box-bottom-left .bottom-block,
+.player-box-bottom-right .bottom-block{
+	position: absolute;
+    bottom: 128px;
 }
 .player-box-bottom-left {
 	left: 0;
 	bottom: 0;
 	background: blue;
 }
+.player-box.player-box-bottom-left .playing-tile{
+    left: 2px;
+    bottom: 2px;
+    right: inherit;
+    top: inherit;
+}
 .player-box-bottom-right {
 	right: 0;
 	bottom: 0;
 	background: yellow;
+}
+.player-box.player-box-bottom-right .playing-tile{
+    top: inherit;
+    bottom: 2px;
 }
 .game-mode.player-vs-player .player-square-btns .btn-add-player {
 	width: 41px;
@@ -303,6 +390,14 @@ html {
     margin: 0;
     font-weight: bold;
 }
+.game-topbar .game-play-text .brief-stats span{
+	background: #424242;
+    padding: 2px 7px;
+}
+.game-topbar .game-play-text {
+	text-transform: uppercase;
+	margin-bottom: 20px;
+}
 .game-topbar > div{
 	margin: 0 auto;
     width: 35%;
@@ -310,6 +405,9 @@ html {
     margin-top: 2px;
     background: black;
     vertical-align: middle;
+}
+body.win .game-topbar > div{
+    background: #489248;
 }
 .game-topbar {
 	position: absolute;

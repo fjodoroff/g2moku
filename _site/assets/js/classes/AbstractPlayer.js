@@ -40,7 +40,13 @@ define(['require', 'PlayerMove'], function(require, PlayerMove){
 		afterEndMove: function(playerMove) {},
 		afterStartMove: function() {},
 		setPlayingTile: function(tile){
-			this.playingTile = tile;
-		}
+			console.log('setPlayingTile');
+			if(isObject(tile)) {
+				//g.map.getTile(0, 0);
+				this.playingTile = tile;
+			} else {//if number 
+				//this.playingTile = g.map.getImageIndex(index);
+			}
+		},
 	})
 });
