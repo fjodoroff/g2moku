@@ -1,6 +1,6 @@
 var request = require('supertest');
 var express = require('express');
-var testingApp = require('../../app/main.js');
+var testingApp = require('../../../app/main.js');
 var nock = require('nock');
 
 

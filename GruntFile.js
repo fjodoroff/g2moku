@@ -22,7 +22,7 @@ module.exports = function(grunt) {
 		jshint: {
 		  options: {
 			jshintrc: '.jshintrc',
-			ignores: ['test/coverage/**/*.js']
+			ignores: ['test/coverage/**/*.js', 'test/frontend/**/*.js', 'test/test-main.js']
 		  },
 		  files: {
 			src: ['app/**/*.js', 'test/**/*.js']
@@ -52,13 +52,13 @@ module.exports = function(grunt) {
 			options: {
 			  reporter: 'spec'
 			},
-			src: ['test/unit/*.js']
+			src: ['test/backend/unit/*.js']
 		  },
 		  route: {
 			options: {
 			  reporter: 'spec'
 			},
-			src: ['test/route/*.js']
+			src: ['test/backend/**/*.js']
 		  },
 		  // api: {
 			// options: {

@@ -1,4 +1,4 @@
-var express = require('express');
+var express = require('express.io');
 //var passport = require('passport');
 var path = require('path');
 var bodyParser = require('body-parser');
@@ -17,6 +17,7 @@ var favicon = require('serve-favicon');
 // });
 
 var app = global.app = express();
+app.http().io();
 var port = global.port = process.env.PORT || 1337;
 
 // configure app
@@ -26,7 +27,6 @@ app.set('PORT', port);
 
 app.use('/coverage', express.static(__dirname + '/../test/coverage/reports'));
 // use middleware
-app.use(morgan('dev'));
 app.use(cookieParser('secret')); 
 
 var dirs = __dirname.split('/'),
@@ -34,7 +34,7 @@ var dirs = __dirname.split('/'),
 for(var i = 0; i < dirs.length; i++) {
 	if(dirs[i].indexOf('axive') !== -1) onProduction = true;
 }
-
+app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, !onProduction ? '/../_site' : '_site')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
@@ -56,5 +56,4 @@ app.use(require('./routes'));
 var server = app.listen(port, function(){
 	console.log('Server running on port ' + server.address().port + '...');
 });
-
 module.exports = app;

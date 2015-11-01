@@ -42,27 +42,9 @@ define(['GameTile'], function(GameTile) {
 				tile.unsetPlayer();
 			}
 		},
-		parseFromServer: function(callback){
-			var serverResponse = {
-				'green': {
-					imgPath: '/assets/img/tiles/square1.png',
-					index: 61
-				},
-				'yellow': {
-					imgPath: '/assets/img/tiles/square2.png',
-					index: 95
-				},
-				'rose': {
-					imgPath: '/assets/img/tiles/square3.png',
-					index: 105
-				},
-				'blue': {
-					imgPath: '/assets/img/tiles/square5.png',
-					index: 38
-				}
-			};
-			for(key in serverResponse) {
-				var tile = new GameTile(key, serverResponse[key]);
+		parseFromServer: function(data, callback){
+			for(key in data) {
+				var tile = new GameTile(key, data[key]);
 				this.allTiles.push(tile);
 				this.availableTiles.push(tile);
 			}

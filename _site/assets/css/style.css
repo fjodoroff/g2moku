@@ -124,17 +124,32 @@ html {
 .players_form .player button.btn-add-player{
 	margin-right: 5px;
 }
-.modal-header .title .label{
+#game-modal .modal-header .title .label{
 	background-color: #2E672E;
 }
-.modal-header .title{
+#game-modal .modal-header .title{
 	width: 100%;
 }
-.modal-header {
+#game-modal .modal-content .logo{
+	position: relative;
+}
+#game-modal .modal-header {
 	position: absolute;
     right: 0;
     left: 0;
     background-color: transparent!important;
+}
+#game-modal .modal-content .short-message {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-right: 7px;
+    margin-bottom: 5px;
+    /* border-bottom: 1px solid green; */
+    font-size: 10px;
+}
+body.online #game-modal .modal-content .short-message i.fa-circle {
+	color: #2B9E2B;
 }
 .player-boxes {
 	position: absolute;

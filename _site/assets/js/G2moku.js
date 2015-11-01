@@ -1,4 +1,4 @@
-define(['require', 'Player', 'Timer'], function(require, Player, Timer){
+define(['require', 'Player', 'Timer', 'socket.io'], function(require, Player, Timer, io){
     require('prototype'); // Ensure Prototype is present
     var g2moku = (function(g) {
 		// Ячейки игрового поля будут в виде объекта this.board[id игровой ячейки] = чем ходили
@@ -7,6 +7,7 @@ define(['require', 'Player', 'Timer'], function(require, Player, Timer){
 		g.stepsToWin = 5;
 		// Кол-во сделанных ходов
 		g.steps = 0;
+		g.io = io.connect('http://localhost:1337');
 		g.MAX_PLAYERS = 4;
 		g.gameTiles = null;
 		g.gameTiles = require('gameTiles');
@@ -580,6 +581,22 @@ define(['require', 'Player', 'Timer'], function(require, Player, Timer){
 			}
 			return(win >= g.stepsToWin);
 		};
+		g.io.emit('ready', {
+			timeStamp: +new Date(),
+			screenSize: {
+				x: g.game.width,
+				y: g.game.height
+			}
+		});
+		// Listen for the talk event.
+		g.io.on('log', function(data) {
+			console.log(data);
+		});
+		g.io.on('welcome', function(data) {
+			console.log(data);
+			g2moku.$gameModal.find('.logo').append('<div class="short-message"><i class="fa fa-circle"></i> ' + data.message + '</div>');
+			jQuery('body').addClass('online');
+		});
 		return g;
 	}(g2moku || {}));	
 	return g2moku;

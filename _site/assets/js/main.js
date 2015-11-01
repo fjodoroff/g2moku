@@ -7,6 +7,7 @@ require.config({
 		'prototype': 'libs/prototype/prototype',
 		'phaser': 'libs/phaser/phaser.min',
 		'utils': 'utils',
+		'socket.io': 'libs/socket.io/socket.io',
 		'exceptions': 'modules/exceptions',
 		'gameTiles':  'modules/gameTiles',
 		'AbstractPlayer':  'classes/AbstractPlayer',
@@ -177,21 +178,26 @@ require([
 	});
 	g2moku.$gameModal.find('.btn-play').on('click', function(e){
 		var $players = g2moku.$gameModal.find('.game-mode.player-vs-player'),
-			$bar = g2moku.$gameModal.find('.modal-header .title');
-		g2moku.gameTiles.parseFromServer(function(gameTiles){
-			var tiles = gameTiles.availableTiles;
-			$players.empty();
-			g2moku.makeGameMenuPlayerRow(tiles.slice(0, 2), false);
-			g2moku.makeGameMenuPlayerRow(tiles.slice(0, 2), true);
-			$players.slideToggle({
-				duration: 450
-				//easing: 'easeInOutExpo'
+			$bar = g2moku.$gameModal.find('.modal-header .title');			
+			console.log('PARSE FROM SERVER');//tiles.available
+		g2moku.io.emit('request.tiles.available');
+		g2moku.io.on('response.tiles.available', function(data) {
+			console.log('response.tiles.available');
+			g2moku.gameTiles.parseFromServer(data, function(gameTiles){
+				var tiles = gameTiles.availableTiles;
+				$players.empty();
+				g2moku.makeGameMenuPlayerRow(tiles.slice(0, 2), false);
+				g2moku.makeGameMenuPlayerRow(tiles.slice(0, 2), true);
+				$players.slideToggle({
+					duration: 450
+					//easing: 'easeInOutExpo'
+				});
+				$bar.fadeToggle(350);
+				g2moku.$gameModal.find('.btn-play-game').fadeToggle(350);
+				//g2moku.$gameModal.modal('hide');
+				//g2moku.gameStart('playerVSplayer');
+				console.log(g2moku);
 			});
-			$bar.fadeToggle(350);
-			g2moku.$gameModal.find('.btn-play-game').fadeToggle(350);
-			//g2moku.$gameModal.modal('hide');
-			//g2moku.gameStart('playerVSplayer');
-			console.log(g2moku);
 		});
 		//map.setTileSize(20, 20);
 		// map.replace(24, 46);
