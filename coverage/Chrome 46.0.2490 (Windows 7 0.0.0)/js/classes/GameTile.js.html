@@ -20,28 +20,28 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">52.63% </span>
+        <span class="strong">89.47% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>10/19</span>
+        <span class='fraction'>17/19</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">50% </span>
+        <span class="strong">62.5% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>3/6</span>
+        <span class='fraction'>5/8</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">28.57% </span>
+        <span class="strong">71.43% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>2/7</span>
+        <span class='fraction'>5/7</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">50% </span>
+        <span class="strong">88.89% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>9/18</span>
+        <span class='fraction'>16/18</span>
       </div>
     </div>
   </div>
-  <div class='status-line medium'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -107,9 +107,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -119,12 +119,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">define(function(require){
@@ -148,10 +148,10 @@
 				this.imgPath = o;
 			}
 		},
-		setPlayer: <span class="fstat-no" title="function not covered" >function($player){</span>
-<span class="cstat-no" title="statement not covered" >			if(!this.selected) {</span>
-<span class="cstat-no" title="statement not covered" >				this.selected = true;</span>
-<span class="cstat-no" title="statement not covered" >				this.$player = $player;</span>
+		setPlayer: function($player){
+			<span class="missing-if-branch" title="else path not taken" >E</span>if(!this.selected) {
+				this.selected = true;
+				this.$player = $player;
 			}
 		},
 		removeClass: <span class="fstat-no" title="function not covered" >function(cl){</span>
@@ -160,13 +160,13 @@
 		setClass: <span class="fstat-no" title="function not covered" >function(cl){</span>
 <span class="cstat-no" title="statement not covered" >			this.cl = cl;</span>
 		},
-		unsetPlayer: <span class="fstat-no" title="function not covered" >function(){</span>
-<span class="cstat-no" title="statement not covered" >			this.$player = null;		</span>
-<span class="cstat-no" title="statement not covered" >			this.selected = false;		</span>
+		unsetPlayer: function(){
+			this.$player = null;		
+			this.selected = false;		
 		},
-		getHTML: <span class="fstat-no" title="function not covered" >function(){</span>
-<span class="cstat-no" title="statement not covered" >			var btnHTML = '&lt;button type="button" data-tile-index="' + this.index + '" class="' + this.classes.join(' ') + " " + this.cl +'"&gt;&lt;img src="' + this.imgPath + '"&gt;&lt;/button&gt;'; </span>
-<span class="cstat-no" title="statement not covered" >			return btnHTML;</span>
+		getHTML: function(){
+			var btnHTML = '&lt;button type="button" ' + ( this.index ? <span class="branch-0 cbranch-no" title="branch not covered" >'data-tile-index="' + this.index + '"' </span>: '' ) + ' class="' + this.classes.join(' ') + " " + this.cl +'"&gt;&lt;img src="' + this.imgPath + '"&gt;&lt;/button&gt;'; 
+			return btnHTML;
 		}
 	})
 });</pre></td></tr>
@@ -175,7 +175,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Oct 31 2015 19:36:46 GMT+0200 (FLE Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Nov 01 2015 02:07:13 GMT+0200 (FLE Standard Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

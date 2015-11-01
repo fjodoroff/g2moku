@@ -1,20 +1,24 @@
 <?xml version="1.0"?>
-<testsuite name="Chrome 46.0.2490 (Windows 7 0.0.0)" package="" timestamp="2015-10-31T17:36:43" id="0" hostname="Artur-PC" tests="12" errors="0" failures="0" time="0.009">
+<testsuite name="Chrome 46.0.2490 (Windows 7 0.0.0)" package="" timestamp="2015-11-01T00:07:11" id="0" hostname="Artur-PC" tests="16" errors="0" failures="0" time="0.01">
   <properties>
     <property name="browser.fullName" value="Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36"/>
   </properties>
-  <testcase name="passing object as argument" time="0.001" classname="Chrome_46_0_2490_(Windows_7_0_0_0).Util test"/>
-  <testcase name="passing null argument" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).Util test"/>
-  <testcase name="passing function as argument" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).Util test"/>
-  <testcase name="passing object as argument" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).AbstractPlayerMove test"/>
-  <testcase name="should be an Object with true arguments" time="0.002" classname="Chrome_46_0_2490_(Windows_7_0_0_0).AbstractPlayerMove test"/>
-  <testcase name="should be player with name" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).AbstractPlayerMove test"/>
+  <testcase name="passing object as argument" time="0.001" classname="Chrome_46_0_2490_(Windows_7_0_0_0).isHTML test"/>
+  <testcase name="passing HTML as argument" time="0.001" classname="Chrome_46_0_2490_(Windows_7_0_0_0).isHTML test"/>
+  <testcase name="passing object as argument" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).isObject test"/>
+  <testcase name="passing null argument" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).isObject test"/>
+  <testcase name="passing function as argument" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).isObject test"/>
+  <testcase name="passing object as argument" time="0.001" classname="Chrome_46_0_2490_(Windows_7_0_0_0).AbstractPlayerMove test"/>
+  <testcase name="should be an Object with true arguments" time="0.001" classname="Chrome_46_0_2490_(Windows_7_0_0_0).AbstractPlayerMove test"/>
+  <testcase name="should be player with name" time="0.001" classname="Chrome_46_0_2490_(Windows_7_0_0_0).AbstractPlayerMove test"/>
   <testcase name="should set player's name, passing string as argument" time="0.001" classname="Chrome_46_0_2490_(Windows_7_0_0_0).Player"/>
-  <testcase name="should have a correct default properties" time="0.001" classname="Chrome_46_0_2490_(Windows_7_0_0_0).Player"/>
+  <testcase name="should have a correct default properties" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).Player"/>
   <testcase name="should set player's properties, passing object as argument (without layer property)" time="0.001" classname="Chrome_46_0_2490_(Windows_7_0_0_0).Player"/>
-  <testcase name="setting PlayingTile, cheking for Phaser.Tile instance" time="0.003" classname="Chrome_46_0_2490_(Windows_7_0_0_0).Player"/>
+  <testcase name="setting PlayingTile, cheking for Phaser.Tile instance" time="0.001" classname="Chrome_46_0_2490_(Windows_7_0_0_0).Player"/>
   <testcase name="passing object as argument" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).GameTile test"/>
   <testcase name="testing setPlayer method" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).GameTile test"/>
+  <testcase name="testing unsetPlayer" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).GameTile test"/>
+  <testcase name="testing getHTML to be html object and contains button" time="0.002" classname="Chrome_46_0_2490_(Windows_7_0_0_0).GameTile test"/>
   <system-out>
     <![CDATA[Chrome 46.0.2490 (Windows 7 0.0.0) LOG: '%c %c %c Phaser v2.2.2 | Pixi.js v2.2.0 | WebGL | WebAudio  %c %c %c http://phaser.io %c♥%c♥%c♥', 'background: #3db79f', 'background: #329582', 'color: #ffffff; background: #226558;', 'background: #329582', 'background: #3db79f', 'background: #ffffff', 'color: #ff2424; background: #fff', 'color: #ff2424; background: #fff', 'color: #ff2424; background: #fff'
 

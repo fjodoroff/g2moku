@@ -36,7 +36,7 @@ define(function(require){
 			this.selected = false;		
 		},
 		getHTML: function(){
-			var btnHTML = '<button type="button" data-tile-index="' + this.index + '" class="' + this.classes.join(' ') + " " + this.cl +'"><img src="' + this.imgPath + '"></button>'; 
+			var btnHTML = '<button type="button" ' + ( this.index ? 'data-tile-index="' + this.index + '"' : '' ) + ' class="' + this.classes.join(' ') + " " + this.cl +'"><img src="' + this.imgPath + '"></button>'; 
 			return btnHTML;
 		}
 	})

@@ -1,6 +1,14 @@
 define(['chai', 'utils'], function(chai, utils) {
 	var expect = chai.expect;
-	describe("Util test", function() {
+	describe("isHTML test", function() {
+		it("passing object as argument", function() {	
+			expect(isHTML({})).to.be.false;
+		});	
+		it("passing HTML as argument", function() {
+			expect(isHTML("<button>asass</button>")).to.be.true;
+		});			
+	});
+	describe("isObject test", function() {
 			it("passing object as argument", function() {
 				var obj = {};		
 				expect(isObject(obj)).to.be.true;
