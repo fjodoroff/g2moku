@@ -5,8 +5,9 @@ define([], function(){
 		var path = require('path');
 		var bodyParser = require('body-parser');
 		var cookieParser = require('cookie-parser');
-		//var session = require('express-session');
+		var fs = require('fs');
 		var morgan = require('morgan');
+		//var session = require('express-session');
 		var favicon = require('serve-favicon');
 		//var mysql = require('mysql');
 		//var flash = require('connect-flash');
@@ -19,6 +20,8 @@ define([], function(){
 		// });
 
 		var app = global.app = express();
+		//console.log(logger);
+		
 		app.http().io();
 		var port = global.port = process.env.PORT || 1337;
 
@@ -36,7 +39,9 @@ define([], function(){
 		for(var i = 0; i < dirs.length; i++) {
 			if(dirs[i].indexOf('axive') !== -1) onProduction = true;
 		}
-		app.use(morgan('dev'));
+		app.use(morgan('common', {
+			stream: fs.createWriteStream('./app/logs/access.log', {flags: 'a'})
+		}));
 		app.use(express.static(path.join(__dirname, !onProduction ? '/../_site' : '_site')));
 		app.use(bodyParser.json());
 		app.use(bodyParser.urlencoded());
@@ -55,8 +60,8 @@ define([], function(){
 
 		//require('./mysql');
 
-		var server = app.listen(port, function(){
-			console.log('Server running on port ' + server.address().port + '...');
+		var serv = app.listen(port, function(){
+			console.log('Server running on port ' + serv.address().port + '...');
 		});
 	}(server || {});
 	return server;

@@ -1,8 +1,8 @@
 define([/*'AbstractPlayer'*/], function(){
 	var routes = function(r){
+		require('console.json');
 		var express = require('express');
 		var router = express.Router();
-		require('console.json');
 		var clc = require('cli-color');
 		var counter = 0;
 
