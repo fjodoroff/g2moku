@@ -5,6 +5,6 @@ require(['config.js'], function(config){
     //config.publicPath = __dirname + '/public';
     require.config(config);  
 });
-require(['server'], function(s){
-    var server = s;
+require(['Server'], function(Server){
+    var server = new Server(1337);
 });

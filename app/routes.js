@@ -1,15 +1,14 @@
-define([/*'AbstractPlayer'*/], function(){
-	var routes = function(r){
+define([], function(){
+	var routes = function(app){
+		var r = this;
 		require('console.json');
-		var express = require('express');
-		var router = express.Router();
-		var clc = require('cli-color');
-		var counter = 0;
+		r.clc = require('cli-color');
+		r.counter = 0;
 
 		// define routes
-		global.app.get('/', function (req, res) {
+		app.get('/', function (req, res) {
 			//if(req.user) console.log(req.user.get('id'));
-			console.log(clc.yellow("REQUEST: ") + "Game page opened " + (++counter) + " time");
+			console.log(r.clc.yellow("REQUEST: ") + "Game page opened " + (++r.counter) + " time");
 			//console.log(req);
 			//req.io.broadcast('log', req);	
 			res.render('game', {});
@@ -21,10 +20,10 @@ define([/*'AbstractPlayer'*/], function(){
 			// });
 		// });
 
-		global.app.get('/rules', function (req, res) {
+		app.get('/rules', function (req, res) {
 			res.render('game_rules', {});
 		});
-		global.app.io.route('request.tiles.available', function(req) {
+		app.io.route('request.tiles.available', function(req) {
 			var serverResponse = {
 				'green': {
 					imgPath: '/assets/img/tiles/square1.png',
@@ -43,18 +42,18 @@ define([/*'AbstractPlayer'*/], function(){
 					index: 38
 				}
 			};
-			console.log(clc.black.bgWhite.underline("[ " + req.socket.id + " ]" + " Getting availableTiles"));
+			console.log(r.clc.black.bgWhite.underline("[ " + req.socket.id + " ]" + " Getting availableTiles"));
 			req.io.emit('response.tiles.available', serverResponse);
 		});
-		global.app.io.route('ready', function(req) {
+		app.io.route('ready', function(req) {
 			console.log(req.socket.id);
-			console.log(clc.black.bgWhite.underline("[ " + req.socket.id + " ]") + " " +clc.green("RESPONSE: ++Online | ") + "ScreenSize: " + req.data.screenSize.x + "x" + req.data.screenSize.y);
+			console.log(r.clc.black.bgWhite.underline("[ " + req.socket.id + " ]") + " " +r.clc.green("RESPONSE: ++Online | ") + "ScreenSize: " + req.data.screenSize.x + "x" + req.data.screenSize.y);
 			req.io.broadcast('online');
 			//console.log(req);
 			req.io.emit('welcome', {
 				message: 'Realtime'
 			});
 		});
-	}(routes || {});
+	}
 	return routes;
 });
