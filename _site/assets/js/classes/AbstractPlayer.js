@@ -1,5 +1,5 @@
-define(['require', 'PlayerMove'], function(require, PlayerMove){
-    require('prototype'); // Ensure Prototype is present
+define(['prototype', 'utils', 'PlayerMove'], function(proto, utils, PlayerMove){
+    //require('prototype'); // Ensure Prototype is present
 	
     return Class.create({
 		initialize: function(o) {
@@ -10,7 +10,7 @@ define(['require', 'PlayerMove'], function(require, PlayerMove){
 			this.layer = 0;
 			this.name = 'Player';
 			if(o) {
-				if(isObject(o)) {
+				if(utils.isObject(o)) {
 					this.layer = o.layer || this.layer;
 					this.name = o.name;
 					this.tile = o.tile;
@@ -41,7 +41,7 @@ define(['require', 'PlayerMove'], function(require, PlayerMove){
 		afterStartMove: function() {},
 		setPlayingTile: function(tile){
 			console.log('setPlayingTile');
-			if(isObject(tile)) {
+			if(utils.isObject(tile)) {
 				//g.map.getTile(0, 0);
 				this.playingTile = tile;
 			} else {//if number 

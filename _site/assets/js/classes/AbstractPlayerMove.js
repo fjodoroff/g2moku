@@ -1,9 +1,7 @@
-define(['require', 'Timer', 'utils'], function(require, Timer, utils){
-    require('prototype'); // Ensure Prototype is present
-	
+define(['Timer', 'utils', 'prototype'], function(Timer, utils, proto){	
     return Class.create({
 		initialize: function(data) {
-			if(isObject(data)) {				
+			if(utils.isObject(data)) {				
 				this.tile = data.tile;
 				this.timer = data.timer;
 				if(data.player) this.player = data.player;

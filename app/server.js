@@ -1,15 +1,41 @@
 define(['routes'], function(routes){
 	var Server = function(port){
 		var s = this;
-		s.express = require('express.io');
+		var bunyan = require('bunyan');
+		s.express = require('express.io');		
 		//var passport = require('passport');
+		//var session = require('express-session');
 		s.path = require('path');
+		var color = require('cli-color');
 		s.bodyParser = require('body-parser');
 		s.cookieParser = require('cookie-parser');
 		s.fs = require('fs');
-		s.morgan = require('morgan');
-		//var session = require('express-session');
 		s.favicon = require('serve-favicon');
+		s.log = {
+			console: bunyan.createLogger({
+				name: 'log',
+				streams: [{
+					level: 'info',
+					name: 'info-console',
+					stream: process.stdout
+				}]
+			}),
+			file: bunyan.createLogger({
+				name: 'log',
+				streams: [{
+					level: 'error',
+					path: s.path.join(__dirname, '/logs/error.log')
+				},{
+					level: 'info',
+					path: s.path.join(__dirname, '/logs/info.log')
+				}]
+			})
+		};
+		s.log.log = function(object) {
+			s.log.console.info(object);
+			s.log.file.debug(object);
+		};
+		global.log = s.log;
 		//var mysql = require('mysql');
 		//var flash = require('connect-flash');
 		// global.pool = mysql.createPool({
@@ -19,10 +45,14 @@ define(['routes'], function(routes){
 			// password : '',
 			// database : ''
 		// });
+		var dirs = __dirname.split('/'),
+			onProduction = false;
+		for(var i = 0; i < dirs.length; i++) {
+			if(dirs[i].indexOf('axive') !== -1) onProduction = true;
+		}
+		
 		s.app = app = s.express();
 		s.port = port;
-		//console.log(logger);
-		
 		app.http().io();
 
 		// configure app
@@ -34,13 +64,11 @@ define(['routes'], function(routes){
 		// use middleware
 		app.use(s.cookieParser('secret')); 
 
-		var dirs = __dirname.split('/'),
-			onProduction = false;
-		for(var i = 0; i < dirs.length; i++) {
-			if(dirs[i].indexOf('axive') !== -1) onProduction = true;
-		}
-		app.use(s.morgan('common', {
-			stream: s.fs.createWriteStream('./app/logs/access.log', {flags: 'a'})
+		app.use(require('express-bunyan-logger')({
+			streams: [{
+				level: 'info',
+				path: s.path.join(__dirname, '/logs/access.log')
+			}]
 		}));
 		app.use(s.express.static(s.path.join(__dirname, !onProduction ? '/../_site' : '_site')));
 		app.use(s.bodyParser.json());
@@ -62,6 +90,8 @@ define(['routes'], function(routes){
 		//require('./mysql');
 
 		s.serv = app.listen(port, function(){
+			s.log.console.info("New server started at port " + port);
+			s.log.file.info("New server started at port " + port);
 			console.log('Server running on port ' + s.serv.address().port + '...');
 		});
 	}

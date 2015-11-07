@@ -7,7 +7,7 @@ define(['require', 'Player', 'Timer', 'socket.io'], function(require, Player, Ti
 		g.stepsToWin = 5;
 		// Кол-во сделанных ходов
 		g.steps = 0;
-		g.io = io.connect('http://localhost:1337');
+		g.io = io.connect('http://localhost:' + location.port);
 		g.MAX_PLAYERS = 4;
 		g.gameTiles = null;
 		g.gameTiles = require('gameTiles');
@@ -37,6 +37,13 @@ define(['require', 'Player', 'Timer', 'socket.io'], function(require, Player, Ti
 		g.players = {
 			arr: [],
 			playing: [],
+			getPlaying: function(){
+				var a = [];
+				g.players.playing.each(function(e, i){
+					a.push(e.getJSON());
+				});
+				return a;
+			},
 			currentPlaying: false,
 			willPlay: function(player){
 				var newArr = [player];
@@ -360,7 +367,7 @@ define(['require', 'Player', 'Timer', 'socket.io'], function(require, Player, Ti
 				'<div class="row">' +
 					'<div class="col-xs-12 col-sm-5 col-md-5">' +
 							'<label class="labelSize" for="player-input-' + uniqNumber + '">Player ' + numbers[tiles.length - 1] + ':</label>' +
-							'<input type="text" class="form-control input-player-name" id="player-input-' + uniqNumber + '" placeholder="Player name...">' +
+							'<input type="text" class="form-control input-player-name" id="player-input-' + uniqNumber + '" placeholder="Player name..." value="Player-' +  (g.debug ? (uniqNumber + "").substr(-4) : "") + '">' +
 					'</div>' +
 					'<div class="col-xs-12 col-sm-7 col-md-7 player-square-btns"><div class="left-buttons">' + buttonsContent + "</div>" +
 						'<button type="button" class="btn btn-default square-btn-right pull-right">' +
@@ -452,6 +459,7 @@ define(['require', 'Player', 'Timer', 'socket.io'], function(require, Player, Ti
 					});
 					g.players.parseFromGameModal(data);
 					//add player box for each playing player.
+					g.io.emit('playGame', g.players.getPlaying());
 					g.players.playing.each(function(e, i){
 						g2moku.preparePlayerBlock(e, i);
 					});

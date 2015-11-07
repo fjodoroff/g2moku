@@ -1,6 +1,4 @@
-define(function(require){
-    require('prototype'); // Ensure Prototype is present
-	
+define(['prototype', 'utils'], function(proto, utils){
     return Class.create({
 		selected: false,
 		$player: null,
@@ -12,7 +10,7 @@ define(function(require){
 		initialize: function(key, o) {
 			this.key = key;
 			this.classes = ['btn', 'btn-default', 'square-btn', 'btn-player-tile'];
-			if(isObject(o)) {
+			if(utils.isObject(o)) {
 				this.index = o.index;
 				if(o.imgPath) this.imgPath = o.imgPath;
 			} else {
