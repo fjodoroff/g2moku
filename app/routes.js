@@ -46,6 +46,9 @@ define(['Player'], function(Player){
 			global.log.file.info("[ " + req.socket.id + " ]" + " Getting availableTiles");
 			req.io.emit('response.tiles.available', serverResponse);
 		});
+		app.io.route('startGame', function(req) {
+			
+		});
 		app.io.route('playGame', function(req) {
 			if(req.data instanceof Array) {
 				for(var i = 0; i < req.data.length; i++) {
@@ -58,6 +61,7 @@ define(['Player'], function(Player){
 					console.log(player);
 				}
 			}
+			//global.game = new G2moku();
 		});
 		app.io.route('ready', function(req) {
 			//console.log(req.socket.id);

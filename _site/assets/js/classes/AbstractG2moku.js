@@ -1,6 +1,5 @@
-define(['require', 'Player', 'Timer', 'socket.io'], function(require, Player, Timer, io){
-    require('prototype'); // Ensure Prototype is present
-    var g2moku = (function(g) {
+define(['prototype', 'Player', 'Timer', 'socket.io'], function(proto, Player, Timer, io){
+	var g2moku = (function(g) {
 		// Ячейки игрового поля будут в виде объекта this.board[id игровой ячейки] = чем ходили
 		g.board = [];
 		// Шагов до победы
@@ -18,6 +17,9 @@ define(['require', 'Player', 'Timer', 'socket.io'], function(require, Player, Ti
 		g.$gameStatistics = null;
 		g.$playerBoxes = jQuery('.player-boxes');
 		g.$gameTopBar = jQuery('.game-topbar');
+		g.$gameModal = jQuery('#game-modal');
+		g.$gameRules = jQuery('#game-rules');
+		g.$gameStatistics = jQuery('#game-statistics');
 		g.$box = null;
 		g.map = null;
 		g.history = [];
@@ -56,9 +58,9 @@ define(['require', 'Player', 'Timer', 'socket.io'], function(require, Player, Ti
 				return this.playing.length > 0 ? this.playing[this.playing.length - 1] : false;
 			},
 			next: function(){
-				if(this.playing.length == 0 && g2moku.gameStarted) this.playing = this.arr;
+				if(this.playing.length == 0 && g.gameStarted) this.playing = this.arr;
 				//this.playing[this.playing.length - 1].startTimer();
-				return this.playing.length > 0 && g2moku.gameStarted ? this.playing.pop() : false;
+				return this.playing.length > 0 && g.gameStarted ? this.playing.pop() : false;
 			},
 			parseFromGameModal: function(data){
 				var pl = this;
@@ -79,7 +81,7 @@ define(['require', 'Player', 'Timer', 'socket.io'], function(require, Player, Ti
 					pl.arr.push(player);				
 				});
 				console.log(pl.arr);
-				if(g2moku.gameStarted) this.playing = this.arr;
+				if(g.gameStarted) this.playing = this.arr;
 				return this.arr;
 			},
 		};
@@ -221,6 +223,10 @@ define(['require', 'Player', 'Timer', 'socket.io'], function(require, Player, Ti
 					try {
 						g.playerMoving = true;
 						if(g.players.currentPlaying === false) {//first turn
+							//GameStart
+							g.io.emit('startGame', {
+								timeStamp: +new Date()
+							});
 							g.players.currentPlaying = g.players.next();
 							g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
 							g.players.currentPlaying.startTimer();
@@ -349,7 +355,7 @@ define(['require', 'Player', 'Timer', 'socket.io'], function(require, Player, Ti
 			jQuery('body').prepend(player.$box);
 			player.$box.fadeIn(300);
 		};
-		g.makeGameMenuPlayerRow = function(tiles, addButton) {//in second iteration tilesNum will be depreceted
+		g.makeGameMenuPlayerRow = function(tiles, addButton) {
 			var buttonsContent = '',
 				addButtonContent = '',
 				uniqNumber = +new Date(),
@@ -387,13 +393,13 @@ define(['require', 'Player', 'Timer', 'socket.io'], function(require, Player, Ti
 					// // e.preventDefault();
 				// // });
 			// }
-			g2moku.$gameModal.find('.game-mode.player-vs-player').append($playerRow);
+			g.$gameModal.find('.game-mode.player-vs-player').append($playerRow);
 			$playerRow.slideDown(300);			
 		};
 		g.reinitPlayerTiles = function(tiles){
 			console.log('reinitting');
 			console.log(tiles);
-			g2moku.$gameModal.find('.game-mode.player-vs-player').children().each(function(i, e){
+			g.$gameModal.find('.game-mode.player-vs-player').children().each(function(i, e){
 				var buttonsNum = jQuery(this).parent().children().length,
 					newButtons = '';
 				for(var k = 0; k < tiles.length; k++) {
@@ -461,7 +467,7 @@ define(['require', 'Player', 'Timer', 'socket.io'], function(require, Player, Ti
 					//add player box for each playing player.
 					g.io.emit('playGame', g.players.getPlaying());
 					g.players.playing.each(function(e, i){
-						g2moku.preparePlayerBlock(e, i);
+						g.preparePlayerBlock(e, i);
 					});
 					g.$gameTopBar.find('.game-play-text').html("<span='game-next-player'>Player</span> be ready for the game YOU ARE FIRST!<br/><b>Click to start the game!</b>");
 					g.$gameTopBar.find('.game-play-text').removeClass('invisible');
@@ -602,10 +608,13 @@ define(['require', 'Player', 'Timer', 'socket.io'], function(require, Player, Ti
 		});
 		g.io.on('welcome', function(data) {
 			console.log(data);
-			g2moku.$gameModal.find('.logo').append('<div class="short-message"><i class="fa fa-circle"></i> ' + data.message + '</div>');
+			g.$gameModal.find('.logo').append('<div class="short-message"><i class="fa fa-circle"></i> ' + data.message + '</div>');
 			jQuery('body').addClass('online');
 		});
+		g.initialize = function(){
+			
+		};
 		return g;
-	}(g2moku || {}));	
-	return g2moku;
+	}(g2moku || {}));    
+	return Class.create(g2moku);
 });

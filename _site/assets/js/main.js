@@ -16,7 +16,7 @@ require.config({
 		'PlayerMove':  'classes/frontend/PlayerMove',
 		'GameTile':  'classes/GameTile',
 		'Timer':  'classes/Timer',
-		'G2moku':  'G2moku',
+		'G2moku':  'classes/AbstractG2moku',
 	},
 	shim: {
 		'prototype': {
@@ -45,7 +45,7 @@ require.config({
 			// exports: 'PlayerMove'
 		// },			
 		'G2moku': {
-			deps: ['utils', 'phaser', 'GameTile', 'jquery', 'bootstrap', 'gameTiles', 'exceptions', 'jquery.nanoscroller'],
+			deps: ['utils', 'phaser', 'GameTile', 'jquery', 'bootstrap', 'gameTiles', 'exceptions', 'jquery.nanoscroller', 'prototype'],
 			exports: 'g2moku'
 		},
 		'GameTile': {
@@ -60,12 +60,10 @@ require.config({
 require([
   // Load our app module and pass it to our definition function
   'G2moku', 'jquery'
-], function(g2moku, $){
+], function(G2, $){
+	var g2moku = new G2();
 	g2moku.game.state.add('GameState', g2moku.gameState);
 	g2moku.game.state.start('GameState');
-	g2moku.$gameModal = $('#game-modal');
-	g2moku.$gameRules = $('#game-rules');
-	g2moku.$gameStatistics = $('#game-statistics');
 	g2moku.$gameModal.modal({
 		backdrop: 'static'
 	});
