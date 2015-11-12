@@ -16,7 +16,8 @@ require.config({
 		'PlayerMove':  'classes/frontend/PlayerMove',
 		'GameTile':  'classes/GameTile',
 		'Timer':  'classes/Timer',
-		'G2moku':  'classes/AbstractG2moku',
+		'AbstractG2moku':  'classes/AbstractG2moku',
+		'G2moku':  'classes/frontend/G2moku'
 	},
 	shim: {
 		'prototype': {
@@ -32,21 +33,12 @@ require.config({
 		'bootstrap': {
 			deps: ['jquery']
 		},
-		// 'AbstractPlayer': {
-			// deps: ['utils', 'GameTile'],
-			// exports: 'AbstractPlayer'
-		// },
-		// 'Player': {
-			// //deps: ['AbstractPlayer'],
-			// exports: 'Player'
-		// },
-		// 'PlayerMove': {
-			// //deps: ['AbstractPlayer'],
-			// exports: 'PlayerMove'
-		// },			
+		'AbstractG2moku': {
+			deps: ['phaser', 'jquery'],
+			exports: 'g2moku'
+		},
 		'G2moku': {
 			deps: ['utils', 'phaser', 'GameTile', 'jquery', 'bootstrap', 'gameTiles', 'exceptions', 'jquery.nanoscroller', 'prototype'],
-			exports: 'g2moku'
 		},
 		'GameTile': {
 			deps: ['utils'],
@@ -63,7 +55,7 @@ require([
 ], function(G2, $){
 	var g2moku = new G2();
 	g2moku.game.state.add('GameState', g2moku.gameState);
-	g2moku.game.state.start('GameState');
+	g2moku.game.state.start('GameState', false, false, {}, {});
 	g2moku.$gameModal.modal({
 		backdrop: 'static'
 	});
