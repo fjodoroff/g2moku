@@ -3,6 +3,6 @@ define(['AbstractPlayer', 'prototype'], function(AbstractPlayer, proto){
 	// inherit from Person class:
 	p.prototype = Object.extend(new AbstractPlayer(), {
 		
-	});
+	}); 
 	return p;
 });

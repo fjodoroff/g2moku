@@ -5,7 +5,7 @@ define(['routes'], function(routes){
 		s.express = require('express.io');		
 		//var passport = require('passport');
 		//var session = require('express-session');
-		s.path = require('path');
+		s.path = require('path'); 
 		var color = require('cli-color');
 		s.bodyParser = require('body-parser');
 		s.cookieParser = require('cookie-parser');

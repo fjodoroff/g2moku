@@ -22,7 +22,7 @@ define(['prototype', 'utils', 'PlayerMove'], function(proto, utils, PlayerMove){
 		endMove: function(tile, callback){
 			this.timer.clear();
 			var playerMove = new PlayerMove({
-				tile: tile,
+				tile: tile, 
 				timer: this.timer
 			});
 			this.moves.push(playerMove);

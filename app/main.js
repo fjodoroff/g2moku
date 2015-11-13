@@ -7,4 +7,4 @@ require(['config.js'], function(config){
 });
 require(['Server'], function(Server){
     var server = new Server(1337);
-});
+}); 

@@ -34,7 +34,7 @@ define(['require', 'G2moku', 'AbstractPlayer', 'Timer'], function(require, g2mok
 		},
 		afterEndMove: function(playerMove){
 			//this.$box.removeClass('active');
-		},
+		}, 
 		moveToTile: function(tile, layer, callback) {
 			//this.moves.push(tile);
 			if(this.playingTile === false) this.playingTile = new Phaser.Tile(layer, 15);

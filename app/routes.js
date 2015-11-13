@@ -72,5 +72,5 @@ define(['Player'], function(Player){
 			});
 		});
 	}
-	return routes;
+	return routes; 
 });
