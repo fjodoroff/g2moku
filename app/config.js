@@ -10,6 +10,7 @@ define({
         'AbstractPlayerMove': '_site/assets/js/classes/AbstractPlayerMove',
         'PlayerMove': '_site/assets/js/classes/backend/PlayerMove',
         'Timer': '_site/assets/js/classes/Timer',
+        'base64': 'node_modules/base-64/base64',
         'GameTile': '_site/assets/js/classes/GameTile',
         'G2moku': '_site/assets/js/classes/backend/G2moku',
         'AbstractG2moku': '_site/assets/js/classes/AbstractG2moku',

@@ -169,13 +169,15 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 						if(g.players.currentPlaying === false) {//first turn
 							//GameStart
 							g.io.emit('startGame', {
-								timeStamp: +new Date()
+								timeStamp: +new Date(),
+								players: g.players.getPlaying()
 							});
-							g.players.next(g.gameStarted);
-							console.log(g.players);
-							g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
-							g.players.currentPlaying.startTimer();
-							g.playerMoving = false;
+							if(g.offline) {
+								g.generateID(g.generateID(function(preGenerated, genID){
+									g.genID = preGenerated + "." + genID
+								}));//generating gameID.(getGameID())
+								g.singleStartGame();
+							}
 						} else {
 							g.gameState.getTileProperties();
 							var tileX = g.layer.getTileX(g.marker.x),
@@ -373,6 +375,29 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 				jQuery(this).find('.left-buttons').html(newButtons);			
 			});
 		};
+		g.singleStartGame = function(){
+			g.players.next(g.gameStarted);
+			console.log(g.players);
+			g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
+			g.players.currentPlaying.startTimer();
+			g.playerMoving = false;
+		};
+		g.singleGameStart = function(){
+			g.$gameTopBar.find('.game-play-text').html("<span='game-next-player'>Player</span> be ready for the game YOU ARE FIRST!<br/><b>Click to start the game!</b>");
+			//add player box for each playing player.
+			g.players.playing.each(function(e, i){
+				g.preparePlayerBlock(e, i);
+			});
+			g.$gameTopBar.find('.game-play-text').removeClass('invisible');
+			g.$gameTopBar.removeClass('invisible').addClass('fadeInDown animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+				jQuery(this).removeClass('fadeInDown animated');
+			});
+			setInterval(function(){
+				g.$gameTopBar.find('b').removeClass().addClass('tada animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+					jQuery(this).removeClass();
+				});
+			}, 4000);
+		};
 		g.gameStart = function(gameMode, data){
 			console.log('not firsttime');
 			console.log(g);
@@ -390,27 +415,12 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 						
 					});
 					g.players.parseFromGameModal(data);
-					//add player box for each playing player.
-					g.io.emit('playGame', g.players.getPlaying());
-					g.players.playing.each(function(e, i){
-						g.preparePlayerBlock(e, i);
+					g.io.emit('playGame', {
+						timeStamp: +new Date(),
+						gameMode: gameMode,
+						players: g.players.getPlaying()
 					});
-					g.$gameTopBar.find('.game-play-text').html("<span='game-next-player'>Player</span> be ready for the game YOU ARE FIRST!<br/><b>Click to start the game!</b>");
-					g.$gameTopBar.find('.game-play-text').removeClass('invisible');
-					g.$gameTopBar.removeClass('invisible').addClass('fadeInDown animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-						jQuery(this).removeClass('fadeInDown animated');
-					});
-					setInterval(function(){
-						g.$gameTopBar.find('b').removeClass().addClass('tada animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-							jQuery(this).removeClass();
-						});
-					}, 4000);
-					//g.players.getLast()
-					//while(!this.gameStarted || !this.players.next()) {
-					// var player = g.players.next();
-					// g.waitMove(player, function(callback){
-						// console.log(callback);
-					// });
+					if(g.offline) g.singleGameStart();
 					break
 				default:
 					break
@@ -431,7 +441,7 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 			g.$gameTopBar.find('.game-play-text').html("<span class='game-win-player'>" + winnerPlayer.name + "</span> WIN!<br/><div class='brief-stats'>Time: <span>" + g.timer.getTimestampDiff(true) + "</span> | Moves: <span>" + winnerPlayer.moves.length + "</span></div><a href='#' class='btn btn-lg btn-primary play-more'>Wanna Play more?</a>");
 			animate(g.$gameTopBar, 'tada');
 			winnerPlayer.$box.addClass('winner');
-			animate(winnerPlayer.$box, 'pulse');
+			animate(winnerPlayer.$box, 'pulse'); 
 			g.winningTimerID = setInterval(function(){
 				animate(g.$gameTopBar, 'tada');
 				animate(winnerPlayer.$box, 'pulse');
@@ -469,6 +479,21 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 					if(data.canMove || g.offline) {
 						g.singleMoveToTile(data.tile);
 					}
+				}
+			});			
+			g.io.on('playGame', function(data) {
+				if(data && data.can) {
+					if(data.gameID) {
+						g.generateID(function(preGenerated, genID){
+							g.genID = preGenerated + "." + genID;
+							g.singleGameStart();
+						});
+					} else {
+						g.genID = g.generateID(function(preGenerated, genID){
+							g.genID = preGenerated + "." + genID;
+							g.singleGameStart();
+						});						
+					}							
 				}
 			});
 			// Listen for the talk event.

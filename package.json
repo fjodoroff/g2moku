@@ -36,6 +36,7 @@
     "amdefine": "^1.0.0",
     "amdrequire": "0.0.3",
     "assemble": "*",
+    "base-64": "^0.1.0",
     "body-parser": "^1.14.1",
     "bunyan": "^1.5.1",
     "chai": "^3.4.0",

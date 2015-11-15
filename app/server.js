@@ -11,6 +11,7 @@ define(['routes'], function(routes){
 		s.cookieParser = require('cookie-parser');
 		s.fs = require('fs');
 		s.favicon = require('serve-favicon');
+		global.games = s.games = {};
 		s.log = {
 			console: bunyan.createLogger({
 				name: 'log',

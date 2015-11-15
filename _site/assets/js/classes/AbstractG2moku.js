@@ -1,4 +1,7 @@
 define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
+	//if (typeof window === 'undefined') {
+	var base64 = require('base64');
+	//}
 	var g2 = (function(g) {
 		// Ячейки игрового поля будут в виде объекта this.board[id игровой ячейки] = чем ходили
 		g.board = [];
@@ -15,6 +18,7 @@ define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
 		g.history = [];
 		g.layer = null;  
 		g.canvas = null;
+		g.genID = false;
 		g.timer = null;
 		g.gameStarted = false;
 		g.playerMoving = false;
@@ -180,7 +184,41 @@ define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
 				this.playing = arr;
 				//this.arr = arr;
 				return arr;
+			},			
+			createPlayers: function(data){
+				var arr = [];
+				//console.log('//parsefromgameModal each data');
+				//console.log(data);
+				data.each(function(e, i){
+					// console.log('//tile i');
+					// console.log(i);
+					// console.log('//tile e');
+					// console.log(e);
+					var player = new Player({
+						name: e.input,
+						tile: e.tile,
+						playingTileIndex: e.tileIndex
+					});
+					//player.setPlayingTile(new Phaser.Tile(g.layer, e.tileIndex));
+					arr.push(player);				
+				});
+				this.arr = arr;
+				this.playing = arr;
+				//this.arr = arr;
+				return arr;
 			},
+		};
+		g.getGameID = function(){
+			return g.genID;
+		};
+		g.generateID = function(callback){
+			if(g.genID ===  false) {
+				var genID = +new Date(),
+					preGenerated = g.players.length;
+				callback(preGenerated, genID);
+			} else {
+				callback(false, g.genID);
+			}
 		};
 		g.initialize = function(){
 			this.gameErrors = {

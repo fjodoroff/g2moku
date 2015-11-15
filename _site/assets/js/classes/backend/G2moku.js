@@ -1,7 +1,10 @@
 define(['AbstractG2moku'], function(AbstractG2moku){
 	var g2 = (function(g) {
 		g.initHandlers = function(){
-			console.log('mapHeight' + g.mapHeight);
+			//console.log('mapHeight' + g.mapHeight);
+		};
+		g.sockets = function(){
+			
 		};
 		g.initialize = function(){
 			this.gameErrors = {

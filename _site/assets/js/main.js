@@ -5,6 +5,7 @@ require.config({
 		'jquery.nanoscroller': 'libs/jquery/jquery.nanoscroller.min',
 		'bootstrap':  'libs/bootstrap/bootstrap.min',
 		'prototype': 'libs/prototype/prototype',
+		'base64': 'libs/base-64/base64',
 		'phaser': 'libs/phaser/phaser.min',
 		'utils': 'utils',
 		'socket.io': 'libs/socket.io/socket.io',
@@ -34,7 +35,7 @@ require.config({
 			deps: ['jquery']
 		},
 		'AbstractG2moku': {
-			deps: ['phaser', 'jquery'],
+			deps: ['phaser', 'jquery', 'base64'],
 			exports: 'g2moku'
 		},
 		'G2moku': {

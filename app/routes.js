@@ -1,4 +1,7 @@
 define(['Player', 'G2moku'], function(Player, G2moku){
+	var logRequest = function(requestData, method, msg) {
+		consol.log(color.black.bgWhite.underline(JSON.stringify(requestData)) + "" + color.black.bgYellow.underline(" REQUEST: " + method));
+	};
 	var routes = function(app){
 		var r = this;
 		require('console.json');
@@ -47,7 +50,7 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 			req.io.emit('response.tiles.available', serverResponse);
 		});
 		app.io.route('beforeMoveToTile', function(req) {
-			console.log(color.black.bgWhite.underline("[ " + req.socket.id + " ]") + "" + color.black.bgYellow.underline(" RESPONSE: beforeMoveToTile"));
+			console.log(color.black.bgWhite.underline("[ " + req.socket.id + " ]") + "" + color.black.bgYellow.underline(" REQUEST: beforeMoveToTile"));
 			console.log(color.white.bgGreen.underline(" Tile: " + JSON.stringify(req.data.tile)) + color.white.bgCyan.underline(" Player: " + JSON.stringify(req.data.player.name))+ color.white.bgMagenta.underline(" Time: " + JSON.stringify(req.data.player.timer)));
 			//checking for move
 			setTimeout(function(){
@@ -58,22 +61,25 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 			}, 1000); 
 		});		
 		app.io.route('startGame', function(req) {
-			console.log('Start Game');
-			if(!global.games) global.games = {};
-			global.games[1] = new G2moku();
+
 		});
 		app.io.route('playGame', function(req) {
-			if(req.data instanceof Array) {
-				for(var i = 0; i < req.data.length; i++) {
-					var e = req.data[i];
-					var player = new Player({
-						name: e.name,
-						layer: e.layer,
-						tile: null
-					});
-					console.log(player);
-				}
-			}
+			var g = new G2moku(),
+				answer = {
+					can: true,// canPlayGame
+				};
+			g.players.createPlayers(req.data.players);
+			setTimeout(function(){
+				console.log(g.players);
+				g.generateID(function(preGenerated, genID){
+					var genetated = "",
+						newGenerated = "";
+					global.games[newGenerated] = g;
+					console.log('Play Game');
+					answer.gameID = preGenerated + "." + genID;
+					req.io.emit('playGame', answer);				
+				});
+			}, 1000);
 			//global.game = new G2moku();
 		});
 		app.io.route('ready', function(req) {
