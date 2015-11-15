@@ -1,4 +1,4 @@
-define(['Player'], function(Player){
+define(['Player', 'G2moku'], function(Player, G2moku){
 	var routes = function(app){
 		var r = this;
 		require('console.json');
@@ -40,14 +40,27 @@ define(['Player'], function(Player){
 				'blue': {
 					imgPath: '/assets/img/tiles/square5.png',
 					index: 38
-				}
+				} 
 			};
 			console.log(color.black.bgWhite.underline("[ " + req.socket.id + " ]") + " Getting availableTiles");
 			global.log.file.info("[ " + req.socket.id + " ]" + " Getting availableTiles");
 			req.io.emit('response.tiles.available', serverResponse);
 		});
+		app.io.route('beforeMoveToTile', function(req) {
+			console.log(color.black.bgWhite.underline("[ " + req.socket.id + " ]") + "" + color.black.bgYellow.underline(" RESPONSE: beforeMoveToTile"));
+			console.log(color.white.bgGreen.underline(" Tile: " + JSON.stringify(req.data.tile)) + color.white.bgCyan.underline(" Player: " + JSON.stringify(req.data.player.name))+ color.white.bgMagenta.underline(" Time: " + JSON.stringify(req.data.player.timer)));
+			//checking for move
+			setTimeout(function(){
+				req.io.emit('beforeMoveToTile', {
+					canMove: true,
+					tile: [req.data.tile.x, req.data.tile.y]
+				});						
+			}, 1000); 
+		});		
 		app.io.route('startGame', function(req) {
-			
+			console.log('Start Game');
+			if(!global.games) global.games = {};
+			global.games[1] = new G2moku();
 		});
 		app.io.route('playGame', function(req) {
 			if(req.data instanceof Array) {

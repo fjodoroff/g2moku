@@ -8,21 +8,16 @@ define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
 		g.steps = 0;
 		g.MAX_PLAYERS = 4;
 		g.exceptions = require('exceptions');
+		g.gameTiles = require('gameTiles');
 		g.debug = true;
-		g.$box = null;
 		g.mapWidth = 150;
 		g.mapHeight = 150;
 		g.history = [];
 		g.layer = null;  
-		g.cursors = null;
-		g.marker = null;
-		g.currentTile = null;
-		g.sprites = null;
 		g.canvas = null;
-		g.firstTime = true;
+		g.timer = null;
 		g.gameStarted = false;
 		g.playerMoving = false;
-		g.canUpdateMarker = true;
 		g.step = function(x, y, player, cb) {
 			// Проверяем что в этой клетке ничего нет
 			if(g.board[x + 'x' + y] !== undefined) return;
@@ -127,7 +122,6 @@ define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
 			return(win >= g.stepsToWin);
 		};
 		g.initHandlers = function(){};
-		g.gameTiles = require('gameTiles');
 		g.players = {
 			arr: [],
 			playing: [],
@@ -137,6 +131,14 @@ define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
 					a.push(e.getJSON());
 				});
 				return a;
+			},
+			clear: function(){
+				this.currentPlaying.$box.remove();
+				this.playing.each(function(e, i){
+					e.$box.remove();
+				});
+				this.playing = [];
+				this.currentPlaying = false;
 			},
 			currentPlaying: false,
 			willPlay: function(player){
@@ -149,16 +151,16 @@ define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
 			getLast: function(){
 				return this.playing.length > 0 ? this.playing[this.playing.length - 1] : false;
 			},
-			next: function(){
-				if(this.playing.length == 0 && g.gameStarted) this.playing = this.arr;
+			next: function(gameStarted){
+				//if(this.playing.length == 0) this.playing = this.arr;
 				//this.playing[this.playing.length - 1].startTimer();
-				var ans = this.playing.length > 0 /*&& g.gameStarted*/ ? this.playing.pop() : false;
+				var ans = this.playing.length > 0 ? this.playing.pop() : false;
 				this.currentPlaying = ans;
 				console.log(ans);
 				return ans;
 			},
 			parseFromGameModal: function(data){
-				var pl = this;
+				var arr = [];
 				//console.log('//parsefromgameModal each data');
 				//console.log(data);
 				data.each(function(e, i){
@@ -172,10 +174,12 @@ define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
 						playingTileIndex: e.tileIndex
 					});
 					player.setPlayingTile(new Phaser.Tile(g.layer, e.tileIndex));
-					pl.arr.push(player);				
+					arr.push(player);				
 				});
-				this.playing = this.arr;
-				return this.arr;
+				this.arr = arr;
+				this.playing = arr;
+				//this.arr = arr;
+				return arr;
 			},
 		};
 		g.initialize = function(){

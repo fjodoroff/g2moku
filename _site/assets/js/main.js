@@ -104,24 +104,6 @@ require([
 		}		
 		e.preventDefault();
 	});
-	jQuery('body').on('click', '.player-turn-xy', function(e){
-		g2moku.canUpdateMarker = false;
-		console.log('clicked');
-		var $this = jQuery(this);
-		$this.parent().addClass('bg-primary');
-		g2moku.marker.lineStyle(2, 0x000000, 1);
-		console.log(g2moku.marker);
-		g2moku.marker.x = g2moku.layer.getTileX($this.data('x')) * 32;
-		g2moku.marker.y = g2moku.layer.getTileY($this.data('y')) * 32;
-		setTimeout(function(){
-			g2moku.canUpdateMarker = true;
-			$this.parent().removeClass('bg-primary');
-		}, 3000);
-		console.log(g2moku.marker);
-		// setTimeout(function(){
-			// g2moku.canUpdateMarker = false;					
-		// }, 2000);
-	});
 	g2moku.$gameModal.on('click', '.btn-player-tile', function(e){
 		var $tile = $(this),
 			$player = $tile.parent().parent().parent().parent(),
@@ -134,11 +116,6 @@ require([
 			g2moku.gameTiles.deselectTile($tile);
 		}
 		g2moku.reinitPlayerTiles(g2moku.gameTiles.availableTiles.slice(0, players));
-		e.preventDefault();
-	});
-	jQuery('body').on('click', '.play-more', function(e){
-		g2moku.$gameModal.modal('show');
-		g2moku.finalEndGame();
 		e.preventDefault();
 	});
 	g2moku.$gameModal.on('click', '.btn-add-player, .btn-remove-player', function(e){

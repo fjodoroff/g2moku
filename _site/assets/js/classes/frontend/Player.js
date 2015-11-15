@@ -18,6 +18,7 @@ define(['require', 'G2moku', 'AbstractPlayer', 'Timer'], function(require, g2mok
 				j.moving = p.moving;
 				j.name = p.name;
 				j.layer = p.layer;
+				if(p.timer) j.timer = p.timer.getTimestampDiff();
 				j.playingTile = {
 					index: p.playingTile.index,
 					wordlX: p.playingTile.worldX,

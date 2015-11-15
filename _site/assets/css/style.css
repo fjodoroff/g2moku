@@ -170,6 +170,14 @@ body.online #game-modal .modal-content .short-message i.fa-circle {
     text-align: center;
     font-weight: bold;
 	text-shadow: 2px 0px 6px rgb(10, 10, 10);
+	-webkit-transition    : .2s;
+	-moz-transition       : .2s;
+	-o-transition         : .2s;
+	transition            : .2s;
+}
+.player-box .avatar span.hovered{
+    font-size: 15px;
+    padding-top: 47px;		
 }
 .player-box .avatar{
 	position: relative;
@@ -201,6 +209,9 @@ body.online #game-modal .modal-content .short-message i.fa-circle {
 }
 .player-box .bottom-block tbody td.player-turn-xy{
     padding-left: 0;
+}
+.player-box .bottom-block tbody tr.not-sended{
+	background-color: #751919!important;
 }
 .player-box .bottom-block tbody tr:first-of-type{
 	background-color: #313131;

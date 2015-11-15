@@ -1,12 +1,26 @@
 define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function(AbstractG2moku, proto, io, Player, Timer){
 	var g2 = (function(g) {
-		g.io = io.connect('http://localhost:' + location.port);
+		g.io = io.connect('http://localhost:' + location.port, {
+			'force new connection': true
+		});
 		g.game = new Phaser.Game('100%', '100%', Phaser.AUTO);
 		g.$playerBoxes = jQuery('.player-boxes');
 		g.$gameTopBar = jQuery('.game-topbar');
 		g.$gameModal = jQuery('#game-modal');
 		g.$gameRules = jQuery('#game-rules');
 		g.$gameStatistics = jQuery('#game-statistics');
+		g.$box = null;
+		g.firstTime = true;
+		g.marker = null;
+		g.offline = false;
+		g.cursors = null;
+		g.currentTile = null;
+		g.sprites = null;
+		g.canUpdateMarker = true;
+		g.setMarker = function(marker) {
+			g.marker.x = marker[0];	
+			g.marker.y = marker[1];	
+		};
 		g.gameState = {
 			init: function(a, b){
 				g2moku = a;
@@ -147,57 +161,41 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 				
 			},
 			clickHandler: function(pointer, event){
+				console.log(g.gameStarted + " " + g.playerMoving);
 				if(g.gameStarted && !g.playerMoving) { // IF Game started
 					try {
-						g.playerMoving = true;
 						console.log('clicked');
+						g.playerMoving = true;
 						if(g.players.currentPlaying === false) {//first turn
 							//GameStart
 							g.io.emit('startGame', {
 								timeStamp: +new Date()
 							});
-							if(g.gameStarted) g.players.next();
+							g.players.next(g.gameStarted);
 							console.log(g.players);
 							g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
 							g.players.currentPlaying.startTimer();
 							g.playerMoving = false;
 						} else {
 							g.gameState.getTileProperties();
-							var tile = g.map.getTile(g.layer.getTileX(g.marker.x), g.layer.getTileY(g.marker.y));
-							g.players.currentPlaying.moveToTile(tile, g.layer, function(playerMove){
-								playerMove.player = g.players.currentPlaying;
-								playerMove.id = g.history.length;
-								console.log('move to tile');
-								console.log(playerMove);
-								//Put tile on map
-								g.map.putTile(g.players.currentPlaying.playingTile, g.layer.getTileX(g.marker.x), g.layer.getTileY(g.marker.y));
-								g.step(playerMove.tile.x, playerMove.tile.y, playerMove.player, function(win, turn) {
-									console.log('win-turn callback');
-									g.history.push(playerMove);
-									g.addDataToPlayerBlock(playerMove, function(){
-										g.players.currentPlaying.$box.removeClass('active');
-										if(g.gameStarted) g.players.next();//take next player in queue
-										g.players.currentPlaying.$box.addClass('active');
-										if(!win) g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
-										g.players.currentPlaying.startTimer();
-										g.playerMoving = false;
-										console.log(g);	
-									});
-									if(win) {
-										g.gameEnd(g.players.currentPlaying, function(timer){
-											console.log('ENDED');
-										});
-									} else {
-									
-									}
-									g.players.willPlay(g.players.currentPlaying);
-									// Она нам вернёт значения ходе, если победитель, а так же чем ходили всё передадим как есть в событие пользователям
-								});
-								//g.players.currentPlaying.moveToTile
-							});	
+							var tileX = g.layer.getTileX(g.marker.x),
+								tileY = g.layer.getTileY(g.marker.y),
+								tile = g.map.getTile(tileX, tileY);
+							g.io.emit('beforeMoveToTile', {
+								player: g.players.currentPlaying.getJSON(),
+								gameTimer: g.timer,
+								tile: {
+									x: tileX,
+									y: tileY
+								},
+								timeStamp: +new Date()
+							});
+							if(g.offline) {
+								g.singleMoveToTile([tileX, tileY]);
+							}							
 						}
 					} catch(e) {
-						
+						console.log("EXCEPTION");
 					}
 				}
 			},
@@ -218,6 +216,44 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 				//citizen.play('walk', 10, true);
 				g.game.add.tween(citizen).to({ x: g.game.width }, 5000, Phaser.Easing.Exponential.InOut, true);
 			}
+		};
+		g.singleMoveToTile = function(tileXY){
+			var tileX = tileXY[0],
+				tileY = tileXY[1],
+				tile = g.map.getTile(tileX, tileY);
+			g.players.currentPlaying.moveToTile(tile, g.layer, function(playerMove){
+				playerMove.player = g.players.currentPlaying;
+				playerMove.id = g.history.length;
+				console.log('move to tile');
+				console.log(playerMove);
+				//Put tile on map
+				g.map.putTile(g.players.currentPlaying.playingTile, tileX, tileY);
+				g.step(playerMove.tile.x, playerMove.tile.y, playerMove.player, function(win, turn) {
+					console.log('win-turn callback');
+					g.history.push(playerMove);
+					if(win) {
+						g.gameEnd(g.players.currentPlaying, function(timer){
+							console.log('ENDED');
+						});
+					} else {
+					
+					}
+					g.addDataToPlayerBlock(playerMove, function(){
+						g.players.willPlay(g.players.currentPlaying);
+						g.players.currentPlaying.$box.removeClass('active');
+						g.players.next(g.gameStarted);//take next player in queue
+						if(!win) {
+							g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
+							g.players.currentPlaying.$box.addClass('active');
+							g.players.currentPlaying.startTimer();
+						}
+						g.playerMoving = false;
+						console.log(g);	
+					});
+					// Она нам вернёт значения ходе, если победитель, а так же чем ходили всё передадим как есть в событие пользователям
+				});
+				//g.players.currentPlaying.moveToTile
+			});
 		};
 		g.makeGameMenuPlayerRow = function(tiles, addButton) {
 			var buttonsContent = '',
@@ -266,7 +302,7 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 				// console.log('start');
 				// console.log(e);
 				// console.log(i);
-			var $playerMove = jQuery('<tr class="player-turn invisible">' +
+			var $playerMove = jQuery('<tr class="player-turn invisible' + (g.offline ? " not-sended" : "") + '">' +
 				'<th scope="row">' + playerMove.id + '</th>' +
 				'<td>' + playerMove.timer.getTimestampDiff(true) + '</td>' + 
 				'<td class="player-turn-xy" data-x="' + playerMove.tile.worldX + '" data-y="' + playerMove.tile.worldY + '">' +
@@ -277,7 +313,7 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 			//});
 			playerMove.player.$box.find('.player-game-history tbody').prepend($playerMove);
 			$playerMove.removeClass("invisible").addClass(anim + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-				jQuery(this).removeClass();
+				jQuery(this).removeClass(anim + ' animated');
 				//playerMove.player.$box.find('.bottom-block').height(300);
 				//playerMove.player.$box.find(".nano").nanoScroller();
 				callback();
@@ -338,6 +374,8 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 			});
 		};
 		g.gameStart = function(gameMode, data){
+			console.log('not firsttime');
+			console.log(g);
 			if(!g.firstTime) {
 				g.game.state.start('GameState', true, false);
 				//g.game.state.add('GameState', g.gameState, true);
@@ -401,18 +439,19 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 			g.playerMoving = false;		
 			callback(g.timer);
 		};
-		g.finalEndGame = function(){
+		g.finalEndGame = function(){ //resetting all arrays and objects. preparing for new game.
 			jQuery('body').removeClass('win');
 			g.$gameTopBar.find('.game-play-text').addClass('invisible');
 			if(g.winningTimerID) clearInterval(g.winningTimerID);
-			g.players.playing.each(function(e, i){
-				e.$box.remove();
-			});
-			g.players.playing = [];
+			g.winningTimerID = false;
+			g.players.clear();
+			g.players.currentPlaying = false;
 			g.history = [];
-			g.players.arr = [];
 			g.board = [];
 			g.firstTime = false;
+			g.gameStarted = false;
+			console.log('finalendgame');
+			console.log(g.players);
 		};
 		g.initHandlers = function(){
 			console.log('inithandlers');
@@ -425,7 +464,37 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 			});
 			g.mapHeight = g.game.height;
 			g.mapWidth = g.game.width;
+			g.io.on('beforeMoveToTile', function(data) {
+				if(data || g.offline) {
+					if(data.canMove || g.offline) {
+						g.singleMoveToTile(data.tile);
+					}
+				}
+			});
 			// Listen for the talk event.
+			g.io.on('connect_failed', function(data){
+				console.log('connect_failed');
+			});
+			g.io.on('connecting', function(data){
+				console.log('connecting');
+			});
+			g.io.on('disconnect', function(data){
+				g.offline = true;
+				console.log('disconnect');
+			});
+			g.io.on('error', function(reason){
+				console.log('error');
+			});
+			g.io.on('reconnect_failed', function(data){
+				console.log('reconnect_failed');
+			});
+			g.io.on('reconnect', function(data){
+				g.offline = false;
+				console.log('reconnect');
+			});
+			g.io.on('reconnecting', function(data){
+				console.log('reconnecting');
+			});
 			g.io.on('log', function(data) {
 				console.log(data);
 			});
@@ -433,6 +502,28 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 				console.log(data);
 				g.$gameModal.find('.logo').append('<div class="short-message"><i class="fa fa-circle"></i> ' + data.message + '</div>');
 				jQuery('body').addClass('online');
+			});
+			jQuery('body').on('click', '.player-turn-xy', function(e){
+				g.canUpdateMarker = false;
+				var $this = jQuery(this);
+				$this.parent().addClass('bg-primary');
+				g.marker.lineStyle(2, 0x000000, 1);
+				console.log(g);
+				console.log('g2moku');
+				g.setMarker([g.layer.getTileX($this.data('x')) * 32, g.layer.getTileY($this.data('y')) * 32]);
+				setTimeout(function(){
+					g.canUpdateMarker = true;
+					$this.parent().removeClass('bg-primary');
+				}, 3000);
+				console.log(g.marker);
+				// setTimeout(function(){
+					// g2moku.canUpdateMarker = false;					
+				// }, 2000);
+			});
+			jQuery('body').on('click', '.play-more', function(e){
+				g.finalEndGame();
+				g.$gameModal.modal('show');
+				e.preventDefault();
 			});
 		};
 		return g;

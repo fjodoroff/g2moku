@@ -1,6 +1,4 @@
-define(function(require){
-    require('prototype'); // Ensure Prototype is present
-	
+define(['prototype'], function(proto){
     return Class.create({
 		initialize: function(interval, callback) {
 			this.count = 0;

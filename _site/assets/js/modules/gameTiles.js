@@ -1,14 +1,14 @@
 define(['GameTile'], function(GameTile) {
-	return {
-		availableTiles: [],
-		allTiles: [],
-		next: function(){
+	var gameTiles = (function(gt) {
+		gt.availableTiles = [];
+		gt.allTiles = [];
+		gt.next = function(){
 			return this.availableTiles.length > 0 ? this.availableTiles.pop() : false;
-		},
-		push: function(tile){
+		};
+		gt.push = function(tile){
 			this.availableTiles.push(tile);
-		},
-		selectTile: function($tile, $player){
+		};
+		gt.selectTile = function($tile, $player){
 			console.log($player.index());
 			//function(g){
 			var g = this;
@@ -20,8 +20,8 @@ define(['GameTile'], function(GameTile) {
 				}
 			});
 			//}(this);
-		},
-		selectedTile: function($player){
+		};
+		gt.selectedTile =  function($player){
 			var tile = null;
 			this.availableTiles.each(function(e, i){
 				//console.log(this.availableTiles[$tile.index()]);
@@ -33,16 +33,16 @@ define(['GameTile'], function(GameTile) {
 				}
 			});
 			return tile;
-		},
-		deselectTile: function($tile){
+		};
+		gt.deselectTile = function($tile){
 			var tile = this.availableTiles[$tile.index()];
 			console.log('deselect: ');
 			console.log(tile);
 			if(tile.selected) {
 				tile.unsetPlayer();
 			}
-		},
-		parseFromServer: function(data, callback){
+		};
+		gt.parseFromServer = function(data, callback){
 			for(key in data) {
 				var tile = new GameTile(key, data[key]);
 				this.allTiles.push(tile);
@@ -50,6 +50,8 @@ define(['GameTile'], function(GameTile) {
 			}
 			console.log(this.availableTiles);
 			callback(this);//returning back this object
-		}
-	};
+		};
+		return gt;
+	}(gameTiles || {}));	
+	return gameTiles;
 });

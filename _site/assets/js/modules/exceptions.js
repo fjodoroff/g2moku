@@ -1,4 +1,4 @@
-define(['GameTile'], function(GameTile) {
+define(['GameTile', 'prototype'], function(GameTile, proto) {
     var exceptions = (function(exps) {
 		exps.ExceptionWithAlert = Class.create();
 		exps.ExceptionWithAlert.prototype = {
