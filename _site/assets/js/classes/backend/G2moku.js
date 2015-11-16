@@ -1,8 +1,9 @@
-define(['AbstractG2moku'], function(AbstractG2moku){
+define(['AbstractG2moku', 'games'], function(AbstractG2moku, games){
 	var g2 = (function(g) {
 		g.initHandlers = function(){
 			//console.log('mapHeight' + g.mapHeight);
 		};
+		g.games = games;
 		g.sockets = function(){
 			
 		};
