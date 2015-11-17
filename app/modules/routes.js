@@ -1,19 +1,15 @@
 define(['Player', 'G2moku'], function(Player, G2moku){
-	var logRequest = function(requestData, method, msg) {
-		consol.log(color.black.bgWhite.underline(JSON.stringify(requestData)) + "" + color.black.bgYellow.underline(" REQUEST: " + method));
-	};
+	require('console.json');
+	var color = require('cli-color');
 	var routes = function(app){
 		var r = this;
-		require('console.json');
-		var color = require('cli-color');
 		r.counter = 0;
 
 		// define routes
 		app.get('/', function (req, res) {
 			//if(req.user) console.log(req.user.get('id'));
-			console.log(color.yellow("REQUEST: ") + "Game page opened " + (++r.counter) + " time");
-			//console.log(req);
-			//req.io.broadcast('log', req);	
+			global.log.logRequest([req.ip], "Game page opened " + (++r.counter) + " time | " + JSON.stringify(req.route.path));
+			global.log.logAction([req.ip], "Rendering page... | " + JSON.stringify(req.route.path) + " | game.ejs");
 			res.render('game', {});
 		});
 
@@ -26,8 +22,8 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 		app.get('/rules', function (req, res) {
 			res.render('game_rules', {});
 		});
-		app.io.route('request.tiles.available', function(req) {
-			var serverResponse = {
+		app.io.route('getAvailableTiles', function(req) {
+			var answer = {
 				'green': {
 					imgPath: '/assets/img/tiles/square1.png',
 					index: 61
@@ -45,9 +41,12 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 					index: 38
 				} 
 			};
-			console.log(color.black.bgWhite.underline("[ " + req.socket.id + " ]") + " Getting availableTiles");
-			global.log.file.info("[ " + req.socket.id + " ]" + " Getting availableTiles");
-			req.io.emit('response.tiles.available', serverResponse);
+			var address = req.socket.handshake.address;
+			address = address.address + ':' + address.port;
+			global.log.logRequest([address, req.socket.id], "getAvailableTiles | " + JSON.stringify(req.data));
+			
+			global.log.logResponse([address, req.socket.id], "getAvailableTiles", JSON.stringify(answer));
+			req.io.emit('getAvailableTiles', answer);
 		});
 		app.io.route('beforeMoveToTile', function(req) {
 			console.log(color.black.bgWhite.underline("[ " + req.socket.id + " ]") + "" + color.black.bgYellow.underline(" REQUEST: beforeMoveToTile"));
@@ -64,6 +63,9 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 
 		});
 		app.io.route('playGame', function(req) {
+			var address = req.socket.handshake.address;
+			address = address.address + ':' + address.port;
+			global.log.logRequest([address, req.socket.id], "playGame | " + JSON.stringify(req.data));
 			var g = new G2moku(),
 				answer = {
 					can: true,// canPlayGame
@@ -74,21 +76,26 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 				g.generateID(function(preGenerated, genID){
 					var genetated = "",
 						newGenerated = "";
-					global.games[newGenerated] = g;
+					//global.games[newGenerated] = g;
 					console.log('Play Game');
 					answer.gameID = preGenerated + "." + genID;
+					global.games.addGame(g);
 					req.io.emit('playGame', answer);				
 				});
 			}, 1000);
 			//global.game = new G2moku();
 		});
 		app.io.route('ready', function(req) {
-			//console.log(req.socket.id);
-			console.log(color.black.bgWhite.underline("[ " + req.socket.id + " ]") + " " + color.green("RESPONSE: ++Online | ") + "ScreenSize: " + req.data.screenSize.x + "x" + req.data.screenSize.y);
-			//console.log(req);
-			req.io.emit('welcome', {
+			var answer = {
 				message: 'Realtime'
-			});
+			};
+			var address = req.socket.handshake.address;
+			address = address.address + ':' + address.port;
+			global.log.logRequest([address, req.socket.id], "ready(DOM Loaded) | " + JSON.stringify(req.data));
+
+			global.log.logResponse([address, req.socket.id], "welcome", JSON.stringify(answer));
+			//send some information on DOM loaded
+			req.io.emit('welcome', answer);
 		});
 	}
 	return routes; 

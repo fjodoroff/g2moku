@@ -12,6 +12,7 @@ define(['routes'], function(routes){
 		s.fs = require('fs');
 		s.favicon = require('serve-favicon');
 		global.games = s.games = {};
+		//logger start
 		s.log = {
 			console: bunyan.createLogger({
 				name: 'log',
@@ -30,13 +31,32 @@ define(['routes'], function(routes){
 					level: 'info',
 					path: s.path.join(__dirname, '/../logs/info.log')
 				}]
-			})
+			}),
 		};
 		s.log.log = function(object) {
 			s.log.console.info(object);
 			s.log.file.debug(object);
 		};
+		s.log.logRequest = function(requestData, method, msg) {
+			var message = color.black.bgWhite.underline(JSON.stringify(requestData)) + "" + color.black.bgYellow.underline(" REQUEST: " + method) + (msg ? "|" + msg : "");
+			global.log.file.info(requestData, message);
+			console.log(message);
+		};
+		s.log.logAction = function(requestData, method, msg) {
+			var message = color.black.bgWhite.underline(JSON.stringify(requestData)) + "" + color.black.bgMagenta.underline(" ACTION: " + method) + (msg ? "|" + msg : "");
+			global.log.file.info(requestData, message);
+			console.log(message);
+		};	
+		s.log.logResponse = function(requestData, method, msg) {
+			var message = color.black.bgWhite.underline(JSON.stringify(requestData)) + "" + color.black.bgGreen.underline(" RESPONSE: " + method) + (msg ? "|" + msg : "");
+			global.log.file.info(requestData, message);
+			console.log(message);
+		};
 		global.log = s.log;
+		//logger end
+		
+		
+		
 		//var mysql = require('mysql');
 		//var flash = require('connect-flash');
 		// global.pool = mysql.createPool({

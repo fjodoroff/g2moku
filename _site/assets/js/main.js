@@ -148,9 +148,9 @@ require([
 		var $players = g2moku.$gameModal.find('.game-mode.player-vs-player'),
 			$bar = g2moku.$gameModal.find('.modal-header .title');			
 			console.log('PARSE FROM SERVER');//tiles.available
-		g2moku.io.emit('request.tiles.available');
-		g2moku.io.on('response.tiles.available', function(data) {
-			console.log('response.tiles.available');
+		g2moku.io.emit('getAvailableTiles');
+		g2moku.io.on('getAvailableTiles', function(data) {
+			console.log('getAvailableTiles');
 			g2moku.gameTiles.parseFromServer(data, function(gameTiles){
 				var tiles = gameTiles.availableTiles;
 				$players.empty();
