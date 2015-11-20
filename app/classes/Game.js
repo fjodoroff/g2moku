@@ -3,6 +3,9 @@ define(['AbstractGame', 'prototype', 'G2moku', 'utils'], function(AbstractGame, 
 		ag.initHandlers = function(){
 			//console.log('mapHeight' + g.mapHeight);
 		};
+		ag.getStats = function(){//game statistics
+
+		};
 		ag.initialize =  function(data) {
 			if(utils.isObject(data)) {
 				this.tile = data.tile;

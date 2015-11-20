@@ -29,7 +29,7 @@ define(['prototype', 'utils', 'PlayerMove'], function(proto, utils, PlayerMove){
 			this.moves.push(playerMove);
 			//g2moku.history.push(playerMove);		
 			this.moving = false;
-			console.log('moving = false');
+			//console.log('moving = false');
 			callback(playerMove);
 			this.afterEndMove(playerMove);
 			//g2moku.players.willPlay(this);

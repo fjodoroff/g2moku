@@ -184,22 +184,49 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 							var tileX = g.layer.getTileX(g.marker.x),
 								tileY = g.layer.getTileY(g.marker.y),
 								tile = g.map.getTile(tileX, tileY);
-							g.io.emit('beforeMoveToTile', {
-								gameID: g.gameID,
-								player: g.players.currentPlaying.getJSON(),
-								gameTimer: g.timer,
-								tile: {
+							console.log('gameMODE');
+							console.log(g.gameMode);
+							if(!g.offline && g.gameMode !== 'playerVSplayer') {
+								g.io.emit('beforeMoveToTile', {
+									gameID: g.getGameID(),
+									player: g.players.currentPlaying.getJSON(),
+									gameTimer: g.timer,
+									tile: {
+										x: tileX,
+										y: tileY
+									},
+									timeStamp: +new Date()
+								});
+							}
+							if(g.offline || g.gameMode === 'playerVSplayer') {
+								console.log('singleMove');
+								//console.log([tileX, tileY]);
+								g.singleMoveToTile({
 									x: tileX,
 									y: tileY
-								},
-								timeStamp: +new Date()
-							});
-							if(g.offline) {
-								g.singleMoveToTile([tileX, tileY]);
+								}, function(win, PlayerMove){
+									g.io.emit('moveToTile', {//only sending data to server gameID: g.gameID,
+										player: g.players.currentPlaying.getJSON(),
+										gameID: g.getGameID(),
+										gameTimer: g.timer,
+										tile: {
+											x: tileX,
+											y: tileY
+										},
+										timeStamp: +new Date()
+									});
+									g.players.willPlay(g.players.currentPlaying);
+									g.players.currentPlaying.$box.removeClass('active');
+									g.players.next(g.gameStarted);//take next player in queue
+									g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
+									g.players.currentPlaying.$box.addClass('active');
+									g.players.currentPlaying.startTimer();
+									g.playerMoving = false;
+								});
 							}							
 						}
 					} catch(e) {
-						console.log("EXCEPTION");
+						throw e;
 					}
 				}
 			},
@@ -221,37 +248,31 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 				g.game.add.tween(citizen).to({ x: g.game.width }, 5000, Phaser.Easing.Exponential.InOut, true);
 			}
 		};
-		g.singleMoveToTile = function(tileXY){
-			var tileX = tileXY[0],
-				tileY = tileXY[1],
-				tile = g.map.getTile(tileX, tileY);
+		g.singleMoveToTile = function(tile, callback){
+			var tile = g.map.getTile(tile.x, tile.y);
+			console.log(tile);
+			console.log('above-tile');
 			g.players.currentPlaying.moveToTile(tile, g.layer, function(playerMove){
 				playerMove.player = g.players.currentPlaying;
 				playerMove.id = g.history.length;
 				console.log('move to tile');
 				console.log(playerMove);
 				//Put tile on map
-				g.map.putTile(g.players.currentPlaying.playingTile, tileX, tileY);
+
+				g.map.putTile(g.players.currentPlaying.playingTile, tile.x, tile.y);
 				g.step(playerMove.tile.x, playerMove.tile.y, playerMove.player, function(win, turn) {
 					console.log('win-turn callback');
 					g.history.push(playerMove);
 					if(win) {
 						g.gameEnd(g.players.currentPlaying, function(timer){
 							console.log('ENDED');
+							g.playerMoving = false;
 						});
 					} else {
 					
 					}
 					g.addDataToPlayerBlock(playerMove, function(){
-						g.players.willPlay(g.players.currentPlaying);
-						g.players.currentPlaying.$box.removeClass('active');
-						g.players.next(g.gameStarted);//take next player in queue
-						if(!win) {
-							g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
-							g.players.currentPlaying.$box.addClass('active');
-							g.players.currentPlaying.startTimer();
-						}
-						g.playerMoving = false;
+						callback(win, playerMove); //callback after checking, putting to tilemap, adding to player block
 						console.log(g);	
 					});
 					// Она нам вернёт значения ходе, если победитель, а так же чем ходили всё передадим как есть в событие пользователям
@@ -408,6 +429,7 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 				//g.game.state.add('GameState', g.gameState, true);
 				console.log(g);
 			}
+			g.gameMode = gameMode;
 			switch (gameMode) {
 				case 'playerVSplayer':
 					g.gameStarted = true;
@@ -477,16 +499,23 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 			g.mapHeight = g.game.height;
 			g.mapWidth = g.game.width;
 			g.io.on('beforeMoveToTile', function(data) {
-				if(data || g.offline) {
-					if(data.canMove || g.offline) {
-						g.singleMoveToTile(data.tile);
-					}
+				if(data && data.canMove) {
+					g.singleMoveToTile(data.tile, function(win, PlayerMove){
+						g.players.willPlay(g.players.currentPlaying);
+						g.players.currentPlaying.$box.removeClass('active');
+						g.players.next(g.gameStarted);//take next player in queue
+						g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
+						g.players.currentPlaying.$box.addClass('active');
+						g.players.currentPlaying.startTimer();
+						g.playerMoving = false;
+					});
 				}
 			});
 			g.io.on('startGame', function(data) {
 				if(data && data.can) {
 					if(data.gameID) {
 						console.log('startGame');
+						g.gameID = data.gameID;
 						g.singleStartGame();
 					} else {
 					}

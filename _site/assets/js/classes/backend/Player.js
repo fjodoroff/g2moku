@@ -2,6 +2,12 @@ define(['AbstractPlayer', 'prototype', 'Timer'], function(AbstractPlayer, proto,
 	var p = Class.create();
 	// inherit from Person class:
 	p.prototype = Object.extend(new AbstractPlayer(), {
+		moveToTile: function(tile, layer, callback) {
+			//this.moves.push(tile);
+			//if(tile) this.playingTile = new Phaser.Tile(layer, 15);
+			//callback('asas');
+			this.endMove(tile, callback);
+		},
 		startTimer: function(){
 			var p = this;
 			this.startMove();

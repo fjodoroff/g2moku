@@ -1,27 +1,14 @@
 <?xml version="1.0"?>
-<testsuite name="Chrome 46.0.2490 (Windows 7 0.0.0)" package="" timestamp="2015-11-01T03:20:38" id="0" hostname="Maxim-PC" tests="16" errors="0" failures="0" time="0.012">
+<testsuite name="Chrome 46.0.2490 (Windows 7 0.0.0)" package="" timestamp="2015-11-20T01:50:16" id="0" hostname="Maxim-PC" tests="0" errors="1" failures="0" time="0">
   <properties>
-    <property name="browser.fullName" value="Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36"/>
+    <property name="browser.fullName" value="Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36"/>
   </properties>
-  <testcase name="passing object as argument" time="0.002" classname="Chrome_46_0_2490_(Windows_7_0_0_0).isHTML test"/>
-  <testcase name="passing HTML as argument" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).isHTML test"/>
-  <testcase name="passing object as argument" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).isObject test"/>
-  <testcase name="passing null argument" time="0.001" classname="Chrome_46_0_2490_(Windows_7_0_0_0).isObject test"/>
-  <testcase name="passing function as argument" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).isObject test"/>
-  <testcase name="passing object as argument" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).AbstractPlayerMove test"/>
-  <testcase name="should be an Object with true arguments" time="0.002" classname="Chrome_46_0_2490_(Windows_7_0_0_0).AbstractPlayerMove test"/>
-  <testcase name="should be player with name" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).AbstractPlayerMove test"/>
-  <testcase name="passing object as argument" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).GameTile test"/>
-  <testcase name="testing setPlayer method" time="0.001" classname="Chrome_46_0_2490_(Windows_7_0_0_0).GameTile test"/>
-  <testcase name="testing unsetPlayer" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).GameTile test"/>
-  <testcase name="testing getHTML to be html object and contains button" time="0.004" classname="Chrome_46_0_2490_(Windows_7_0_0_0).GameTile test"/>
-  <testcase name="should set player's name, passing string as argument" time="0.001" classname="Chrome_46_0_2490_(Windows_7_0_0_0).Player"/>
-  <testcase name="should have a correct default properties" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).Player"/>
-  <testcase name="should set player's properties, passing object as argument (without layer property)" time="0" classname="Chrome_46_0_2490_(Windows_7_0_0_0).Player"/>
-  <testcase name="setting PlayingTile, cheking for Phaser.Tile instance" time="0.001" classname="Chrome_46_0_2490_(Windows_7_0_0_0).Player"/>
   <system-out>
-    <![CDATA[Chrome 46.0.2490 (Windows 7 0.0.0) LOG: '%c %c %c Phaser v2.2.2 | Pixi.js v2.2.0 | WebGL | WebAudio  %c %c %c http://phaser.io %c♥%c♥%c♥', 'background: #3db79f', 'background: #329582', 'color: #ffffff; background: #226558;', 'background: #329582', 'background: #3db79f', 'background: #ffffff', 'color: #ff2424; background: #fff', 'color: #ff2424; background: #fff', 'color: #ff2424; background: #fff'
-,Chrome 46.0.2490 (Windows 7 0.0.0) LOG: 'setPlayingTile'
+    <![CDATA[Chrome 46.0.2490 (Windows 7 0.0.0) ERROR: 'There is no timestamp for /base/_site/assets/js/G2moku.js!'
+,Chrome 46.0.2490 (Windows 7 0.0.0) ERROR
+  Uncaught Error: Load timeout for modules: G2moku
+  http://requirejs.org/docs/errors.html#timeout
+  at C:/Users/Maxim/AppData/Roaming/npm/node_modules/requirejs/require.js:140
 
 ]]>
   </system-out>

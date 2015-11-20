@@ -57,7 +57,7 @@ define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
 			// будем проверять динамически 4 комбинации: горизонталь, вертикаль и 2 диагонали
 			// при этом мы не знаем на какой позиции текущий ход,, проверять будем во всех 4 направлениях
 			var win = 1;
-			console.log(a + " " + x +  " " + y +  " " + turn + " " + g.stepsToWin);	
+			//if(global && global.log) global.log.logAction("Checking in direction: " + a + ", tile: [" + x +  ", " + y +  "], turnsToWin:" + turn + " " + g.stepsToWin);
 			switch(a) {
 
 				// поиск по горизонтали
@@ -161,7 +161,7 @@ define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
 				//this.playing[this.playing.length - 1].startTimer();
 				var ans = this.playing.length > 0 ? this.playing.pop() : false;
 				this.currentPlaying = ans;
-				console.log(ans);
+				//console.log(ans);
 				return ans;
 			},
 			parseFromGameModal: function(data){

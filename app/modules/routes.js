@@ -5,7 +5,38 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 		var r = this,
 			app = s.app;
 		r.counter = 0;
-
+		function beforeMoveToTile(req, callback) {
+			var address = req.socket.handshake.address;
+			address = address.address + ':' + address.port;
+			s.games.getGame(req.data.gameID, function(game) {
+				var answer = {
+					gameID: game.gameID,
+					canMove: true,
+					tile: req.data.tile
+				};
+				//global.log.log(game);
+				if (game !== false) {
+					game.playerMoving = true;
+					game.g2moku.players.currentPlaying.moveToTile(answer.tile, req.data.layer, function(playerMove) {
+						global.log.logAction([req.data.player.name, game.gameID, address, req.socket.id], 'Move to tile | ' + JSON.stringify(playerMove));
+						playerMove.player = game.g2moku.players.currentPlaying;
+						playerMove.id = game.g2moku.history.length;
+						//console.log(playerMove);
+						game.g2moku.step(playerMove.tile.x, playerMove.tile.y, playerMove.player, function(win, turn) {
+							global.log.logAction([req.data.player.name, game.gameID, address, req.socket.id], 'Checked for winner | win:' + win);
+							game.g2moku.history.push(playerMove);
+							if (win) {
+								global.log.log("win!");
+							} else {
+								callback(game);
+							}
+						});
+						//Put tile on map
+						//g.map.putTile(g.players.currentPlaying.playingTile, tileX, tileY);
+					});
+				}
+			});
+		}
 		// define routes
 		app.get('/', function (req, res) {
 			//if(req.user) console.log(req.user.get('id'));
@@ -43,25 +74,32 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 			global.log.logResponse([address, req.socket.id], "getAvailableTiles", JSON.stringify(answer));
 			req.io.emit('getAvailableTiles', answer);
 		});
+		app.io.route('moveToTile', function(req) {
+			var address = req.socket.handshake.address;
+			address = address.address + ':' + address.port;
+			global.log.logRequest([req.data.player.name, req.data.gameID, address, req.socket.id], "moveToTile | " + JSON.stringify(req.data));
+			beforeMoveToTile(req, function(game){
+				game.g2moku.players.willPlay(game.g2moku.players.currentPlaying);
+				global.log.log('gameStarted:' + game.gameStarted);
+				game.g2moku.players.next(game.gameStarted);//take next player in queue
+				//game.g2moku.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
+				//game.g2moku.players.currentPlaying.$box.addClass('active');
+				game.g2moku.players.currentPlaying.startTimer();
+				game.playerMoving = false;
+			});
+		});
 		app.io.route('beforeMoveToTile', function(req) {
 			var address = req.socket.handshake.address;
 			address = address.address + ':' + address.port;
-			global.log.logRequest([req.data.gameID, address, req.socket.id], "beforeMoveToTile | " + JSON.stringify(req.data));
+			global.log.logRequest([req.data.player.name, req.data.gameID, address, req.socket.id], "beforeMoveToTile | " + JSON.stringify(req.data));
 			//console.log(color.black.bgWhite.underline("[ " + req.socket.id + " ]") + "" + color.black.bgYellow.underline(" REQUEST: beforeMoveToTile"));
 			//console.log(color.white.bgGreen.underline(" Tile: " + JSON.stringify(req.data.tile)) + color.white.bgCyan.underline(" Player: " + JSON.stringify(req.data.player.name))+ color.white.bgMagenta.underline(" Time: " + JSON.stringify(req.data.player.timer)));
 			//checking for move
 			setTimeout(function(){
 				//global.log.log(game.g2moku.players.currentPlaying);
-				s.games.getGame(req.data.gameID, function(game) {
-					var answer = {
-						gameID: game.gameID,
-						canMove: true,
-						tile: [req.data.tile.x, req.data.tile.y]
-					};
-					if (game !== false) {
-						global.log.logResponse([game.gameID, address, req.socket.id], "beforeMoveToTile | " + JSON.stringify(answer));
-						req.io.emit('beforeMoveToTile', answer);
-					}
+				beforeMoveToTile(req, function(game){
+					global.log.logResponse([req.data.player.name, game.gameID, address, req.socket.id], "beforeMoveToTile | " + JSON.stringify(answer));
+					req.io.emit('beforeMoveToTile', answer);
 				});
 			}, 1000); 
 		});		
@@ -99,6 +137,7 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 				answer = {
 					can: true// canPlayGame
 				};
+			if(req.data.gameMode) g.gameMode = req.data.gameMode;
 			g.players.createPlayers(req.data.players);
 			global.log.log(g.players.playing);
 			setTimeout(function(){
