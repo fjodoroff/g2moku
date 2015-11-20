@@ -3,7 +3,7 @@ define(['Game'], function(Game) {
 		this.games = {};
 		this.port = port;
 		this.addGame = function(g2moku, callback){
-			var game; 
+			var game;
 			if(g2moku.gameID) {
 				game = new Game({
 					g2moku: g2moku
