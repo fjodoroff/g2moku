@@ -19,6 +19,7 @@ define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
 		g.layer = null;  
 		g.canvas = null;
 		g.genID = false;
+		g.gameID = false;
 		g.timer = null;
 		g.gameStarted = false;
 		g.playerMoving = false;
@@ -195,12 +196,12 @@ define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
 					// console.log('//tile e');
 					// console.log(e);
 					var player = new Player({
-						name: e.input,
+						name: e.name,
 						tile: e.tile,
-						playingTileIndex: e.tileIndex
+						playingTile: e.playingTile
 					});
 					//player.setPlayingTile(new Phaser.Tile(g.layer, e.tileIndex));
-					arr.push(player);				
+					arr.push(player);
 				});
 				this.arr = arr;
 				this.playing = arr;
@@ -209,15 +210,15 @@ define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
 			},
 		};
 		g.getGameID = function(){
-			return g.genID;
+			return this.gameID;
 		};
-		g.generateID = function(callback){
-			if(g.genID ===  false) {
-				var genID = +new Date(),
+		g.generateID = function(genID, callback){
+			if(genID ===  false) {
+				var newGenID = +new Date(),
 					preGenerated = g.players.length;
-				callback(preGenerated, genID);
+				callback(preGenerated, newGenID);
 			} else {
-				callback(false, g.genID);
+				callback(false, this.genID);
 			}
 		};
 		g.initialize = function(){

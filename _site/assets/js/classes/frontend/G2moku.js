@@ -170,6 +170,7 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 							//GameStart
 							g.io.emit('startGame', {
 								timeStamp: +new Date(),
+								gameID: g.getGameID(),
 								players: g.players.getPlaying()
 							});
 							if(g.offline) {
@@ -184,6 +185,7 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 								tileY = g.layer.getTileY(g.marker.y),
 								tile = g.map.getTile(tileX, tileY);
 							g.io.emit('beforeMoveToTile', {
+								gameID: g.gameID,
 								player: g.players.currentPlaying.getJSON(),
 								gameTimer: g.timer,
 								tile: {
@@ -480,14 +482,23 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 						g.singleMoveToTile(data.tile);
 					}
 				}
-			});			
+			});
+			g.io.on('startGame', function(data) {
+				if(data && data.can) {
+					if(data.gameID) {
+						console.log('startGame');
+						g.singleStartGame();
+					} else {
+					}
+				}
+			});
 			g.io.on('playGame', function(data) {
 				if(data && data.can) {
 					if(data.gameID) {
-						g.generateID(function(preGenerated, genID){
-							g.genID = preGenerated + "." + genID;
-							g.singleGameStart();
-						});
+						g.gameID = data.gameID;
+						g.genID = data.genID;
+						console.log(g.gameID);
+						g.singleGameStart();
 					} else {
 						g.genID = g.generateID(function(preGenerated, genID){
 							g.genID = preGenerated + "." + genID;

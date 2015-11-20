@@ -12,6 +12,7 @@ define(['prototype', 'utils', 'PlayerMove'], function(proto, utils, PlayerMove){
 			if(o) {
 				if(utils.isObject(o)) {
 					this.layer = o.layer || this.layer;
+					if(o.playingTile) this.playingTile = o.playingTile;
 					this.name = o.name;
 					this.tile = o.tile;
 				} else {
@@ -36,6 +37,24 @@ define(['prototype', 'utils', 'PlayerMove'], function(proto, utils, PlayerMove){
 		startMove: function(tile){
 			this.moving = true;
 			this.afterStartMove(tile);
+		},
+		getJSON: function(){
+			var p = this;
+			var json = function(j){
+				j.moving = p.moving;
+				j.name = p.name;
+				j.layer = p.layer;
+				if(p.timer) j.timer = p.timer.getTimestampDiff();
+				j.playingTile = {
+					index: p.playingTile.index,
+					wordlX: p.playingTile.worldX,
+					worldY: p.playingTile.worldY,
+					x: p.playingTile.x,
+					y: p.playingTile.y
+				};
+				return j;
+			}(json || {});
+			return json;
 		},
 		afterEndMove: function(playerMove) {},
 		afterStartMove: function() {},

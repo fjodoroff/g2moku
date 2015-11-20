@@ -8,6 +8,7 @@ define({
         'AbstractPlayerMove': '_site/assets/js/classes/AbstractPlayerMove',
         'PlayerMove': '_site/assets/js/classes/backend/PlayerMove',
         'AbstractG2moku': '_site/assets/js/classes/AbstractG2moku',
+        'AbstractGame': '_site/assets/js/classes/AbstractGame',
         'G2moku': '_site/assets/js/classes/backend/G2moku',
         'Timer': '_site/assets/js/classes/Timer',
         'GameTile': '_site/assets/js/classes/GameTile',

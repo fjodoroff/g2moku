@@ -1,4 +1,4 @@
-define(['routes'], function(routes){
+define(['routes', 'games', 'utils'], function(routes, games, utils){
 	var Server = function(port){
 		var s = this;
 		var bunyan = require('bunyan');
@@ -11,7 +11,7 @@ define(['routes'], function(routes){
 		s.cookieParser = require('cookie-parser');
 		s.fs = require('fs');
 		s.favicon = require('serve-favicon');
-		global.games = s.games = {};
+		s.games = new games(port);
 		//logger start
 		s.log = {
 			console: bunyan.createLogger({
@@ -31,11 +31,12 @@ define(['routes'], function(routes){
 					level: 'info',
 					path: s.path.join(__dirname, '/../logs/info.log')
 				}]
-			}),
+			})
 		};
 		s.log.log = function(object) {
-			s.log.console.info(object);
-			s.log.file.debug(object);
+			global.log.file.info(object, "Logging...");
+			console.log(color.black.bgCyan.underline(utils.isObject(object) ? JSON.stringify(object) : object));
+			//s.log.file.debug(object);
 		};
 		s.log.logRequest = function(requestData, method, msg) {
 			var message = color.black.bgWhite.underline(JSON.stringify(requestData)) + "" + color.black.bgYellow.underline(" REQUEST: " + method) + (msg ? "|" + msg : "");
@@ -109,7 +110,7 @@ define(['routes'], function(routes){
 		// }));
 		//app.use(passport.initialize());
 		//app.use(passport.session());
-		s.routes = new routes(app);
+		s.routes = new routes(s);
 		app.use(s.routes);
 		//app.use(require('./auth'));
 

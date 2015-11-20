@@ -2,7 +2,6 @@ define(['GameTile', 'prototype'], function(GameTile, proto) {
     var exceptions = (function(exps) {
 		exps.ExceptionWithAlert = Class.create();
 		exps.ExceptionWithAlert.prototype = {
-			alertClasses: ['alert'],
 			$alert: null,
 			animationShow: 'bounceIn',
 			animationHide: 'bounceOut',
