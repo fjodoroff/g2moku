@@ -11,7 +11,6 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 		s.cookieParser = require('cookie-parser');
 		s.fs = require('fs');
 		s.favicon = require('serve-favicon');
-		s.games = new games(port);
 		//logger start
 		s.log = {
 			console: bunyan.createLogger({
@@ -110,6 +109,7 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 		// }));
 		//app.use(passport.initialize());
 		//app.use(passport.session());
+		s.games = new games(port);
 		s.routes = new routes(s);
 		app.use(s.routes);
 		//app.use(require('./auth'));

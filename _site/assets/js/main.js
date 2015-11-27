@@ -1,24 +1,29 @@
 require.config({
 	baseUrl: '/assets/js/',
 	paths: {
-		'jquery': 'libs/jquery/jquery.min',
-		'jquery.nanoscroller': 'libs/jquery/jquery.nanoscroller.min',
-		'bootstrap':  'libs/bootstrap/bootstrap.min',
-		'prototype': 'libs/prototype/prototype',
-		'base64': 'libs/base-64/base64',
-		'phaser': 'libs/phaser/phaser.min',
-		'utils': 'utils',
-		'socket.io': 'libs/socket.io/socket.io',
-		'exceptions': 'modules/exceptions',
-		'gameTiles':  'modules/gameTiles',
+		//Classes
+		'AbstractG2moku':  'classes/AbstractG2moku',
+		'G2moku':  'classes/frontend/G2moku',
 		'AbstractPlayer':  'classes/AbstractPlayer',
-		'AbstractPlayerMove':  'classes/AbstractPlayerMove',
 		'Player':  'classes/frontend/Player',
+		'AbstractPlayerMove':  'classes/AbstractPlayerMove',
 		'PlayerMove':  'classes/frontend/PlayerMove',
+		'AbstractGame':  'classes/AbstractGame',
+		'Game':  'classes/frontend/Game',
 		'GameTile':  'classes/GameTile',
 		'Timer':  'classes/Timer',
-		'AbstractG2moku':  'classes/AbstractG2moku',
-		'G2moku':  'classes/frontend/G2moku'
+		//Modules
+		'gameTiles':  'modules/gameTiles',
+		'exceptions': 'modules/exceptions',
+		//Libraries
+		'jquery.nanoscroller': 'libs/jquery/jquery.nanoscroller.min',
+		'prototype': 'libs/prototype/prototype',
+		'socket.io': 'libs/socket.io/socket.io',
+		'jquery': 'libs/jquery/jquery.min',
+		'bootstrap':  'libs/bootstrap/bootstrap.min',
+		'phaser': 'libs/phaser/phaser.min',
+		'base64': 'libs/base-64/base64',
+		'utils': 'utils'
 	},
 	shim: {
 		'prototype': {

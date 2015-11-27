@@ -15,14 +15,34 @@ define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
 		g.debug = true;
 		g.mapWidth = 150;
 		g.mapHeight = 150;
-		g.history = [];
-		g.layer = null;  
+		g.history = {
+			games: {},
+			getNextID: function(){
+				return Object.keys(this.games).length;
+			},
+			toJSON: function(){
+				var json = {},
+					keys = Object.keys(this.games);
+				for(var i = 0; i < keys.length; i++){
+					var k = keys[i],
+						e = this.games[k];
+					json[k] = e.toJSON();
+				}
+				return json;
+			}
+		};
+		g.layer = null;
+		g.gameMode = false;
 		g.canvas = null;
 		g.genID = false;
 		g.gameID = false;
 		g.timer = null;
 		g.gameStarted = false;
 		g.playerMoving = false;
+		g.addHistory = function(playerMove){
+			if(playerMove.id !== undefined) this.history.games[playerMove.id] = playerMove;
+			else this.history.games[this.history.getNextID()] = playerMove;
+		};
 		g.step = function(x, y, player, cb) {
 			// Проверяем что в этой клетке ничего нет
 			if(g.board[x + 'x' + y] !== undefined) return;
@@ -127,88 +147,6 @@ define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
 			return(win >= g.stepsToWin);
 		};
 		g.initHandlers = function(){};
-		g.players = {
-			arr: [],
-			playing: [],
-			getPlaying: function(){
-				var a = [];
-				this.playing.each(function(e, i){
-					a.push(e.getJSON());
-				});
-				return a;
-			},
-			clear: function(){
-				this.currentPlaying.$box.remove();
-				this.playing.each(function(e, i){
-					e.$box.remove();
-				});
-				this.playing = [];
-				this.currentPlaying = false;
-			},
-			currentPlaying: false,
-			willPlay: function(player){
-				var newArr = [player];
-				for(var i = 0; i < this.playing.length; i++) {
-					newArr.push(this.playing[i]);
-				}
-				this.playing = newArr;
-			},		
-			getLast: function(){
-				return this.playing.length > 0 ? this.playing[this.playing.length - 1] : false;
-			},
-			next: function(gameStarted){
-				//if(this.playing.length == 0) this.playing = this.arr;
-				//this.playing[this.playing.length - 1].startTimer();
-				var ans = this.playing.length > 0 ? this.playing.pop() : false;
-				this.currentPlaying = ans;
-				//console.log(ans);
-				return ans;
-			},
-			parseFromGameModal: function(data){
-				var arr = [];
-				//console.log('//parsefromgameModal each data');
-				//console.log(data);
-				data.each(function(e, i){
-					// console.log('//tile i');
-					// console.log(i);
-					// console.log('//tile e');
-					// console.log(e);
-					var player = new Player({
-						name: e.input,
-						tile: e.tile,
-						playingTileIndex: e.tileIndex
-					});
-					player.setPlayingTile(new Phaser.Tile(g.layer, e.tileIndex));
-					arr.push(player);				
-				});
-				this.arr = arr;
-				this.playing = arr;
-				//this.arr = arr;
-				return arr;
-			},			
-			createPlayers: function(data){
-				var arr = [];
-				//console.log('//parsefromgameModal each data');
-				//console.log(data);
-				data.each(function(e, i){
-					// console.log('//tile i');
-					// console.log(i);
-					// console.log('//tile e');
-					// console.log(e);
-					var player = new Player({
-						name: e.name,
-						tile: e.tile,
-						playingTile: e.playingTile
-					});
-					//player.setPlayingTile(new Phaser.Tile(g.layer, e.tileIndex));
-					arr.push(player);
-				});
-				this.arr = arr;
-				this.playing = arr;
-				//this.arr = arr;
-				return arr;
-			},
-		};
 		g.getGameID = function(){
 			return this.gameID;
 		};
@@ -222,6 +160,96 @@ define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
 			}
 		};
 		g.initialize = function(){
+			this.players = (function(pl){
+				pl.arr = [];
+				pl.playing = [];
+				pl.getPlayers = function(){
+					var a = [];
+					this.arr.each(function(e, i){
+						a.push(e.getJSON());
+					});
+					return a;
+				};
+				pl.getPlaying = function(){
+					var a = [];
+					this.playing.each(function(e, i){
+						a.push(e.getJSON());
+					});
+					return a;
+				};
+				pl.clear = function(){
+					this.currentPlaying.$box.remove();
+					this.playing.each(function(e, i){
+						e.$box.remove();
+					});
+					this.playing = [];
+					this.currentPlaying = false;
+				};
+				pl.currentPlaying = false;
+				pl.willPlay = function(player){
+					var newArr = [player];
+					for(var i = 0; i < this.playing.length; i++) {
+						newArr.push(this.playing[i]);
+					}
+					this.playing = newArr;
+				};
+				pl.getLast = function(){
+					return this.playing.length > 0 ? this.playing[this.playing.length - 1] : false;
+				};
+				pl.next = function(gameStarted){
+					//if(this.playing.length == 0) this.playing = this.arr;
+					//this.playing[this.playing.length - 1].startTimer();
+					var ans = this.playing.length > 0 ? this.playing.pop() : false;
+					this.currentPlaying = ans;
+					//console.log(ans);
+					return ans;
+				};
+				pl.parseFromGameModal = function(data){
+					var arr = [];
+					//console.log('//parsefromgameModal each data');
+					//console.log(data);
+					data.each(function(e, i){
+						// console.log('//tile i');
+						// console.log(i);
+						// console.log('//tile e');
+						// console.log(e);
+						var player = new Player({
+							name: e.input,
+							tile: e.tile,
+							playingTileIndex: e.tileIndex
+						});
+						player.setPlayingTile(new Phaser.Tile(g.layer, e.tileIndex));
+						arr.push(player);
+					});
+					this.arr = arr;
+					this.playing = arr;
+					//this.arr = arr;
+					return arr;
+				};
+				pl.createPlayers = function(data){
+					var arr = [];
+					//console.log('//parsefromgameModal each data');
+					//console.log(data);
+					data.each(function(e, i){
+						// console.log('//tile i');
+						// console.log(i);
+						// console.log('//tile e');
+						// console.log(e);
+						var player = new Player({
+							name: e.name,
+							tile: e.tile,
+							playingTile: e.playingTile
+						});
+						//player.setPlayingTile(new Phaser.Tile(g.layer, e.tileIndex));
+						arr.push(player);
+					});
+					this.arr = arr;
+					this.playing = arr;
+					//this.arr = arr;
+					return arr;
+				};
+				return pl;
+			}(this.players || {}));
 			this.gameErrors = {
 				gameMenu: []
 			};

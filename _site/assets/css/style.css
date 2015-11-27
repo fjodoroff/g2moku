@@ -148,8 +148,14 @@ html {
     /* border-bottom: 1px solid green; */
     font-size: 10px;
 }
+body.offline #game-modal .modal-content .short-message i.fa-circle {
+    color: rgb(206, 29, 29);
+}
 body.online #game-modal .modal-content .short-message i.fa-circle {
-	color: #2B9E2B;
+    color: #2B9E2B;
+}
+body #game-modal .modal-content .short-message i.fa-circle.bg-yellow {
+    color: #CACE1D;
 }
 .player-boxes {
 	position: absolute;
