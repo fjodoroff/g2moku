@@ -30,8 +30,14 @@ define(['Game'], function(Game) {
 				game = new Game({
 					g2moku: g2moku
 				});
-				console.log('!cantbe false');
+				//console.log('!cantbe false');
 				console.log(g2moku.gameID);
+                global.pool.query('INSERT INTO `game` (Player_id, PublicGame_ID) VALUES (?, ?)', ['2', g2moku.gameID], function(err, result) {
+                    if(err) console.log(err);
+                    else {
+                        console.log(result.insertId);
+                    }
+                });
 				//this.games[g2moku.gameID] = game;
 				//console.log(this.games);
 				if(!this.games[group]) this.games[group] = {};

@@ -44,7 +44,7 @@ require.config({
 			exports: 'g2moku'
 		},
 		'G2moku': {
-			deps: ['utils', 'phaser', 'GameTile', 'jquery', 'bootstrap', 'gameTiles', 'exceptions', 'jquery.nanoscroller', 'prototype'],
+			deps: ['utils', 'phaser', 'GameTile', 'jquery', 'bootstrap', 'gameTiles', 'exceptions', 'jquery.nanoscroller', 'prototype']
 		},
 		'GameTile': {
 			deps: ['utils'],
@@ -53,7 +53,7 @@ require.config({
 		'gameTiles': {
 			deps: ['GameTile']
 		}
-	},
+	}
 });
 require([
   // Load our app module and pass it to our definition function

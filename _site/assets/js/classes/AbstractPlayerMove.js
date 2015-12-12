@@ -1,6 +1,6 @@
 define(['Timer', 'utils', 'prototype'], function(Timer, utils, proto){
 	//if (typeof window === 'undefined') {
-	var base64 = require('base64');
+	//var base64 = require('base64');
 	//}
 	var apm = (function(pm) {
 		pm.toJSON = function(){

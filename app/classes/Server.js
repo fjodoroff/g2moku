@@ -57,15 +57,14 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 		
 		
 		
-		//var mysql = require('mysql');
-		//var flash = require('connect-flash');
-		// global.pool = mysql.createPool({
-			// connectionLimit : 10,
-			// host     : 'localhost',
-			// user     : 'root',
-			// password : '',
-			// database : ''
-		// });
+		var mysql = require('mysql');
+        s.pool = global.pool = mysql.createPool({
+			connectionLimit : 10,
+			host     : 'localhost',
+			user     : 'root',
+			password : '',
+			database : 'g2moku'
+		});
 		var dirs = __dirname.split(__dirname.indexOf('/') != -1 ? '/' : '\\'),
 			onProduction = false;
 		var tempDirs = dirs;

@@ -22,5 +22,5 @@ define({
         'utils': '_site/assets/js/utils',
 		'base64': 'node_modules/base-64/base64'
     },
-    basePath: './' 
+    basePath: './'
 });

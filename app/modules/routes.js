@@ -52,7 +52,9 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 		});
 
 		app.get('/rules', function (req, res) {
-			res.render('game_rules', {});
+			res.render('game_rules', {
+
+            });
 		});
 		app.io.route('getAvailableTiles', function(req) {
 			var answer = {
@@ -100,7 +102,7 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 				this.playerMoving = false;
 				s.games[req.data.gameID] = this;
 			});
-	});
+	    });
 		app.io.route('beforeMoveToTile', function(req) {
 			var answer = {
 				gameID: game.gameID,

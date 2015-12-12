@@ -5,13 +5,13 @@ define([], function(){
 			return ( (typeof val === 'function') || (typeof val === 'object') );
 		};
 		u.isHTML = function(obj) {
-		  return isObject(obj) ? false : /<(?=.*? .*?\/ ?>|br|hr|input|!--|wbr)[a-z]+.*?>|<([a-z]+).*?<\/\1>/i.test(obj);
+		  return u.isObject(obj) ? false : /<(?=.*? .*?\/ ?>|br|hr|input|!--|wbr)[a-z]+.*?>|<([a-z]+).*?<\/\1>/i.test(obj);
 		};
 		u.isArray = function(obj) {
 			return {}.toString.apply(obj) === '[object Array]';
 		};
 		u.getFormatedGameID = function(gameID){
-			return gameID ? gameID.substring(0, gameID.lastIndexOf('.')) : false;
+			return gameID ? ans = gameID.substring(0, gameID.lastIndexOf('.')) || ans == '' : false;
 		};
 		u.deepDiffMapper = function() {
 			return {

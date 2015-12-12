@@ -8,6 +8,15 @@ define(['AbstractPlayer', 'prototype', 'Timer'], function(AbstractPlayer, proto,
 			//callback('asas');
 			this.endMove(tile, callback);
 		},
+        db_id: null,
+        create: function(callback){ //create new player in database
+            global.pool.query('INSERT INTO `player` (?) VALUES (?, ?)', ['Username', this.name], function(err, result) {
+                if (err) throw err;
+                console.log(result.insertId);
+                this.db_id = result.insertId;
+                callback(result.insertId);
+            });
+        },
 		startTimer: function(){
 			var p = this;
 			this.startMove();

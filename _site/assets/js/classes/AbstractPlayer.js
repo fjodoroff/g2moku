@@ -66,6 +66,6 @@ define(['prototype', 'utils', 'PlayerMove'], function(proto, utils, PlayerMove){
 			} else {//if number 
 				//this.playingTile = g.map.getImageIndex(index);
 			}
-		},
+		}
 	})
 });
