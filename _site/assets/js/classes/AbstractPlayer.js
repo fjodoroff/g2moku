@@ -45,6 +45,7 @@ define(['prototype', 'utils', 'PlayerMove'], function(proto, utils, PlayerMove){
 				j.name = p.name;
 				j.layer = p.layer;
 				if(p.timer) j.timer = p.timer.getTimestampDiff();
+				if(p.db_id) j.db_id = p.db_id;
 				j.playingTile = {
 					index: p.playingTile.index,
 					wordlX: p.playingTile.worldX,

@@ -54,16 +54,17 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 		};
 		global.log = s.log;
 		//logger end
-		
-		
-		
+
+
+
 		var mysql = require('mysql');
         s.pool = global.pool = mysql.createPool({
 			connectionLimit : 10,
 			host     : 'localhost',
 			user     : 'root',
 			password : '',
-			database : 'g2moku'
+			database : 'g2moku',
+            multipleStatements: true
 		});
 		var dirs = __dirname.split(__dirname.indexOf('/') != -1 ? '/' : '\\'),
 			onProduction = false;
@@ -110,6 +111,7 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 		//app.use(passport.session());
 		s.games = new games(port);
 		s.routes = new routes(s);
+
 		app.use(s.routes);
 		//app.use(require('./auth'));
 
@@ -120,6 +122,6 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 			s.log.file.info("New server started at port " + port);
 			console.log('Server running on port ' + s.serv.address().port + '...');
 		});
-	}
+	};
 	return Server;
 });

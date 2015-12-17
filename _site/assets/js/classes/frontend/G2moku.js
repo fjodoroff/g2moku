@@ -1,4 +1,4 @@
-define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', 'utils'], function(AbstractG2moku, proto, io, Player, Timer, Game, utils){
+define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', 'utils', 'Players'], function(AbstractG2moku, proto, io, Player, Timer, Game, utils, Players){
 	var g2 = (function(g) {
 		g.io = io.connect('http://localhost:' + location.port, {
 			'force new connection': true
@@ -16,7 +16,9 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 		g.cursors = null;
 		g.currentTile = null;
 		g.sprites = null;
+        g.players = new Players();
 		g.canUpdateMarker = true;
+		g.canMoveMarker = true;
 		g.onSendGameStats = function(data){
 			if(!g.games.inited) {
 				g.games.initGames(data.games);
@@ -40,15 +42,13 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 					else {
 						data[k] = utils.deepDiffMapper.map([
 							games[k].gameID,
-							games[k].players[0].name,
-							games[k].players[1].name,
+							games[k].playersList,
 							games[k].gameMode,
 							games[k].status,
 							games[k].movingPlayer
 						], [
 							this.games[k].gameID,
-							this.games[k].players[0].name,
-							this.games[k].players[1].name,
+							this.games[k].playersList,
 							this.games[k].gameMode,
 							this.games[k].status,
 							this.games[k].movingPlayer
@@ -77,32 +77,56 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 			addGame: function(gameData){
 				var game = new Game(gameData);
 				this.games[game.gameID] = game;
-				this.$activeGames.append(game.toTableHTML());
+				this.$activeGames.prepend(game.toTableHTML());
 			},
+            removeGame: function(gameID, callback){
+                var that = this;
+                this.$activeGames.find('.realtime-stats-game-gameID-' + utils.getFormatedGameID(gameID)).slideUp(300, function(){
+                    $(this).remove();
+                    delete that.games[gameID];
+                    callback();
+                });
+            },
 			updateGames: function(games, callback){
 				var dataToUpdate = this.checkDataToUpdate(games),
 					keys = Object.keys(dataToUpdate);
-				if(keys.length > 0) {
-					for (var i = 0; i < keys.length; i++) {
-						var k = keys[i],
-							e = dataToUpdate[k],
-							$addingTR = g.$gameStatistics.find('.realtime-stats-game-gameID-' + utils.getFormatedGameID(games[k].gameID));
-						console.log('block with this id?' + games[k].gameID);
-						console.log($addingTR.length);
-						//if($addingTR.length == 0) {
-							if (e === true) {
-								this.addGame(games[k]);
-							}
-							if(utils.isObject(e)) {
-								console.log('isObject');
-								this.updateGame(this.games[k], e, function(){
+                var dataGamesKeys = Object.keys(games),
+                    gamesKeys = Object.keys(this.games);
+                if(utils.isArray(dataGamesKeys) && utils.isArray(gamesKeys) && dataGamesKeys.length !== gamesKeys.length) {
+                    var diff = utils.deepDiffMapper.map(Object.keys(this.games), Object.keys(games));
+                    for(var i = 0; i < gamesKeys.length; i++){
+                        var e = diff[i];
+                        if(e.type == "deleted") {
+                            this.removeGame(e.data, function(){
 
-								});
-							}
-						//} else {
-						//}
-					}
-				}
+                            });
+                        }
+                    }
+                }
+                if (keys.length > 0) {
+                    for (var i = 0; i < keys.length; i++) {
+                        var k = keys[i],
+                            e = dataToUpdate[k],
+                            $addingTR = g.$gameStatistics.find('.realtime-stats-game-gameID-' + utils.getFormatedGameID(games[k].gameID));
+                        console.log('block with this id?' + games[k].gameID);
+                        console.log($addingTR.length);
+                        //if($addingTR.length == 0) {
+                        if (e === true) {
+                            this.addGame(games[k]);
+                        }
+                        if (utils.isObject(e)) {
+                            console.log('isObject');
+                            this.updateGame(this.games[k], e, function () {
+
+                            });
+                        }
+                        //} else {
+                        //}
+                    }
+                }
+                console.log(Object.keys(games));
+                console.log(Object.keys(this.games));
+                console.log();
 			},
 			updateGame: function(game, dataToUpdate, callback){
 				var $game = g.$gameStatistics.find('.realtime-stats-game-gameID-' + game.getFormatedGameID());
@@ -127,8 +151,9 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 									$changingTD.removeClass('bg-warning bg-success');
 									if (e.code.data == "0") $changingTD.addClass('bg-warning');
 									else if (e.code.data == "1") $changingTD.addClass('bg-success');
+                                    else if (e.code.data == "2") $changingTD.addClass('bg-danger');
 									else {
-
+                                        $changingTD.addClass('bg-danger');
 									}
 								}
 							}
@@ -283,75 +308,78 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 			},
 			clickHandler: function(pointer, event){
 				console.log(g.gameStarted + " " + g.playerMoving);
-				if(g.gameStarted && !g.playerMoving) { // IF Game started
-					try {
-						console.log('clicked');
-						g.playerMoving = true;
-						if(g.players.currentPlaying === false) {//first turn
-							//GameStart
-							g.io.emit('startGame', {
-								timeStamp: +new Date(),
-								gameID: g.getGameID(),
-								players: g.players.getPlaying()
-							});
-							if(g.offline) {
-								g.generateID(g.generateID(function(preGenerated, genID){
-									g.genID = preGenerated + "." + genID
-								}));//generating gameID.(getGameID())
-								g.singleStartGame();
-							}
-						} else {
-							g.gameState.getTileProperties();
-							var tileX = g.layer.getTileX(g.marker.x),
-								tileY = g.layer.getTileY(g.marker.y),
-								tile = g.map.getTile(tileX, tileY);
-							console.log('gameMODE');
-							console.log(g.gameMode);
-							if(!g.offline && g.gameMode !== 'playerVSplayer') {
-								g.io.emit('beforeMoveToTile', {
-									gameID: g.getGameID(),
-									player: g.players.currentPlaying.getJSON(),
-									gameTimer: g.timer,
-									tile: {
-										x: tileX,
-										y: tileY
-									},
-									timeStamp: +new Date()
-								});
-							}
-							if(g.offline || g.gameMode === 'playerVSplayer') {
-								console.log('singleMove');
-								//console.log([tileX, tileY]);
-								g.singleMoveToTile({
-									x: tileX,
-									y: tileY
-								}, function(win, PlayerMove){
-									g.io.emit('moveToTile', {//only sending data to server gameID: g.gameID,
-										player: g.players.currentPlaying.getJSON(),
-										gameID: g.getGameID(),
-										gameTimer: g.timer,
-										tile: {
-											x: tileX,
-											y: tileY
-										},
-										timeStamp: +new Date()
-									});
-									if(!win) {
-										g.players.willPlay(g.players.currentPlaying);
-										g.players.currentPlaying.$box.removeClass('active');
-										g.players.next(g.gameStarted);//take next player in queue
-										g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
-										g.players.currentPlaying.$box.addClass('active');
-										g.players.currentPlaying.startTimer();
-									}
-									g.playerMoving = false;
-								});
-							}
-						}
-					} catch(e) {
-						throw e;
-					}
-				}
+                console.log(g.game.input.activePointer.leftButton);
+                g.gameState.getTileProperties();
+                var tileX = g.layer.getTileX(g.marker.x),
+                    tileY = g.layer.getTileY(g.marker.y),
+                    tile = g.map.getTile(tileX, tileY);
+                setTimeout(function() {
+                    if (g.gameStarted && g.canMoveMarker && g.board[tileX + 'x' + tileY] === undefined && !g.playerMoving && g.game.input.activePointer.duration == -1) { // IF Game started
+                        try {
+                            console.log('clicked');
+                            g.playerMoving = true;
+                            if (g.players.currentPlaying === false) {//first turn
+                                //GameStart
+                                g.io.emit('startGame', {
+                                    timeStamp: +new Date(),
+                                    gameID: g.getGameID(),
+                                    players: g.players.getPlaying()
+                                });
+                                if (g.offline) {
+                                    g.generateID(g.generateID(function (preGenerated, genID) {
+                                        g.genID = preGenerated + "." + genID
+                                    }));//generating gameID.(getGameID())
+                                    g.singleStartGame();
+                                }
+                            } else {
+                                console.log('gameMODE');
+                                console.log(g.gameMode);
+                                if (!g.offline && g.gameMode !== 'playerVSplayer') {
+                                    g.io.emit('beforeMoveToTile', {
+                                        gameID: g.getGameID(),
+                                        player: g.players.currentPlaying.getJSON(),
+                                        gameTimer: g.timer,
+                                        tile: {
+                                            x: tileX,
+                                            y: tileY
+                                        },
+                                        timeStamp: +new Date()
+                                    });
+                                }
+                                if (g.offline || g.gameMode === 'playerVSplayer') {
+                                    console.log('singleMove');
+                                    //console.log([tileX, tileY]);
+                                    g.singleMoveToTile({
+                                        x: tileX,
+                                        y: tileY
+                                    }, function (win, PlayerMove) {
+                                        g.io.emit('moveToTile', {//only sending data to server gameID: g.gameID,
+                                            player: g.players.currentPlaying.getJSON(),
+                                            gameID: g.getGameID(),
+                                            gameTimer: g.timer,
+                                            tile: {
+                                                x: tileX,
+                                                y: tileY
+                                            },
+                                            timeStamp: +new Date()
+                                        });
+                                        if (!win) {
+                                            g.players.willPlay(g.players.currentPlaying);
+                                            g.players.currentPlaying.$box.removeClass('active');
+                                            g.players.next(g.gameStarted);//take next player in queue
+                                            g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
+                                            g.players.currentPlaying.$box.addClass('active');
+                                            g.players.currentPlaying.startTimer();
+                                        }
+                                        g.playerMoving = false;
+                                    });
+                                }
+                            }
+                        } catch (e) {
+                            throw e;
+                        }
+                    }
+                }, 150);
 			},
 			updateMarker: function() {
 				if(g.canUpdateMarker) {
@@ -419,11 +447,11 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 			}
 			var $playerRow = jQuery('<div class="player col-xs-12 col-sm-12 col-md-12" style="display: none">' +
 				'<div class="row">' +
-					'<div class="col-xs-12 col-sm-5 col-md-5">' +
-							'<label class="labelSize" for="player-input-' + uniqNumber + '">Player ' + numbers[tiles.length - 1] + ':</label>' +
-							'<input type="text" class="form-control input-player-name" id="player-input-' + uniqNumber + '" placeholder="Player name..." value="Player-' +  (g.debug ? (uniqNumber + "").substr(-4) : "") + '">' +
+					'<div class="col-xs-12 col-sm-6 col-md-6">' +
+							'<label class="labelSize" for="player-input-' + uniqNumber + '">Player name:</label>' +
+							'<input type="text" class="form-control input-player-name" id="player-input-' + uniqNumber + '" placeholder="Player name..." value="' +  (g.debug ? ("Player-" + uniqNumber + "").substr(-4) : "") + '">' +
 					'</div>' +
-					'<div class="col-xs-12 col-sm-7 col-md-7 player-square-btns"><div class="left-buttons">' + buttonsContent + "</div>" +
+					'<div class="col-xs-12 col-sm-6 col-md-6 player-square-btns"><div class="left-buttons">' + buttonsContent + "</div>" +
 						'<button type="button" class="btn btn-default square-btn-right pull-right">' +
 							'<img src="assets/img/gear.png">' +
 						'</button>' + addButtonContent +
@@ -441,7 +469,7 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 					// // e.preventDefault();
 				// // });
 			// }
-			g.$gameModal.find('.game-mode.player-vs-player').append($playerRow);
+			g.$gameModal.find('.game-mode.player-vs-player > div').append($playerRow);
 			$playerRow.slideDown(300);
 		};
 		g.addDataToPlayerBlock = function(playerMove, callback){
@@ -503,7 +531,7 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 		g.reinitPlayerTiles = function(tiles){
 			console.log('reinitting');
 			console.log(tiles);
-			g.$gameModal.find('.game-mode.player-vs-player').children().each(function(i, e){
+			g.$gameModal.find('.game-mode.player-vs-player > div').children().each(function(i, e){
 				var buttonsNum = jQuery(this).parent().children().length,
 					newButtons = '';
 				for(var k = 0; k < tiles.length; k++) {
@@ -584,7 +612,11 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 					jQuery(this).removeClass(anim + ' animated');
 				});
 			};
-			g.$gameTopBar.find('.game-play-text').html("<span class='game-win-player'>" + winnerPlayer.name + "</span> WIN!<br/><div class='brief-stats'>Time: <span>" + g.timer.getTimestampDiff(true) + "</span> | Moves: <span>" + winnerPlayer.moves.length + "</span></div><a href='#' class='btn btn-lg btn-primary play-more'>Wanna Play more?</a>");
+			g.$gameTopBar.find('.game-play-text').html("<span class='game-win-player'>" + winnerPlayer.name + "</span> WIN!<br/><div class='brief-stats'>Time: <span>" +
+                g.timer.getTimestampDiff(true) + "</span> | Moves: <span>" + winnerPlayer.moves.length +
+                "</span></div>" +
+                "<div class='socials'><a href='#' class='btn btn-lg btn-primary play-more'>Wanna Play more?</a><img src='/assets/img/google-128.png'/><img src='/assets/img/twitter_letter-64.png'/><img src='/assets/img/facebook-64.png' /><img src='/assets/img/vkontakte-64.png' /></div>"
+            );
 			animate(g.$gameTopBar, 'tada');
 			winnerPlayer.$box.addClass('winner');
 			animate(winnerPlayer.$box, 'pulse');
@@ -609,6 +641,25 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 			console.log('finalendgame');
 			console.log(g.players);
 		};
+        g.makeRequest = function(fileName, data, onSuccess, dataType, method) {
+            jQuery.ajax({
+                url: fileName,
+                type: method || "POST",
+                data: data,
+                dataType: dataType || "JSON"
+            }).done(function(data) {
+                onSuccess(data);
+            });
+        };
+        g.reloadAllGames = function(params){
+            g.$gameStatistics.find('.refresh').button('loading');
+            g.makeRequest('allGames', {
+                type: 'html'
+            }, function(htmlResponse){
+                g.$gameStatistics.find('.refresh').button('reset');
+                g.$gameStatistics.find('.all-games').html(htmlResponse);
+            }, "HTML", "GET");
+        };
 		g.initHandlers = function(){
 			console.log('inithandlers');
 			g.io.emit('ready', {
@@ -633,6 +684,18 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 					});
 				}
 			});
+			g.io.on('joined', function(data) {
+                var player = new Player(data.player);
+                console.log(data);
+                g.$gameModal.find('.game-mode.multiplayer .options .player-add fieldset').prop('disabled', 'true');
+                g.$gameModal.find('.game-mode.multiplayer .online-players').append('<div class="player">' +
+                    '<div class="row">' +
+                        '<div class="col-xs-12 col-sm-6 col-md-6">' +
+                            '<h5>' + player.name + '</h5>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>');
+            });
 			g.io.on('sendGamesStats', function(data) {
 				g.onSendGameStats(data);
 			});
@@ -685,7 +748,7 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 			g.io.on('reconnect', function(data){
 				g.offline = false;
 				g.$gameModal.find('.logo .short-message').html('<i class="fa fa-circle"></i> Reconnected');
-				g.onSendGameStats();
+				g.onSendGameStats(data);
 				jQuery('body').removeClass('offline').addClass('online');
 				setTimeout(function(){
 					g.$gameModal.find('.logo .short-message').html('<i class="fa fa-circle"></i> Realtime');

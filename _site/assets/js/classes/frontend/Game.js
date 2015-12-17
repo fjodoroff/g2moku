@@ -11,8 +11,7 @@ define(['AbstractGame', 'prototype'], function(AbstractGame, proto) {
         toTableHTML: function(){
             return '<tr class="realtime-stats-game realtime-stats-game-gameID-' + this.getFormatedGameID() + '" data-gameID="' + this.gameID + '">' +
                 '<th scope="row">' + this.getFormatedGameID() + '</th>' +
-                '<td>' + this.players[0].name + '</td>' +
-                '<td>' + this.players[1].name + '</td>' +
+                '<td>' + this.playersList + '</td>' +
                 '<td>' + this.gameMode + '</td>' + this.getStatusHTML() +
                 '<td>' + (this.getMovingPlayer() ? this.getMovingPlayer().name : "-") + '</td>' +
             '</tr>';

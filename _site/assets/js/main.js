@@ -4,9 +4,11 @@ require.config({
 		//Classes
 		'AbstractG2moku':  'classes/AbstractG2moku',
 		'G2moku':  'classes/frontend/G2moku',
-		'AbstractPlayer':  'classes/AbstractPlayer',
-		'Player':  'classes/frontend/Player',
-		'AbstractPlayerMove':  'classes/AbstractPlayerMove',
+        'AbstractPlayer':  'classes/AbstractPlayer',
+        'Player':  'classes/frontend/Player',
+        'Players':  'classes/frontend/Players',
+        'AbstractPlayers':  'classes/AbstractPlayers',
+        'AbstractPlayerMove':  'classes/AbstractPlayerMove',
 		'PlayerMove':  'classes/frontend/PlayerMove',
 		'AbstractGame':  'classes/AbstractGame',
 		'Game':  'classes/frontend/Game',
@@ -113,7 +115,7 @@ require([
 	g2moku.$gameModal.on('click', '.btn-player-tile', function(e){
 		var $tile = $(this),
 			$player = $tile.parent().parent().parent().parent(),
-			players = g2moku.$gameModal.find('.game-mode.player-vs-player').children().length;
+			players = g2moku.$gameModal.find('.game-mode.player-vs-player > div').children().length;
 		$tile.toggleClass('player-tile-selected');
 		//if()
 		if($tile.hasClass('player-tile-selected')) {
@@ -125,7 +127,7 @@ require([
 		e.preventDefault();
 	});
 	g2moku.$gameModal.on('click', '.btn-add-player, .btn-remove-player', function(e){
-		var players = g2moku.$gameModal.find('.game-mode.player-vs-player').children().length;
+		var players = g2moku.$gameModal.find('.game-mode.player-vs-player > div').children().length;
 		if($(this).parent().parent().parent().index() !== g2moku.MAX_PLAYERS - 1) {
 			$(this).toggleClass('btn-remove-player btn-add-player');
 			if($(this).hasClass('btn-remove-player')) {
@@ -146,32 +148,60 @@ require([
 		e.preventDefault();
 	});	
 	g2moku.$gameModal.find('.btn-statistics').on('click', function(e){
-		g2moku.$gameStatistics.slideToggle(300);
+		g2moku.$gameStatistics.slideDown(300, function(){
+            g2moku.reloadAllGames({});
+        });
 		e.preventDefault();
 	});
-	g2moku.$gameModal.find('.btn-play').on('click', function(e){
-		var $players = g2moku.$gameModal.find('.game-mode.player-vs-player'),
-			$bar = g2moku.$gameModal.find('.modal-header .title');			
-			console.log('PARSE FROM SERVER');//tiles.available
-		g2moku.io.emit('getAvailableTiles');
-		g2moku.io.on('getAvailableTiles', function(data) {
-			console.log('getAvailableTiles');
-			g2moku.gameTiles.parseFromServer(data, function(gameTiles){
-				var tiles = gameTiles.availableTiles;
-				$players.empty();
-				g2moku.makeGameMenuPlayerRow(tiles.slice(0, 2), false);
-				g2moku.makeGameMenuPlayerRow(tiles.slice(0, 2), true);
-				$players.slideToggle({
-					duration: 450
-					//easing: 'easeInOutExpo'
-				});
-				$bar.fadeToggle(350);
-				g2moku.$gameModal.find('.btn-play-game').fadeToggle(350);
-				//g2moku.$gameModal.modal('hide');
-				//g2moku.gameStart('playerVSplayer');
-				console.log(g2moku);
-			});
-		});
+	g2moku.$gameStatistics.find('.refresh').on('click', function(e){
+        g2moku.reloadAllGames({});
+    });
+    g2moku.io.on('getAvailableTiles', function(data) {
+        console.log('getAvailableTiles');
+        var $players = g2moku.$gameModal.find('.game-mode.player-vs-player > div'),
+            $bar = g2moku.$gameModal.find('.modal-header .title');
+        g2moku.gameTiles.parseFromServer(data, function(gameTiles){
+            var tiles = gameTiles.availableTiles;
+            $players.empty();
+            g2moku.makeGameMenuPlayerRow(tiles.slice(0, 2), false);
+            g2moku.makeGameMenuPlayerRow(tiles.slice(0, 2), true);
+            if($players.parent().css('display') == 'block') {
+                $players.parent().slideUp(300, function(){
+                    g2moku.$gameModal.find('.game-mode-select > div > .active').removeClass('active');
+                });
+            } else {
+                $players.parent().slideDown(450);
+            }
+            $bar.fadeToggle(350);
+            g2moku.$gameModal.find('.btn-play-game').fadeToggle(350);
+            //g2moku.$gameModal.modal('hide');
+            //g2moku.gameStart('playerVSplayer');
+            console.log(g2moku);
+        });
+    });
+	g2moku.$gameModal.find('button.player-join').on('click', function(e){
+        g2moku.io.emit('join', {
+            name: jQuery(this).prev().children().val()
+        });
+    });
+	g2moku.$gameModal.find('.game-mode-select > div > div').on('click', function(e){
+			//console.log('PARSE FROM SERVER');//tiles.available
+        var $mode = jQuery(this);
+        $mode.parent().find('.active').removeClass('active');
+        $mode.toggleClass('active');
+        if($mode.hasClass('player-vs-player')) {
+            g2moku.io.emit('getAvailableTiles');
+        } else if($mode.hasClass('multiplayer')) {
+            var $el = g2moku.$gameModal.find('.game-mode.multiplayer');
+            if($el.css('display') == 'block') {
+                $el.slideUp(300, function(){
+                    g2moku.$gameModal.find('.game-mode-select > div > .active').removeClass('active');
+                });
+            } else {
+                $el.slideDown(450);
+            }
+        }
+
 		//map.setTileSize(20, 20);
 		// map.replace(24, 46);
 		// map.replace(12, 34); 

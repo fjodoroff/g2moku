@@ -32,6 +32,8 @@
             'AbstractPlayerMove':  '_site/assets/js/classes/AbstractPlayerMove',
             'PlayerMove':  '_site/assets/js/classes/frontend/PlayerMove',
             'AbstractGame':  '_site/assets/js/classes/AbstractGame',
+            'Players':  '_site/assets/js/classes/backend/Players',
+            'AbstractPlayers':  '_site/assets/js/classes/AbstractPlayers',
             'Game':  '_site/assets/js/classes/frontend/Game',
             'GameTile':  '_site/assets/js/classes/GameTile',
             'Timer':  '_site/assets/js/classes/Timer',

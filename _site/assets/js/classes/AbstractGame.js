@@ -31,11 +31,16 @@ define(['prototype', 'utils'], function(proto, utils){
 		toJSON: function(){
 			var js = {},
 				players = this.g2moku.players.getPlaying();
+            var playersList = [];
 			if(this.status) js.status = this.status;
 			if(this.getMovingPlayer()) js.movingPlayer = this.getMovingPlayer().getJSON();
 			if(this.g2moku) {
 				js.gameID = this.g2moku.getGameID();
 				js.players = players;
+                for(var i = 0; i < players.length; i++) {
+                    playersList.push(players[i].name);
+                }
+                js.playersList = playersList.join(", ");
 				js.gameMode = this.g2moku.gameMode;
 			} else {
 				if(this.gameID) js.gameID = this.gameID;
@@ -51,6 +56,7 @@ define(['prototype', 'utils'], function(proto, utils){
 				if(data.players) this.players = data.players;
 				if(data.status) this.status = data.status;
 				if(data.gameMode) this.gameMode = data.gameMode;
+				if(data.playersList) this.playersList = data.playersList;
 				if(data.movingPlayer) this.movingPlayer = data.movingPlayer;
 			}
 		}

@@ -1,7 +1,8 @@
-define(['AbstractG2moku', 'games', 'base64', 'prototype'], function(AbstractG2moku, games, base64, proto){
+define(['AbstractG2moku', 'games', 'base64', 'prototype', 'Players'], function(AbstractG2moku, games, base64, proto, Players){
 	var p = Class.create();
 	// inherit from Person class:
 	p.prototype = Object.extend(new AbstractG2moku(), {
+        players: new Players(),
 		initHandlers: function(){
 			//console.log('mapHeight' + g.mapHeight);
 		},

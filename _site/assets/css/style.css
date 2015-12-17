@@ -348,6 +348,35 @@ body #game-modal .modal-content .short-message i.fa-circle.bg-yellow {
     top: inherit;
     bottom: 2px;
 }
+.game-mode.multiplayer .player-add h3,
+.game-mode.multiplayer .game-room-add h3{
+    margin-top: 0;
+}
+.game-mode.multiplayer .game-players {
+	margin-top: 15px;
+}
+.game-mode.multiplayer .game-room-add {
+    /* padding-left: 30px; */
+}
+#game-play-text .socials{
+	/* float: left; */
+}
+#game-modal .players_form .socials img:first-of-type{
+    padding-left: 1px;
+}
+#game-modal .footer-btns .socials img{
+    height: 39px;
+    vertical-align: top;
+    padding: 0 1.5px;
+}
+#game-play-text .socials img{
+	height: 51px;
+    vertical-align: middle;
+    padding: 0 1.5px;
+}
+#game-play-text .socials img:first-of-type{
+    padding-left: 10px;
+}
 .game-mode.player-vs-player .player-square-btns .btn-add-player {
 	width: 41px;
 	background: url('/assets/img/plus.png') no-repeat;
@@ -375,6 +404,40 @@ body #game-modal .modal-content .short-message i.fa-circle.bg-yellow {
 .game-mode.player-vs-player .btn-player-tile.active {
 	border-color: #B51313 !important;
 	outline: none!important;
+}
+.game-mode-select > div > div.player-vs-player > div{
+    padding: 17px 0 20px 0;
+}
+.game-mode-select div.player-vs-player h4{
+	margin-top: 20px;
+    margin-bottom: 0px;
+    padding-bottom: 0;
+}
+.game-mode-select > div > div.multiplayer img{
+	height: 160px;
+	display: block;
+	margin: 0 auto;
+}
+.game-mode-select > div > div.multiplayer > div{
+    padding: 4px 0 0px 0;
+}
+.game-mode-select h4{
+    text-align: center;
+    margin-top: 0;
+    padding-bottom: 20px;
+    text-transform: uppercase;
+}
+.game-mode-select > div > div > div{
+	text-shadow: 2px 0px 6px rgb(10, 10, 10);
+	-webkit-transition    : .2s;
+	-moz-transition       : .2s;
+	-o-transition         : .2s;
+	transition            : .2s;
+}
+.game-mode-select > div > div.active > div,
+.game-mode-select > div > div > div:hover {
+    background: #378037;
+	cursor: pointer;
 }
 .game-rules {
 	border: 2px dashed #645034;

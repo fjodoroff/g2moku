@@ -12,7 +12,7 @@ define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
 		g.MAX_PLAYERS = 4;
 		g.exceptions = require('exceptions');
 		g.gameTiles = require('gameTiles');
-		g.debug = true;
+		g.debug = false;
 		g.mapWidth = 150;
 		g.mapHeight = 150;
 		g.history = {
@@ -159,100 +159,7 @@ define(['prototype', 'Player', 'Timer'], function(proto, Player, Timer){
 				callback(false, this.genID);
 			}
 		};
-        g.players = (function(pl){
-            pl.arr = [];
-            pl.playing = [];
-            pl.getPlayers = function(){
-                var a = [];
-                this.arr.each(function(e, i){
-                    a.push(e.getJSON());
-                });
-                return a;
-            };
-            pl.getPlaying = function(){
-                var a = [];
-                this.playing.each(function(e, i){
-                    a.push(e.getJSON());
-                });
-                return a;
-            };
-            pl.clear = function(){
-                this.currentPlaying.$box.remove();
-                this.playing.each(function(e, i){
-                    e.$box.remove();
-                });
-                this.playing = [];
-                this.currentPlaying = false;
-            };
-            pl.currentPlaying = false;
-            pl.willPlay = function(player){
-                var newArr = [player];
-                for(var i = 0; i < this.playing.length; i++) {
-                    newArr.push(this.playing[i]);
-                }
-                this.playing = newArr;
-            };
-            pl.getLast = function(){
-                return this.playing.length > 0 ? this.playing[this.playing.length - 1] : false;
-            };
-            pl.next = function(gameStarted){
-                //if(this.playing.length == 0) this.playing = this.arr;
-                //this.playing[this.playing.length - 1].startTimer();
-                var ans = this.playing.length > 0 ? this.playing.pop() : false;
-                this.currentPlaying = ans;
-                //console.log(ans);
-                return ans;
-            };
-            pl.parseFromGameModal = function(data){
-                var arr = [];
-                //console.log('//parsefromgameModal each data');
-                //console.log(data);
-                data.each(function(e, i){
-                    // console.log('//tile i');
-                    // console.log(i);
-                    // console.log('//tile e');
-                    // console.log(e);
-                    var player = new Player({
-                        name: e.input,
-                        tile: e.tile,
-                        playingTileIndex: e.tileIndex
-                    });
-                    player.setPlayingTile(new Phaser.Tile(g.layer, e.tileIndex));
-                    arr.push(player);
-                });
-                this.arr = arr;
-                this.playing = arr;
-                //this.arr = arr;
-                return arr;
-            };
-            pl.createPlayers = function(data){
-                var arr = [];
-                //console.log('//parsefromgameModal each data');
-                //console.log(data);
-                data.each(function(e, i){
-                    // console.log('//tile i');
-                    // console.log(i);
-                    // console.log('//tile e');
-                    // console.log(e);
-                    var player = new Player({
-                        name: e.name,
-                        tile: e.tile,
-                        playingTile: e.playingTile
-                    });
-//                    player.create(function(){
-//                        arr.push(player);
-//                    });
-                    arr.push(player);
-                    //player.setPlayingTile(new Phaser.Tile(g.layer, e.tileIndex));
-                    //arr.push(player);
-                });
-                this.arr = arr;
-                this.playing = arr;
-                //this.arr = arr;
-                return arr;
-            };
-            return pl;
-        }(g.players || {}));
+
 		g.initialize = function(){
 			this.gameErrors = {
 				gameMenu: []

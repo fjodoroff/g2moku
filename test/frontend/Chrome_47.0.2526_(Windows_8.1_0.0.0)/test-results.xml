@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<testsuite name="Chrome 47.0.2526 (Windows 8.1 0.0.0)" package="" timestamp="2015-12-17T11:42:25" id="0" hostname="MAXIM-INFOBIG" tests="0" errors="1" failures="0" time="0">
+  <properties>
+    <property name="browser.fullName" value="Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.80 Safari/537.36"/>
+  </properties>
+  <system-out>
+    <![CDATA[Chrome 47.0.2526 (Windows 8.1 0.0.0) ERROR
+  Uncaught TypeError: AbstractG2moku is not a function
+  at D:/_dev2/g2moku/_site/assets/js/classes/frontend/G2moku.js:9
+
+]]>
+  </system-out>
+  <system-err/>
+</testsuite>

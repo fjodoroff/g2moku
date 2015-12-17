@@ -1,4 +1,4 @@
-define(['Player', 'G2moku'], function(Player, G2moku){
+define(['Player', 'G2moku', 'utils'], function(Player, G2moku, utils){
 	require('console.json');
 	var color = require('cli-color');
 	var routes = function(s){
@@ -19,7 +19,7 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 					game = this;
 				//global.log.log(game);
 				this.playerMoving = true;
-				this.g2moku.players.currentPlaying.moveToTile(answer.tile, req.data.layer, function(playerMove) {
+				this.g2moku.players.currentPlaying.moveToTile(answer.tile, req.data.layer, game.db_id, function(playerMove) {
 					global.log.logAction([req.data.player.name, game.gameID, address, req.socket.id], 'Move to tile | ' + JSON.stringify(playerMove));
 					playerMove.player = game.g2moku.players.currentPlaying;
 					playerMove.id = game.g2moku.history.getNextID();
@@ -34,6 +34,51 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 						//console.log(callbackObj);
 						if (win) {
 							global.log.log("win!");
+                            game.setStatus(2, "Game ended!");
+                            game.playerMoving = false;
+                            game.gameStarted = game.g2moku.gameStarted = true;
+                            game.g2moku.players.willPlay(game.g2moku.players.currentPlaying);
+                            game.gameStarted = game.g2moku.gameStarted = false;
+                            games.sendGamesStats(req);
+
+
+                            global.pool.getConnection(function(err, connection) {
+                                if (err) {
+                                    throw err;
+                                }
+                                connection.beginTransaction(function (err) {
+                                    if (err) {
+                                        throw err;
+                                    }
+                                    connection.query('UPDATE `game` SET gameEnd = ? WHERE Game_ID = ?', [new Date(), game.db_id], function(err, result) {
+                                        if (err) {
+                                            return connection.rollback(function () {
+                                                throw err;
+                                            });
+                                        }
+                                        connection.query('UPDATE `game` SET Winner_ID = ? WHERE Game_ID = ?', [playerMove.player.db_id, game.db_id], function(err, result) {
+                                            if (err) {
+                                                return connection.rollback(function () {
+                                                    throw err;
+                                                });
+                                            }
+                                            connection.commit(function (err) {
+                                                if (err) {
+                                                    return connection.rollback(function () {
+                                                        throw err;
+                                                    });
+                                                }
+                                                setTimeout(function(){
+                                                    games.clearGame(game.gameID);
+                                                    games.sendGamesStats(req);
+                                                }, 5000);
+                                                console.log('success!');
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                            //callback.apply(game, [games]);
 						} else {
 							callback.apply(game, [games]);
 						}
@@ -48,14 +93,90 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 			//if(req.user) console.log(req.user.get('id'));
 			global.log.logRequest([req.ip], "Game page opened " + (++r.counter) + " time | " + JSON.stringify(req.route.path));
 			global.log.logAction([req.ip], "Rendering page... | " + JSON.stringify(req.route.path) + " | game.ejs");
-			res.render('game', {});
+			res.render('game', {
+                allgames: {
+                    headers: [
+                        "#", "Players", "GameMode", "Status", "Winner"
+                    ]
+                }
+            });
 		});
-
+        app.get('/allGames', function(req, res) {
+            //if(req.user) console.log(req.user.get('id'));
+            global.log.logRequest([req.ip], "Ajax Request | " + JSON.stringify(req.route.path) + " | " + JSON.stringify(req.query));
+            if(!req.query.type || req.query.type == "html") {
+                global.pool.query(
+                        'SELECT game2.PublicGame_ID, game2.Game_ID, game2.gameMode, game2.gameStart, game2.gameEnd, game2.Winner_ID, ( ' +
+                        'SELECT playingName ' +
+                        'FROM player ' +
+                        'WHERE player.Player_ID = game2.Winner_ID ) AS Winner, ( ' +
+                        'SELECT playingName ' +
+                        'FROM player ' +
+                        'WHERE player.Player_ID = game2.Player_ID ' +
+                        ') AS beginPlayer, ( ' +
+                        'SELECT GROUP_CONCAT(player.playingName) ' +
+                        'FROM player_opponent_games ' +
+                        'INNER JOIN game ' +
+                        'ON game.Game_ID = player_opponent_games.Game_ID ' +
+                        'INNER JOIN player ' +
+                        'ON player.Player_ID = player_opponent_games.Player2_ID ' +
+                        'WHERE game.Game_ID = game2.Game_ID ' +
+                        'GROUP BY game.Game_ID ' +
+                        ') AS Players ' +
+                        'FROM `game` AS game2 ' +
+                        'ORDER BY gameStart DESC',
+                    function(err, results, fields) {
+                    if(err) console.log(err);
+                    else {
+                        console.log(JSON.stringify(results));
+                        global.log.logAction([req.ip], "Rendering page... | " + JSON.stringify(req.route.path) + " | all_games.ejs");
+                        res.render('all_games', {
+                            printStatus: function(game){
+                                var status = "<td class='bg-warning'>Game Inited";
+                                if(game.gameStart && game.gameEnd && game.Winner_ID) status = "<td class='bg-danger'>Game Ended";
+                                else if(game.gameStart && game.gameEnd) status = "<td class='bg-danger'>Game Ended";
+                                else if(game.gameStart) status = "<td class='bg-success'>Game Started";
+                                return status + '</td>';
+                            },
+                            printGameID: utils.getFormatedGameID,
+                            allgames: {
+                                headers: [
+                                    "#", "Players", "GameMode", "Status", "Winner"
+                                ],
+                                content: results
+                            }
+                        });
+                    }
+                });
+            }
+        });
 		app.get('/rules', function (req, res) {
 			res.render('game_rules', {
 
             });
 		});
+		app.io.route('join', function(req) {
+            var address = req.socket.handshake.address;
+            address = address.address + ':' + address.port;
+            global.log.logRequest([address, req.socket.id], "join | " + JSON.stringify(req.data));
+            if(req.data.name) {
+                var answer = {},
+                    player = new Player(req.data.name);
+                answer.player = player.getJSON();
+                app.io.broadcast('joined', answer);
+            }
+        });
+        app.io.route('addGameRoom', function(req) {
+            var address = req.socket.handshake.address;
+            address = address.address + ':' + address.port;
+            global.log.logRequest([address, req.socket.id], "addGameRoom | " + JSON.stringify(req.data));
+            if(req.data.name) {
+                var answer = {},
+                    player = new Player(req.data.name);
+                answer.player = player.getJSON();
+                app.io.broadcast('joined', answer);
+            }
+        });
 		app.io.route('getAvailableTiles', function(req) {
 			var answer = {
 				'green': {
@@ -100,7 +221,9 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 				this.g2moku.players.currentPlaying.startTimer();
 
 				this.playerMoving = false;
-				s.games[req.data.gameID] = this;
+                console.log(s.games.group);
+                console.log(req.data.gameID);
+				//s.games[s.games.group][req.data.gameID] = this;
 			});
 	    });
 		app.io.route('beforeMoveToTile', function(req) {
@@ -115,13 +238,11 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 			//console.log(color.black.bgWhite.underline("[ " + req.socket.id + " ]") + "" + color.black.bgYellow.underline(" REQUEST: beforeMoveToTile"));
 			//console.log(color.white.bgGreen.underline(" Tile: " + JSON.stringify(req.data.tile)) + color.white.bgCyan.underline(" Player: " + JSON.stringify(req.data.player.name))+ color.white.bgMagenta.underline(" Time: " + JSON.stringify(req.data.player.timer)));
 			//checking for move
-			setTimeout(function(){
-				//global.log.log(game.g2moku.players.currentPlaying);
-				//beforeMoveToTile(req, function(game){
-				global.log.logResponse([req.data.player.name, game.gameID, address, req.socket.id], "beforeMoveToTile | " + JSON.stringify(answer));
-				req.io.emit('beforeMoveToTile', answer);
-				//});
-			}, 1000);
+            //global.log.log(game.g2moku.players.currentPlaying);
+            //beforeMoveToTile(req, function(game){
+            global.log.logResponse([req.data.player.name, game.gameID, address, req.socket.id], "beforeMoveToTile | " + JSON.stringify(answer));
+            req.io.emit('beforeMoveToTile', answer);
+            //});
 		});
 		app.io.route('startGame', function(req) {
 			var address = req.socket.handshake.address;
@@ -130,22 +251,24 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 			var answer = {
 				can: true// canPlayGame
 			};
-			setTimeout(function(){
-				s.games.getGame(req.data.gameID, function(group){
-					this.gameStarted = this.g2moku.gameStarted = true;
-					if(this.gameID) this.setStatus(1, "Game started");
-					s.games.sendGamesStats(req);
-					//global.log.log(game.g2moku.players.currentPlaying.getJSON());
-					this.g2moku.players.next(this.gameStarted);
-					this.g2moku.players.currentPlaying.startTimer();
-					//global.log.log(game.g2moku.players.currentPlaying.getJSON());
-					answer.gameID = this.gameID;
-					global.log.logAction([this.gameID, address, req.socket.id], "Starting game...");
-					//game.
-					global.log.logResponse([this.gameID, address, req.socket.id], "startGame | " + JSON.stringify(answer));
-					req.io.emit('startGame', answer);//
-				});
-			}, 1000);
+            s.games.getGame(req.data.gameID, function(group){
+                var game = this;
+                global.pool.query('UPDATE `game` SET gameStart = ? WHERE Game_ID = ?', [new Date(), game.db_id], function(err, result) {
+                    if (err) throw err;
+                    game.gameStarted = game.g2moku.gameStarted = true;
+                    if(game.gameID) game.setStatus(1, "Game started");
+                    s.games.sendGamesStats(req);
+                    //global.log.log(game.g2moku.players.currentPlaying.getJSON());
+                    game.g2moku.players.next(game.gameStarted);
+                    game.g2moku.players.currentPlaying.startTimer();
+                    //global.log.log(game.g2moku.players.currentPlaying.getJSON());
+                    answer.gameID = game.gameID;
+                    global.log.logAction([game.gameID, address, req.socket.id], "Starting game...");
+                    //game.
+                    global.log.logResponse([game.gameID, address, req.socket.id], "startGame | " + JSON.stringify(answer));
+                    req.io.emit('startGame', answer);//
+                });
+            });
 		});
 		app.io.route('playGame', function(req) {
 			var address = req.socket.handshake.address;
@@ -155,30 +278,31 @@ define(['Player', 'G2moku'], function(Player, G2moku){
 				answer = {
 					can: true// canPlayGame
 				};
+            global.log.logAction([address, req.socket.id], "G2moku object created");
 			if(req.data.gameMode) g.gameMode = req.data.gameMode;
-			g.players.createPlayers(req.data.players);
-			global.log.log(g.players.playing);
-			setTimeout(function(){
-				global.log.logAction([address, req.socket.id], "Creating g2moku object, generating gameID...");
-				g.generateID(function(preGenerated, genID){
-					if(preGenerated !== false) {
-						var genetated = "",
-							newGenerated = "";
-						//global.games[newGenerated] = g;
-						//newGenerated = preGenerated + "." + genID;
-						answer.gameID = g.gameID = preGenerated;
-						answer.genID = g.genID = genID;
-						s.games.addGame(g, function(group) {
-							if(this.gameID) this.setStatus(0, "Waiting to begin");
-							s.games.sendGamesStats(req);
-							answer.game = this.toJSON();
-							global.log.logResponse([g.gameID, address, req.socket.id], "playGame | " + JSON.stringify(answer));
-							//s.games.games[game.gameID] = game;
-							req.io.emit('playGame', answer);
-						});
-					}
-				});
-			}, 1000);
+			g.players.createPlayers(req.data.players, function(players){
+                global.log.logAction([address, req.socket.id], "Players created");
+                global.log.log(g.players.playing);
+                g.generateID(function(preGenerated, genID){
+                    if(preGenerated !== false) {
+                        var genetated = "",
+                            newGenerated = "";
+                        //global.games[newGenerated] = g;
+                        //newGenerated = preGenerated + "." + genID;
+                        answer.gameID = g.gameID = preGenerated;
+                        answer.genID = g.genID = genID;
+                        s.games.addGame(g, function(group) { //!!transaction in game adding
+                            if(this.gameID) this.setStatus(0, "Waiting to begin");
+                            s.games.sendGamesStats(req);
+                            answer.game = this.toJSON();
+                            global.log.logResponse([g.gameID, address, req.socket.id], "playGame | " + JSON.stringify(answer));
+                            //s.games.games[game.gameID] = game;
+                            req.io.emit('playGame', answer);
+                        });
+                    }
+                });
+            });
+
 			//global.game = new G2moku();
 		});
 		app.io.route('ready', function(req) {
