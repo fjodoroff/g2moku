@@ -35,6 +35,6 @@ define({
         'utils': global.APP_PATH + '/_site/assets/js/utils',
         'base64': global.APP_PATH + '/node_modules/base-64/base64'
     },
-    basePath: '../',
+    basePath: './',
     publicPath: './'
 });
