@@ -4,13 +4,16 @@ var tempDirs = dirs;
 global.onProduction = false;
 tempDirs.pop();
 global.APP_PATH = tempDirs.join(path.sep);
-global.BASE_PATH = './';
+global.BASE_PATH = '../';
+if(process.env.BASE_PATH) global.BASE_PATH = process.env.BASE_PATH;
 console.log(dirs);
-console.log(global.APP_PATH);
+if(path.isAbsolute(global.APP_PATH)) global.APP_PATH = '../';
+console.log(global.APP_PATH, path.isAbsolute(global.APP_PATH));
 // for(var i = 0; i < dirs.length; i++) {
 //     //if(dirs[i].indexOf('axive') !== -1) global.onProduction = true;
 // }
 //global.APP_FOLDER = global.onProduction ? '/' : '/app/';
+console.log(path.join(global.APP_PATH, '/_site/assets/js/classes/backend/Player'));
 global.APP_FOLDER = './';
 define({
     paths: {
@@ -38,6 +41,6 @@ define({
         'utils': path.join(global.APP_PATH, '/_site/assets/js/utils'),
         'base64': '../node_modules/base-64/base64'
     },
-    basePath: '../',
+    basePath: global.BASE_PATH,
     publicPath: './'
 });

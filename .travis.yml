@@ -5,11 +5,9 @@ node_js:
   - "5.11"
 before_script:
   - npm install grunt-cli -g
-  - mysql -e 'create database g2moku;'
+  - mysql -u root -e 'create database g2moku;'
+  - mysqldump -u root -p g2moku > ./g2moku.sql
 services:
   - mysql
 env:
-  - DB_HOST=localhost
-  - DB_USER=travis
-  - DB_NAME=g2moku
-  - DB_PASSWORD=
+  - BASE_PATH=./
