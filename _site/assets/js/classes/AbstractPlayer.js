@@ -12,6 +12,7 @@ define(['prototype', 'utils', 'PlayerMove'], function(proto, utils, PlayerMove){
 			if(o) {
 				if(utils.isObject(o)) {
 					this.layer = o.layer || this.layer;
+					if(o.playingTile) this.playingTile = o.playingTile;
 					this.name = o.name;
 					this.tile = o.tile;
 				} else {
@@ -22,13 +23,13 @@ define(['prototype', 'utils', 'PlayerMove'], function(proto, utils, PlayerMove){
 		endMove: function(tile, callback){
 			this.timer.clear();
 			var playerMove = new PlayerMove({
-				tile: tile,
+				tile: tile, 
 				timer: this.timer
 			});
 			this.moves.push(playerMove);
 			//g2moku.history.push(playerMove);		
 			this.moving = false;
-			console.log('moving = false');
+			//console.log('moving = false');
 			callback(playerMove);
 			this.afterEndMove(playerMove);
 			//g2moku.players.willPlay(this);
@@ -36,6 +37,25 @@ define(['prototype', 'utils', 'PlayerMove'], function(proto, utils, PlayerMove){
 		startMove: function(tile){
 			this.moving = true;
 			this.afterStartMove(tile);
+		},
+		getJSON: function(){
+			var p = this;
+			var json = function(j){
+				j.moving = p.moving;
+				j.name = p.name;
+				j.layer = p.layer;
+				if(p.timer) j.timer = p.timer.getTimestampDiff();
+				if(p.db_id) j.db_id = p.db_id;
+				j.playingTile = {
+					index: p.playingTile.index,
+					wordlX: p.playingTile.worldX,
+					worldY: p.playingTile.worldY,
+					x: p.playingTile.x,
+					y: p.playingTile.y
+				};
+				return j;
+			}(json || {});
+			return json;
 		},
 		afterEndMove: function(playerMove) {},
 		afterStartMove: function() {},
@@ -47,6 +67,6 @@ define(['prototype', 'utils', 'PlayerMove'], function(proto, utils, PlayerMove){
 			} else {//if number 
 				//this.playingTile = g.map.getImageIndex(index);
 			}
-		},
+		}
 	})
 });

@@ -148,8 +148,14 @@ html {
     /* border-bottom: 1px solid green; */
     font-size: 10px;
 }
+body.offline #game-modal .modal-content .short-message i.fa-circle {
+    color: rgb(206, 29, 29);
+}
 body.online #game-modal .modal-content .short-message i.fa-circle {
-	color: #2B9E2B;
+    color: #2B9E2B;
+}
+body #game-modal .modal-content .short-message i.fa-circle.bg-yellow {
+    color: #CACE1D;
 }
 .player-boxes {
 	position: absolute;
@@ -170,6 +176,14 @@ body.online #game-modal .modal-content .short-message i.fa-circle {
     text-align: center;
     font-weight: bold;
 	text-shadow: 2px 0px 6px rgb(10, 10, 10);
+	-webkit-transition    : .2s;
+	-moz-transition       : .2s;
+	-o-transition         : .2s;
+	transition            : .2s;
+}
+.player-box .avatar span.hovered{
+    font-size: 15px;
+    padding-top: 47px;		
 }
 .player-box .avatar{
 	position: relative;
@@ -201,6 +215,9 @@ body.online #game-modal .modal-content .short-message i.fa-circle {
 }
 .player-box .bottom-block tbody td.player-turn-xy{
     padding-left: 0;
+}
+.player-box .bottom-block tbody tr.not-sended{
+	background-color: #751919!important;
 }
 .player-box .bottom-block tbody tr:first-of-type{
 	background-color: #313131;
@@ -331,6 +348,38 @@ body.online #game-modal .modal-content .short-message i.fa-circle {
     top: inherit;
     bottom: 2px;
 }
+.game-mode.multiplayer .player-add h3,
+.game-mode.multiplayer .game-room-add h3{
+    margin-top: 0;
+}
+.game-mode.multiplayer .game-players .player h5{
+	margin: 3px;
+}
+.game-mode.multiplayer .game-players {
+	margin-top: 15px;
+}
+.game-mode.multiplayer .game-room-add {
+    /* padding-left: 30px; */
+}
+#game-play-text .socials{
+	/* float: left; */
+}
+#game-modal .players_form .socials img:first-of-type{
+    padding-left: 1px;
+}
+#game-modal .footer-btns .socials img{
+    height: 39px;
+    vertical-align: top;
+    padding: 0 1.5px;
+}
+#game-play-text .socials img{
+	height: 51px;
+    vertical-align: middle;
+    padding: 0 1.5px;
+}
+#game-play-text .socials img:first-of-type{
+    padding-left: 10px;
+}
 .game-mode.player-vs-player .player-square-btns .btn-add-player {
 	width: 41px;
 	background: url('/assets/img/plus.png') no-repeat;
@@ -358,6 +407,40 @@ body.online #game-modal .modal-content .short-message i.fa-circle {
 .game-mode.player-vs-player .btn-player-tile.active {
 	border-color: #B51313 !important;
 	outline: none!important;
+}
+.game-mode-select > div > div.player-vs-player > div{
+    padding: 17px 0 20px 0;
+}
+.game-mode-select div.player-vs-player h4{
+	margin-top: 20px;
+    margin-bottom: 0px;
+    padding-bottom: 0;
+}
+.game-mode-select > div > div.multiplayer img{
+	height: 160px;
+	display: block;
+	margin: 0 auto;
+}
+.game-mode-select > div > div.multiplayer > div{
+    padding: 4px 0 0px 0;
+}
+.game-mode-select h4{
+    text-align: center;
+    margin-top: 0;
+    padding-bottom: 20px;
+    text-transform: uppercase;
+}
+.game-mode-select > div > div > div{
+	text-shadow: 2px 0px 6px rgb(10, 10, 10);
+	-webkit-transition    : .2s;
+	-moz-transition       : .2s;
+	-o-transition         : .2s;
+	transition            : .2s;
+}
+.game-mode-select > div > div.active > div,
+.game-mode-select > div > div > div:hover {
+    background: #378037;
+	cursor: pointer;
 }
 .game-rules {
 	border: 2px dashed #645034;

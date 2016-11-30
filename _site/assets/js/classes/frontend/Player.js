@@ -12,23 +12,6 @@ define(['require', 'G2moku', 'AbstractPlayer', 'Timer'], function(require, g2mok
 				p.$box.find('.time-elapsed').text(numbers[0]);
 			});
 		},
-		getJSON: function(){
-			var p = this;
-			var json = function(j){
-				j.moving = p.moving;
-				j.name = p.name;
-				j.layer = p.layer;
-				j.playingTile = {
-					index: p.playingTile.index,
-					wordlX: p.playingTile.worldX,
-					worldY: p.playingTile.worldY,
-					x: p.playingTile.x,
-					y: p.playingTile.y
-				};
-				return j;
-			}(json || {});
-			return json;
-		},
 		afterStartMove: function(tile){
 			this.$box.addClass('active');
 		},
