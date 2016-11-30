@@ -158,6 +158,36 @@ define(['Player', 'G2moku', 'utils'], function(Player, G2moku, utils){
         if(s.io.on) {
             s.io.on('connection', function (socket) {
                 console.log('new connection');
+                socket.on('request.tiles.available', function (req) {
+                    var answer = {
+                        'green': {
+                            imgPath: '/assets/img/tiles/square1.png',
+                            index: 61
+                        },
+                        'yellow': {
+                            imgPath: '/assets/img/tiles/square2.png',
+                            index: 95
+                        },
+                        'rose': {
+                            imgPath: '/assets/img/tiles/square3.png',
+                            index: 105
+                        },
+                        'blue': {
+                            imgPath: '/assets/img/tiles/square5.png',
+                            index: 38
+                        }
+                    };
+                    console.log(req);
+                    // var address = req.socket.handshake.address;
+                    // address = address.address + ':' + address.port;
+                    // global.log.logRequest([address, req.socket.id], "response.tiles.available | " + JSON.stringify(req.data));
+                    //
+                    // global.log.logResponse([address, req.socket.id], "response.tiles.available", JSON.stringify(answer));
+                    s.io.emit('response.tiles.available', answer);
+                });
+                socket.on('disconnect', function () {
+                    s.io.emit('user disconnected');
+                });
             });
             s.io.on('join', function (req) {
                 var address = req.socket.handshake.address;
@@ -180,32 +210,6 @@ define(['Player', 'G2moku', 'utils'], function(Player, G2moku, utils){
                     answer.player = player.getJSON();
                     app.io.broadcast('joined', answer);
                 }
-            });
-            s.io.on('request.tiles.available', function (req) {
-                var answer = {
-                    'green': {
-                        imgPath: '/assets/img/tiles/square1.png',
-                        index: 61
-                    },
-                    'yellow': {
-                        imgPath: '/assets/img/tiles/square2.png',
-                        index: 95
-                    },
-                    'rose': {
-                        imgPath: '/assets/img/tiles/square3.png',
-                        index: 105
-                    },
-                    'blue': {
-                        imgPath: '/assets/img/tiles/square5.png',
-                        index: 38
-                    }
-                };
-                var address = req.socket.handshake.address;
-                address = address.address + ':' + address.port;
-                global.log.logRequest([address, req.socket.id], "getAvailableTiles | " + JSON.stringify(req.data));
-
-                global.log.logResponse([address, req.socket.id], "getAvailableTiles", JSON.stringify(answer));
-                req.io.emit('getAvailableTiles', answer);
             });
             s.io.on('moveToTile', function (req) {
                 var address = req.socket.handshake.address;

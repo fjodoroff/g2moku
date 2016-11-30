@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<testsuite name="Chrome 54.0.2840 (Windows 8.1 0.0.0)" package="" timestamp="2016-11-30T20:51:32" id="0" hostname="Artur-PC" tests="0" errors="1" failures="0" time="0">
+  <properties>
+    <property name="browser.fullName" value="Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36"/>
+  </properties>
+  <system-out>
+    <![CDATA[Chrome 54.0.2840 (Windows 8.1 0.0.0) ERROR
+  Disconnectedundefined
+,Chrome 54.0.2840 (Windows 8.1 0.0.0) ERROR
+  Some of your tests did a full page reload!
+
+]]>
+  </system-out>
+  <system-err/>
+</testsuite>

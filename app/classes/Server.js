@@ -80,7 +80,7 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 		s.app = app = s.express();
 		s.port = port;
 		s.server = require('http').Server(app);
-		s.io = {};
+		s.io = require('socket.io')(s.server);
 
 		// configure app
 		app.set('view engine', 'ejs');
