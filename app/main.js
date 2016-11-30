@@ -1,5 +1,5 @@
 require = require('amdrequire');
-require(['config.js'], function(config){
+require(['./config.js'], function(config){
     // Set basepaths first
     //config.basePath = __dirname;
     //config.publicPath = __dirname + '/public';
