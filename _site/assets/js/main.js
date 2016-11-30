@@ -1,5 +1,6 @@
 require.config({
 	baseUrl: '/assets/js/',
+	waitSeconds: 200,
 	paths: {
 		'jquery': 'libs/jquery/jquery.min',
 		'jquery.nanoscroller': 'libs/jquery/jquery.nanoscroller.min',
@@ -29,7 +30,7 @@ require.config({
 		'jquery.jscrollpane': {
 			deps: ['jquery'],
 			exports: 'jQuery.NanoScroller'
-		},		
+		},
 		'bootstrap': {
 			deps: ['jquery']
 		},
@@ -80,7 +81,7 @@ require([
 		g2moku.$gameModal.find('.game-mode.player-vs-player .player').each(function(i, e){
 			var $input = $(this).find("input.input-player-name"),
 				$this = $(this),
-				selectedTile = g2moku.gameTiles.selectedTile($this);				
+				selectedTile = g2moku.gameTiles.selectedTile($this);
 			try {
 				if(selectedTile == null) throw new g2moku.exceptions.GameFormException("Choose tile", $input[0]);
 				if($input.val().length == 0) throw new g2moku.exceptions.GameFormException("Please type player name", $input[0]);
@@ -100,8 +101,8 @@ require([
 		if(g2moku.gameErrors.gameMenu.length == 0) {
 			g2moku.$gameModal.modal('hide');
 			console.log(data);
-			g2moku.gameStart('playerVSplayer', data);			
-		}		
+			g2moku.gameStart('playerVSplayer', data);
+		}
 		e.preventDefault();
 	});
 	jQuery('body').on('click', '.player-turn-xy', function(e){
@@ -119,7 +120,7 @@ require([
 		}, 3000);
 		console.log(g2moku.marker);
 		// setTimeout(function(){
-			// g2moku.canUpdateMarker = false;					
+			// g2moku.canUpdateMarker = false;
 		// }, 2000);
 	});
 	g2moku.$gameModal.on('click', '.btn-player-tile', function(e){
@@ -154,21 +155,21 @@ require([
 				$(this).parent().parent().parent().slideUp(250, function(){
 					$(this).remove();
 				});
-				g2moku.reinitPlayerTiles(g2moku.gameTiles.availableTiles.slice(0, players - 1));			
+				g2moku.reinitPlayerTiles(g2moku.gameTiles.availableTiles.slice(0, players - 1));
 			}
 		}
 	});
 	g2moku.$gameModal.find('.btn-rules').on('click', function(e){
 		g2moku.$gameRules.slideToggle(300);
 		e.preventDefault();
-	});	
+	});
 	g2moku.$gameModal.find('.btn-statistics').on('click', function(e){
 		g2moku.$gameStatistics.slideToggle(300);
 		e.preventDefault();
 	});
 	g2moku.$gameModal.find('.btn-play').on('click', function(e){
 		var $players = g2moku.$gameModal.find('.game-mode.player-vs-player'),
-			$bar = g2moku.$gameModal.find('.modal-header .title');			
+			$bar = g2moku.$gameModal.find('.modal-header .title');
 			console.log('PARSE FROM SERVER');//tiles.available
 		g2moku.io.emit('request.tiles.available');
 		g2moku.io.on('response.tiles.available', function(data) {
@@ -191,7 +192,7 @@ require([
 		});
 		//map.setTileSize(20, 20);
 		// map.replace(24, 46);
-		// map.replace(12, 34); 
+		// map.replace(12, 34);
 		// setInterval(function(){
 			// g2moku.map.forEach(function(tile){
 				// console.log(tile.x + "x" + tile.y);

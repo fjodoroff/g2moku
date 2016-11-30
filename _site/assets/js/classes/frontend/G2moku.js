@@ -9,8 +9,8 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 		g.$gameStatistics = jQuery('#game-statistics');
 		g.gameState = {
 			init: function(a, b){
-				g2moku = a;
-				g2moku = b;
+				// g2moku = a;
+				// g2moku = b;
 				console.log(a);
 				console.log(b);
 			},
@@ -22,7 +22,7 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 				//game.load.spritesheet('citizenmale', 'assets/sprites/citizenmale.png', 64, 64, 10);
 			},
 			create: function(){
-				console.log(g2moku);
+				// console.log(g2moku);
 				// var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
 				// var text = g.game.add.text(g.game.world.centerX, g.game.world.centerY, "- phaser -\nwith a sprinkle of\npixi dust", style);
 				

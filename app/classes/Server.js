@@ -1,8 +1,9 @@
 define(['routes', 'games', 'utils'], function(routes, games, utils){
 	var Server = function(port){
 		var s = this;
+		var app = null;
 		var bunyan = require('bunyan');
-		s.express = require('express.io');
+		s.express = require('express');
 		//var passport = require('passport');
 		//var session = require('express-session');
 		s.path = require('path');
@@ -78,7 +79,7 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 
 		s.app = app = s.express();
 		s.port = port;
-		app.http().io();
+		require('http').Server(app);
 
 		// configure app
 		app.set('view engine', 'ejs');
