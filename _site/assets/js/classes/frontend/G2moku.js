@@ -1,172 +1,12 @@
-define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', 'utils', 'Players'], function(AbstractG2moku, proto, io, Player, Timer, Game, utils, Players){
+define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function(AbstractG2moku, proto, io, Player, Timer){
 	var g2 = (function(g) {
-		g.io = io.connect('http://localhost:3000', {
-			'force new connection': true
-		});
+		g.io = io.connect('http://localhost:' + location.port);
 		g.game = new Phaser.Game('100%', '100%', Phaser.AUTO);
 		g.$playerBoxes = jQuery('.player-boxes');
 		g.$gameTopBar = jQuery('.game-topbar');
 		g.$gameModal = jQuery('#game-modal');
 		g.$gameRules = jQuery('#game-rules');
 		g.$gameStatistics = jQuery('#game-statistics');
-		g.$box = null;
-		g.firstTime = true;
-		g.marker = null;
-		g.offline = false;
-		g.cursors = null;
-		g.currentTile = null;
-		g.sprites = null;
-        g.players = new Players();
-		g.canUpdateMarker = true;
-		g.canMoveMarker = true;
-		g.onSendGameStats = function(data){
-			if(!g.games.inited) {
-				g.games.initGames(data.games);
-			} else {
-				g.games.updateGames(data.games);
-			}
-		};
-		g.games = {
-			games: {},
-			inited: false,
-			$activeGames: null,
-			checkDataToUpdate: function(games){
-				var keys = Object.keys(games),
-					data = {};
-				for(var i = 0; i < keys.length; i++) {
-					var k = keys[i],
-						e = games[k];
-					console.log('checking');
-					console.log(games);
-					if(this.games[k] === undefined) data[k] = true;
-					else {
-						data[k] = utils.deepDiffMapper.map([
-							games[k].gameID,
-							games[k].playersList,
-							games[k].gameMode,
-							games[k].status,
-							games[k].movingPlayer
-						], [
-							this.games[k].gameID,
-							this.games[k].playersList,
-							this.games[k].gameMode,
-							this.games[k].status,
-							this.games[k].movingPlayer
-						]);
-						console.log(data[k]);
-					}
-				}
-				return data;
-			},
-			initGames: function(games){
-				console.log('initGames');
-				console.log(games);
-				this.$activeGames = g.$gameStatistics.find('.active-games tbody');
-				this.$activeGames.empty();
-
-				var keys = Object.keys(games);
-				for(var i = 0; i < keys.length; i++) {
-					var key = keys[i],
-						e = games[key];
-					var game = new Game(e);
-					this.games[key] = game;
-					this.$activeGames.append(game.toTableHTML());
-				}
-				this.inited = true;
-			},
-			addGame: function(gameData){
-				var game = new Game(gameData);
-				this.games[game.gameID] = game;
-				this.$activeGames.prepend(game.toTableHTML());
-			},
-            removeGame: function(gameID, callback){
-                var that = this;
-                this.$activeGames.find('.realtime-stats-game-gameID-' + utils.getFormatedGameID(gameID)).slideUp(300, function(){
-                    $(this).remove();
-                    delete that.games[gameID];
-                    callback();
-                });
-            },
-			updateGames: function(games, callback){
-				var dataToUpdate = this.checkDataToUpdate(games),
-					keys = Object.keys(dataToUpdate);
-                var dataGamesKeys = Object.keys(games),
-                    gamesKeys = Object.keys(this.games);
-                if(utils.isArray(dataGamesKeys) && utils.isArray(gamesKeys) && dataGamesKeys.length !== gamesKeys.length) {
-                    var diff = utils.deepDiffMapper.map(Object.keys(this.games), Object.keys(games));
-                    for(var i = 0; i < gamesKeys.length; i++){
-                        var e = diff[i];
-                        if(e.type == "deleted") {
-                            this.removeGame(e.data, function(){
-
-                            });
-                        }
-                    }
-                }
-                if (keys.length > 0) {
-                    for (var i = 0; i < keys.length; i++) {
-                        var k = keys[i],
-                            e = dataToUpdate[k],
-                            $addingTR = g.$gameStatistics.find('.realtime-stats-game-gameID-' + utils.getFormatedGameID(games[k].gameID));
-                        console.log('block with this id?' + games[k].gameID);
-                        console.log($addingTR.length);
-                        //if($addingTR.length == 0) {
-                        if (e === true) {
-                            this.addGame(games[k]);
-                        }
-                        if (utils.isObject(e)) {
-                            console.log('isObject');
-                            this.updateGame(this.games[k], e, function () {
-
-                            });
-                        }
-                        //} else {
-                        //}
-                    }
-                }
-                console.log(Object.keys(games));
-                console.log(Object.keys(this.games));
-                console.log();
-			},
-			updateGame: function(game, dataToUpdate, callback){
-				var $game = g.$gameStatistics.find('.realtime-stats-game-gameID-' + game.getFormatedGameID());
-				console.log('updateGame');
-				console.log(dataToUpdate);
-				console.log($game.length);
-				var keys = Object.keys(dataToUpdate);
-				if($game.length > 0 && keys.length > 0) {
-					for(var i = 0; i < keys.length; i++) {
-						var k = keys[i],
-							e = dataToUpdate[k];
-						console.log(e);
-						if(e.type == 'updated' || e.code) {
-							var $changingTD = $game.children().eq(k),
-								changedData = e.data ? e.data : false;
-							if(e.data && e.data.name) {
-								changedData = e.data.name;
-							}
-							if(e.code) {
-								changedData = e.msg.data;
-								if(e.code.type == 'updated') {
-									$changingTD.removeClass('bg-warning bg-success');
-									if (e.code.data == "0") $changingTD.addClass('bg-warning');
-									else if (e.code.data == "1") $changingTD.addClass('bg-success');
-                                    else if (e.code.data == "2") $changingTD.addClass('bg-danger');
-									else {
-                                        $changingTD.addClass('bg-danger');
-									}
-								}
-							}
-							$changingTD.html(changedData);
-						}
-					}
-				}
-			}
-		};
-		g.setMarker = function(marker) {
-			g.marker.x = marker[0];
-			g.marker.y = marker[1];
-		};
 		g.gameState = {
 			init: function(a, b){
 				g2moku = a;
@@ -185,19 +25,19 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 				console.log(g2moku);
 				// var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
 				// var text = g.game.add.text(g.game.world.centerX, g.game.world.centerY, "- phaser -\nwith a sprinkle of\npixi dust", style);
-
+				
 				// text.anchor.set(0.5);
 				// text.alpha = 0.1;
 				// g.game.add.tween(text).to( { alpha: 1 }, 2000, "Linear", true);
 				g.game.physics.startSystem(Phaser.Physics.ARCADE);
-
+				
 				g.map = g.game.add.tilemap('map', 32, 32);
 
 				g.map.addTilesetImage('tiles');
 				g.currentTile = g.map.getTile(0, 0);
-
+				
 				//map.setCollisionBetween(1, 12);
-
+				
 				g.layer = g.map.createLayer(0);
 
 				g.layer.resizeWorld();
@@ -211,27 +51,27 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 				//game.time.events.loop(1050, this.createSprite, this)
 
 				g.cursors = g.game.input.keyboard.createCursorKeys();
-
+				
 				//g.sprite = g.game.add.sprite(40, 100, 'ms');
 				console.log(g.map.width);
-
+						
 				g.game.input.addMoveCallback(this.updateMarker, this);
 				g.game.input.onDown.add(this.clickHandler, this);
-
+				
 				g.canvas = window.document.getElementsByTagName('canvas')[0],
 					prevX = 0, prevY = 0, mouseDown = false;
-
+			
 				g.canvas.addEventListener('touchstart',function(e){
 					prevX = e.changedTouches[0].screenX;
 					prevY = e.changedTouches[0].screenY;
 				});
-
+			
 				g.canvas.addEventListener('mousedown',function(e){
 					mouseDown = true;
 					prevX = e.screenX;
 					prevY = e.screenY;
 				});
-
+			
 				g.canvas.addEventListener('touchmove',function(e){
 					e.preventDefault();
 					g.game.camera.x+= prevX - e.changedTouches[0].screenX;
@@ -239,7 +79,7 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 					g.game.camera.y+= prevY - e.changedTouches[0].screenY;
 					prevY = e.changedTouches[0].screenY;
 				});
-
+			
 				g.canvas.addEventListener('mousemove',function(e){
 					if(mouseDown){
 						e.preventDefault();
@@ -249,11 +89,11 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 						prevY = e.screenY;
 					}
 				});
-
+			
 				g.canvas.addEventListener('mouseup',function(e){
 					mouseDown = false;
 				});
-
+			
 				g.canvas.addEventListener('mouseleave',function(e){
 					mouseDown = false;
 				});
@@ -270,13 +110,13 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 			update: function(){
 				if(g.canUpdateMarker) {
 					g.marker.x = g.layer.getTileX(g.game.input.activePointer.worldX) * 32;
-					g.marker.y = g.layer.getTileY(g.game.input.activePointer.worldY) * 32;
+					g.marker.y = g.layer.getTileY(g.game.input.activePointer.worldY) * 32;				
 				}
-
+				
 				//g.sprites.setAll('x', 1, true, true, 1);
 
 				//g.sprites.forEach(g.checkSprite, this, true);
-
+				
 				if (g.cursors.left.isDown)
 				{
 					g.game.camera.x -= 4;
@@ -304,89 +144,69 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 
 				// tile.properties.wibble = true;
 				//console.log(g.map.getTile(g.layer.getTileX(g.marker.x), g.layer.getTileY(g.marker.y)));
-
+				
 			},
 			clickHandler: function(pointer, event){
-				console.log(g.gameStarted + " " + g.playerMoving);
-                console.log(g.game.input.activePointer.leftButton);
-                g.gameState.getTileProperties();
-                var tileX = g.layer.getTileX(g.marker.x),
-                    tileY = g.layer.getTileY(g.marker.y),
-                    tile = g.map.getTile(tileX, tileY);
-                setTimeout(function() {
-                    if (g.gameStarted && g.canMoveMarker && g.board[tileX + 'x' + tileY] === undefined && !g.playerMoving && g.game.input.activePointer.duration == -1) { // IF Game started
-                        try {
-                            console.log('clicked');
-                            g.playerMoving = true;
-                            if (g.players.currentPlaying === false) {//first turn
-                                //GameStart
-                                g.io.emit('startGame', {
-                                    timeStamp: +new Date(),
-                                    gameID: g.getGameID(),
-                                    players: g.players.getPlaying()
-                                });
-                                if (g.offline) {
-                                    g.generateID(g.generateID(function (preGenerated, genID) {
-                                        g.genID = preGenerated + "." + genID
-                                    }));//generating gameID.(getGameID())
-                                    g.singleStartGame();
-                                }
-                            } else {
-                                console.log('gameMODE');
-                                console.log(g.gameMode);
-                                if (!g.offline && g.gameMode !== 'playerVSplayer') {
-                                    g.io.emit('beforeMoveToTile', {
-                                        gameID: g.getGameID(),
-                                        player: g.players.currentPlaying.getJSON(),
-                                        gameTimer: g.timer,
-                                        tile: {
-                                            x: tileX,
-                                            y: tileY
-                                        },
-                                        timeStamp: +new Date()
-                                    });
-                                }
-                                if (g.offline || g.gameMode === 'playerVSplayer') {
-                                    console.log('singleMove');
-                                    //console.log([tileX, tileY]);
-                                    g.singleMoveToTile({
-                                        x: tileX,
-                                        y: tileY
-                                    }, function (win, PlayerMove) {
-                                        g.io.emit('moveToTile', {//only sending data to server gameID: g.gameID,
-                                            player: g.players.currentPlaying.getJSON(),
-                                            gameID: g.getGameID(),
-                                            gameTimer: g.timer,
-                                            tile: {
-                                                x: tileX,
-                                                y: tileY
-                                            },
-                                            timeStamp: +new Date()
-                                        });
-                                        if (!win) {
-                                            g.players.willPlay(g.players.currentPlaying);
-                                            g.players.currentPlaying.$box.removeClass('active');
-                                            g.players.next(g.gameStarted);//take next player in queue
-                                            g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
-                                            g.players.currentPlaying.$box.addClass('active');
-                                            g.players.currentPlaying.startTimer();
-                                        }
-                                        g.playerMoving = false;
-                                    });
-                                }
-                            }
-                        } catch (e) {
-                            throw e;
-                        }
-                    }
-                }, 150);
+				if(g.gameStarted && !g.playerMoving) { // IF Game started
+					try {
+						g.playerMoving = true;
+						console.log('clicked');
+						if(g.players.currentPlaying === false) {//first turn
+							//GameStart
+							g.io.emit('startGame', {
+								timeStamp: +new Date()
+							});
+							if(g.gameStarted) g.players.next();
+							console.log(g.players);
+							g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
+							g.players.currentPlaying.startTimer();
+							g.playerMoving = false;
+						} else {
+							g.gameState.getTileProperties();
+							var tile = g.map.getTile(g.layer.getTileX(g.marker.x), g.layer.getTileY(g.marker.y));
+							g.players.currentPlaying.moveToTile(tile, g.layer, function(playerMove){
+								playerMove.player = g.players.currentPlaying;
+								playerMove.id = g.history.length;
+								console.log('move to tile');
+								console.log(playerMove);
+								//Put tile on map
+								g.map.putTile(g.players.currentPlaying.playingTile, g.layer.getTileX(g.marker.x), g.layer.getTileY(g.marker.y));
+								g.step(playerMove.tile.x, playerMove.tile.y, playerMove.player, function(win, turn) {
+									console.log('win-turn callback');
+									g.history.push(playerMove);
+									g.addDataToPlayerBlock(playerMove, function(){
+										g.players.currentPlaying.$box.removeClass('active');
+										if(g.gameStarted) g.players.next();//take next player in queue
+										g.players.currentPlaying.$box.addClass('active');
+										if(!win) g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
+										g.players.currentPlaying.startTimer();
+										g.playerMoving = false;
+										console.log(g);	
+									});
+									if(win) {
+										g.gameEnd(g.players.currentPlaying, function(timer){
+											console.log('ENDED');
+										});
+									} else {
+									
+									}
+									g.players.willPlay(g.players.currentPlaying);
+									// Она нам вернёт значения ходе, если победитель, а так же чем ходили всё передадим как есть в событие пользователям
+								});
+								//g.players.currentPlaying.moveToTile
+							});	
+						}
+					} catch(e) {
+						
+					}
+				}
 			},
 			updateMarker: function() {
 				if(g.canUpdateMarker) {
 					g.marker.x = g.layer.getTileX(g.game.input.activePointer.worldX) * 32;
 					g.marker.y = g.layer.getTileY(g.game.input.activePointer.worldY) * 32;
 				}
-			},
+			}, 
 			createSprite: function() {
 				var mummy = g.sprites.create(0, g.game.world.randomY, 'mummy');
 				mummy.scale.x = 2;
@@ -398,38 +218,6 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 				//citizen.play('walk', 10, true);
 				g.game.add.tween(citizen).to({ x: g.game.width }, 5000, Phaser.Easing.Exponential.InOut, true);
 			}
-		};
-		g.singleMoveToTile = function(tile, callback){
-			var tile = g.map.getTile(tile.x, tile.y);
-			console.log(tile);
-			console.log('above-tile');
-			g.players.currentPlaying.moveToTile(tile, g.layer, function(playerMove){
-				playerMove.player = g.players.currentPlaying;
-				playerMove.id = g.history.getNextID();
-				console.log('move to tile');
-				console.log(playerMove);
-				//Put tile on map
-
-				g.map.putTile(g.players.currentPlaying.playingTile, tile.x, tile.y);
-				g.step(playerMove.tile.x, playerMove.tile.y, playerMove.player, function(win, turn) {
-					console.log('win-turn callback');
-					g.addHistory(playerMove);
-					if(win) {
-						g.gameEnd(g.players.currentPlaying, function(timer){
-							console.log('ENDED');
-							g.playerMoving = false;
-						});
-					} else {
-
-					}
-					g.addDataToPlayerBlock(playerMove, function(newPlayerMove){
-						callback(win, newPlayerMove); //callback after checking, putting to tilemap, adding to player block
-						console.log(g);
-					});
-					// Она нам вернёт значения ходе, если победитель, а так же чем ходили всё передадим как есть в событие пользователям
-				});
-				//g.players.currentPlaying.moveToTile
-			});
 		};
 		g.makeGameMenuPlayerRow = function(tiles, addButton) {
 			var buttonsContent = '',
@@ -447,16 +235,16 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 			}
 			var $playerRow = jQuery('<div class="player col-xs-12 col-sm-12 col-md-12" style="display: none">' +
 				'<div class="row">' +
-					'<div class="col-xs-12 col-sm-6 col-md-6">' +
-							'<label class="labelSize" for="player-input-' + uniqNumber + '">Player name:</label>' +
-							'<input type="text" class="form-control input-player-name" id="player-input-' + uniqNumber + '" placeholder="Player name..." value="' +  (g.debug ? ("Player-" + uniqNumber + "").substr(-4) : "") + '">' +
+					'<div class="col-xs-12 col-sm-5 col-md-5">' +
+							'<label class="labelSize" for="player-input-' + uniqNumber + '">Player ' + numbers[tiles.length - 1] + ':</label>' +
+							'<input type="text" class="form-control input-player-name" id="player-input-' + uniqNumber + '" placeholder="Player name..." value="Player-' +  (g.debug ? (uniqNumber + "").substr(-4) : "") + '">' +
 					'</div>' +
-					'<div class="col-xs-12 col-sm-6 col-md-6 player-square-btns"><div class="left-buttons">' + buttonsContent + "</div>" +
+					'<div class="col-xs-12 col-sm-7 col-md-7 player-square-btns"><div class="left-buttons">' + buttonsContent + "</div>" +
 						'<button type="button" class="btn btn-default square-btn-right pull-right">' +
 							'<img src="assets/img/gear.png">' +
 						'</button>' + addButtonContent +
-					'</div>' +
-				'</div>' +
+					'</div>' +                                                                                    
+				'</div>' +									
 			'</div>');
 			// if(addButton) {
 				// // $playerRow.find('button:last-of-type').on('click', function(e){
@@ -464,13 +252,13 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 					// // if($(this).hasClass('btn-add-player')) {
 						// // g2moku.makeGameMenuPlayerRow(g2moku.$gameModal.find('.game-mode.player-vs-player .player').length + 1, true);
 					// // } else {
-
+						
 					// // }
 					// // e.preventDefault();
 				// // });
 			// }
-			g.$gameModal.find('.game-mode.player-vs-player > div').append($playerRow);
-			$playerRow.slideDown(300);
+			g.$gameModal.find('.game-mode.player-vs-player').append($playerRow);
+			$playerRow.slideDown(300);			
 		};
 		g.addDataToPlayerBlock = function(playerMove, callback){
 			console.log(playerMove);
@@ -478,9 +266,9 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 				// console.log('start');
 				// console.log(e);
 				// console.log(i);
-			var $playerMove = jQuery('<tr class="player-turn invisible' + (g.offline ? " not-sended" : "") + '">' +
+			var $playerMove = jQuery('<tr class="player-turn invisible">' +
 				'<th scope="row">' + playerMove.id + '</th>' +
-				'<td>' + playerMove.timer.getTimestampDiff(true) + '</td>' +
+				'<td>' + playerMove.timer.getTimestampDiff(true) + '</td>' + 
 				'<td class="player-turn-xy" data-x="' + playerMove.tile.worldX + '" data-y="' + playerMove.tile.worldY + '">' +
 				'<span class="player-turn-x">x ' + playerMove.tile.x + '</span>' +
 				'<span class="player-turn-y">y ' + playerMove.tile.y + '</span>' +
@@ -489,11 +277,12 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 			//});
 			playerMove.player.$box.find('.player-game-history tbody').prepend($playerMove);
 			$playerMove.removeClass("invisible").addClass(anim + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-				jQuery(this).removeClass(anim + ' animated');
+				jQuery(this).removeClass();
 				//playerMove.player.$box.find('.bottom-block').height(300);
 				//playerMove.player.$box.find(".nano").nanoScroller();
-				callback(playerMove);
+				callback();
 			});
+			return $playerMove;
 		};
 		g.preparePlayerBlock = function(player, i){ //adding jquery player box, as a additional property
 			var corners = [
@@ -503,7 +292,7 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 			if(i >=2) {
 				tfooter = '<tfoot>' + headers + '</tfoot>';
 			} else {
-				theader = '<thead>' + headers + '</thead>';
+				theader = '<thead>' + headers + '</thead>';				
 			}
 			console.log(player);
 			player.$box = jQuery('<div class="player-box ' + corners[i] + '" style="display: none;" title="' + player.name + '">' +
@@ -519,10 +308,10 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 					'</div>' +
 				'</div>' +
 				'<div class="bottom-block">' +
-					'<table class="table table-bordered player-game-history">' + theader +
+					'<table class="table table-bordered player-game-history">' + theader + 
 						'<tbody>' +
 						'</tbody>' + tfooter +
-					'</table>' +
+					'</table>' +						
 				'</div>' +
 			'</div>');
 			jQuery('body').prepend(player.$box);
@@ -531,7 +320,7 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 		g.reinitPlayerTiles = function(tiles){
 			console.log('reinitting');
 			console.log(tiles);
-			g.$gameModal.find('.game-mode.player-vs-player > div').children().each(function(i, e){
+			g.$gameModal.find('.game-mode.player-vs-player').children().each(function(i, e){
 				var buttonsNum = jQuery(this).parent().children().length,
 					newButtons = '';
 				for(var k = 0; k < tiles.length; k++) {
@@ -545,56 +334,45 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 					}
 					newButtons += tiles[k].getHTML();
 				}
-				jQuery(this).find('.left-buttons').html(newButtons);
+				jQuery(this).find('.left-buttons').html(newButtons);			
 			});
-		};
-		g.singleStartGame = function(){
-			g.players.next(g.gameStarted);
-			console.log(g.players);
-			g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
-			g.players.currentPlaying.startTimer();
-			g.playerMoving = false;
-		};
-		g.singleGameStart = function(){
-			g.$gameTopBar.find('.game-play-text').html("<span='game-next-player'>Player</span> be ready for the game YOU ARE FIRST!<br/><b>Click to start the game!</b>");
-			//add player box for each playing player.
-			g.players.playing.each(function(e, i){
-				g.preparePlayerBlock(e, i);
-			});
-			g.$gameTopBar.find('.game-play-text').removeClass('invisible');
-			g.$gameTopBar.removeClass('invisible').addClass('fadeInDown animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-				jQuery(this).removeClass('fadeInDown animated');
-			});
-			setInterval(function(){
-				g.$gameTopBar.find('b').removeClass().addClass('tada animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-					jQuery(this).removeClass();
-				});
-			}, 4000);
 		};
 		g.gameStart = function(gameMode, data){
-			console.log('not firsttime');
-			console.log(g);
 			if(!g.firstTime) {
 				g.game.state.start('GameState', true, false);
 				//g.game.state.add('GameState', g.gameState, true);
 				console.log(g);
 			}
-			g.gameMode = gameMode;
 			switch (gameMode) {
 				case 'playerVSplayer':
 					g.gameStarted = true;
 					g.playerMoving = false;
 					g.canUpdateMarker = true;
 					g.timer = new Timer(1000, function(timer){
-
+						
 					});
 					g.players.parseFromGameModal(data);
-					g.io.emit('playGame', {
-						timeStamp: +new Date(),
-						gameMode: gameMode,
-						players: g.players.getPlaying()
+					//add player box for each playing player.
+					g.io.emit('playGame', g.players.getPlaying());
+					g.players.playing.each(function(e, i){
+						g.preparePlayerBlock(e, i);
 					});
-					if(g.offline) g.singleGameStart();
+					g.$gameTopBar.find('.game-play-text').html("<span='game-next-player'>Player</span> be ready for the game YOU ARE FIRST!<br/><b>Click to start the game!</b>");
+					g.$gameTopBar.find('.game-play-text').removeClass('invisible');
+					g.$gameTopBar.removeClass('invisible').addClass('fadeInDown animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+						jQuery(this).removeClass('fadeInDown animated');
+					});
+					setInterval(function(){
+						g.$gameTopBar.find('b').removeClass().addClass('tada animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+							jQuery(this).removeClass();
+						});
+					}, 4000);
+					//g.players.getLast()
+					//while(!this.gameStarted || !this.players.next()) {
+					// var player = g.players.next();
+					// g.waitMove(player, function(callback){
+						// console.log(callback);
+					// });
 					break
 				default:
 					break
@@ -610,13 +388,9 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 			var animate = function($obj, anim){
 				$obj.removeClass('invisible').addClass(anim + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
 					jQuery(this).removeClass(anim + ' animated');
-				});
+				});				
 			};
-			g.$gameTopBar.find('.game-play-text').html("<span class='game-win-player'>" + winnerPlayer.name + "</span> WIN!<br/><div class='brief-stats'>Time: <span>" +
-                g.timer.getTimestampDiff(true) + "</span> | Moves: <span>" + winnerPlayer.moves.length +
-                "</span></div>" +
-                "<div class='socials'><a href='#' class='btn btn-lg btn-primary play-more'>Wanna Play more?</a><img src='/assets/img/google-128.png'/><img src='/assets/img/twitter_letter-64.png'/><img src='/assets/img/facebook-64.png' /><img src='/assets/img/vkontakte-64.png' /></div>"
-            );
+			g.$gameTopBar.find('.game-play-text').html("<span class='game-win-player'>" + winnerPlayer.name + "</span> WIN!<br/><div class='brief-stats'>Time: <span>" + g.timer.getTimestampDiff(true) + "</span> | Moves: <span>" + winnerPlayer.moves.length + "</span></div><a href='#' class='btn btn-lg btn-primary play-more'>Wanna Play more?</a>");
 			animate(g.$gameTopBar, 'tada');
 			winnerPlayer.$box.addClass('winner');
 			animate(winnerPlayer.$box, 'pulse');
@@ -624,42 +398,22 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 				animate(g.$gameTopBar, 'tada');
 				animate(winnerPlayer.$box, 'pulse');
 			}, 4000);
-			g.playerMoving = false;
+			g.playerMoving = false;		
 			callback(g.timer);
 		};
-		g.finalEndGame = function(){ //resetting all arrays and objects. preparing for new game.
+		g.finalEndGame = function(){
 			jQuery('body').removeClass('win');
 			g.$gameTopBar.find('.game-play-text').addClass('invisible');
 			if(g.winningTimerID) clearInterval(g.winningTimerID);
-			g.winningTimerID = false;
-			g.players.clear();
-			g.players.currentPlaying = false;
-			//g.history = [];
+			g.players.playing.each(function(e, i){
+				e.$box.remove();
+			});
+			g.players.playing = [];
+			g.history = [];
+			g.players.arr = [];
 			g.board = [];
 			g.firstTime = false;
-			g.gameStarted = false;
-			console.log('finalendgame');
-			console.log(g.players);
 		};
-        g.makeRequest = function(fileName, data, onSuccess, dataType, method) {
-            jQuery.ajax({
-                url: fileName,
-                type: method || "POST",
-                data: data,
-                dataType: dataType || "JSON"
-            }).done(function(data) {
-                onSuccess(data);
-            });
-        };
-        g.reloadAllGames = function(params){
-            g.$gameStatistics.find('.refresh').button('loading');
-            g.makeRequest('allGames', {
-                type: 'html'
-            }, function(htmlResponse){
-                g.$gameStatistics.find('.refresh').button('reset');
-                g.$gameStatistics.find('.all-games').html(htmlResponse);
-            }, "HTML", "GET");
-        };
 		g.initHandlers = function(){
 			console.log('inithandlers');
 			g.io.emit('ready', {
@@ -671,131 +425,17 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 			});
 			g.mapHeight = g.game.height;
 			g.mapWidth = g.game.width;
-			g.io.on('beforeMoveToTile', function(data) {
-				if(data && data.canMove) {
-					g.singleMoveToTile(data.tile, function(win, PlayerMove){
-						g.players.willPlay(g.players.currentPlaying);
-						g.players.currentPlaying.$box.removeClass('active');
-						g.players.next(g.gameStarted);//take next player in queue
-						g.$gameTopBar.find('.game-play-text').html("<span class='game-next-player'>" + g.players.currentPlaying.name + "</span>'s turn!");
-						g.players.currentPlaying.$box.addClass('active');
-						g.players.currentPlaying.startTimer();
-						g.playerMoving = false;
-					});
-				}
-			});
-			g.io.on('joined', function(data) {
-                var player = new Player(data.player);
-                console.log(data);
-                g.$gameModal.find('.game-mode.multiplayer .options .player-add fieldset').prop('disabled', 'true');
-                g.$gameModal.find('.game-mode.multiplayer .online-players').append('<div class="player">' +
-                    '<div class="row">' +
-                        '<div class="col-xs-12 col-sm-12 col-md-12">' +
-                            '<h5>' + player.name + '</h5>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>');
-            });
-			g.io.on('sendGamesStats', function(data) {
-				g.onSendGameStats(data);
-			});
-			g.io.on('startGame', function(data) {
-				if(data && data.can) {
-					if(data.gameID) {
-						console.log('startGame');
-						g.gameID = data.gameID;
-						g.singleStartGame();
-					} else {
-					}
-				}
-			});
-			g.io.on('playGame', function(data) {
-				if(data && data.can) {
-					if(data.gameID) {
-						g.gameID = data.gameID;
-						g.genID = data.genID;
-						console.log(g.gameID);
-						g.singleGameStart();
-					} else {
-						g.genID = g.generateID(function(preGenerated, genID){
-							g.genID = preGenerated + "." + genID;
-							g.singleGameStart();
-						});
-					}
-				}
-			});
 			// Listen for the talk event.
-			g.io.on('connect_failed', function(data){
-				console.log('connect_failed');
+			g.io.on('log', function(data) {
+				console.log(data);
 			});
-			g.io.on('connecting', function(data){
-				console.log('connecting');
-				g.$gameModal.find('.logo .short-message').html('<i class="fa fa-circle bg-yellow"></i> Connecting...');
-			});
-			g.io.on('disconnect', function(data){
-				g.offline = true;
-				g.$gameModal.find('.logo .short-message').html('<i class="fa fa-circle"></i> Disconnect');
-				jQuery('body').removeClass('online').addClass('offline');
-				console.log('disconnect');
-			});
-			g.io.on('error', function(reason){
-				console.log('error');
-			});
-			g.io.on('reconnect_failed', function(data){
-				g.$gameModal.find('.logo .short-message').html('<i class="fa fa-circle"></i> Reconnect failed');
-				console.log('reconnect_failed');
-			});
-			g.io.on('reconnect', function(data){
-				g.offline = false;
-				g.$gameModal.find('.logo .short-message').html('<i class="fa fa-circle"></i> Reconnected');
-				g.onSendGameStats(data);
-				jQuery('body').removeClass('offline').addClass('online');
-				setTimeout(function(){
-					g.$gameModal.find('.logo .short-message').html('<i class="fa fa-circle"></i> Realtime');
-				}, 2000);
-				console.log('reconnect');
-			});
-			g.io.on('reconnecting', function(data){
-				g.$gameModal.find('.logo .short-message').html('<i class="fa fa-circle bg-yellow"></i> Reconnecting...');
-				console.log('reconnecting');
-			});
-			//g.io.on('log', function(data) {
-			//	console.log(data);
-			//});
 			g.io.on('welcome', function(data) {
 				console.log(data);
-				if(g.$gameModal.find('.logo .short-message').length == 0) g.$gameModal.find('.logo').append('<div class="short-message"><i class="fa fa-circle"></i> ' + data.message + '</div>');
-				else {
-					g.$gameModal.find('.logo .short-message').html('<i class="fa fa-circle"></i> Realtime');
-					jQuery('body').removeClass('offline').addClass('online');
-					g.offline = false;
-				}
+				g.$gameModal.find('.logo').append('<div class="short-message"><i class="fa fa-circle"></i> ' + data.message + '</div>');
 				jQuery('body').addClass('online');
-			});
-			jQuery('body').on('click', '.player-turn-xy', function(e){
-				g.canUpdateMarker = false;
-				var $this = jQuery(this);
-				$this.parent().addClass('bg-primary');
-				g.marker.lineStyle(2, 0x000000, 1);
-				console.log(g);
-				console.log('g2moku');
-				g.setMarker([g.layer.getTileX($this.data('x')) * 32, g.layer.getTileY($this.data('y')) * 32]);
-				setTimeout(function(){
-					g.canUpdateMarker = true;
-					$this.parent().removeClass('bg-primary');
-				}, 3000);
-				console.log(g.marker);
-				// setTimeout(function(){
-					// g2moku.canUpdateMarker = false;
-				// }, 2000);
-			});
-			jQuery('body').on('click', '.play-more', function(e){
-				g.finalEndGame();
-				g.$gameModal.modal('show');
-				e.preventDefault();
 			});
 		};
 		return g;
-	}(new AbstractG2moku()));
+	}(new AbstractG2moku() || {})); 
 	return Class.create(AbstractG2moku, g2);
 });
