@@ -1,11 +1,17 @@
 var request = require('supertest');
 var express = require('express');
 var nock = require('nock');
+const path = require('path');
 
 require = require('amdrequire');
 require(['../../../app/config.js'], function(config){
 	// Set basepaths first
-	config.basePath = __dirname;
+	var paths = __dirname.split(path.sep);
+	paths.pop();
+	paths.pop();
+	paths.pop();
+	paths.push('app');
+	config.basePath = paths.join(path.sep);
 	// config.publicPath = __dirname + '/public';
 	require.config(config);
 });

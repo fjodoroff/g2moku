@@ -1,6 +1,6 @@
 define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function(AbstractG2moku, proto, io, Player, Timer){
 	var g2 = (function(g) {
-		g.io = io.connect('http://localhost:' + location.port);
+		g.io = io.connect('http://localhost:' + 2000);
 		g.game = new Phaser.Game('100%', '100%', Phaser.AUTO);
 		g.$playerBoxes = jQuery('.player-boxes');
 		g.$gameTopBar = jQuery('.game-topbar');

@@ -8,7 +8,7 @@ require.config({
 		'prototype': 'libs/prototype/prototype',
 		'phaser': 'libs/phaser/phaser.min',
 		'utils': 'utils',
-		'socket.io': 'libs/socket.io/socket.io',
+		'socket.io': 'https://cdn.socket.io/socket.io-1.0.6',
 		'exceptions': 'modules/exceptions',
 		'gameTiles':  'modules/gameTiles',
 		'AbstractPlayer':  'classes/AbstractPlayer',

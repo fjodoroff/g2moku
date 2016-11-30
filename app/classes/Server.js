@@ -61,10 +61,10 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 		var mysql = require('mysql');
 		s.pool = global.pool = mysql.createPool({
 			connectionLimit : 10,
-			host     : 'localhost',
-			user     : 'root',
-			password : '',
-			database : 'g2moku'
+			host     : process.env.DB_HOST || 'localhost',
+			user     : process.env.DB_USER || 'root',
+			password : process.env.DB_PASSWORD || '',
+			database : process.env.DB_NAME || 'g2moku'
 		});
 		var dirs = __dirname.split(__dirname.indexOf('/') != -1 ? '/' : '\\'),
 				onProduction = true;
@@ -80,7 +80,7 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 		s.app = app = s.express();
 		s.port = port;
 		s.server = require('http').Server(app);
-		s.io = require('socket.io')(s.server);
+		s.io = {};
 
 		// configure app
 		app.set('view engine', 'ejs');
@@ -123,6 +123,11 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 			s.log.file.info("New server started at port " + port);
 			console.log('Server running on port ' + s.server.address().port + '...');
 		});
+		// s.app.listen(2000, function(){
+		// 	s.log.console.info("New server started at port " + 2001);
+		// 	s.log.file.info("New server started at port " + 2001);
+		// 	console.log('Server running on port ' + 2001 + '...');
+		// });
 	};
 	return Server;
 });
