@@ -155,7 +155,7 @@ define(['Player', 'G2moku', 'utils'], function(Player, G2moku, utils){
 
             });
 		});
-		app.io.route('join', function(req) {
+		s.io.on('join', function(req) {
             var address = req.socket.handshake.address;
             address = address.address + ':' + address.port;
             global.log.logRequest([address, req.socket.id], "join | " + JSON.stringify(req.data));
@@ -166,7 +166,7 @@ define(['Player', 'G2moku', 'utils'], function(Player, G2moku, utils){
                 app.io.broadcast('joined', answer);
             }
         });
-        app.io.route('addGameRoom', function(req) {
+        s.io.on('addGameRoom', function(req) {
             var address = req.socket.handshake.address;
             address = address.address + ':' + address.port;
             global.log.logRequest([address, req.socket.id], "addGameRoom | " + JSON.stringify(req.data));
@@ -177,7 +177,7 @@ define(['Player', 'G2moku', 'utils'], function(Player, G2moku, utils){
                 app.io.broadcast('joined', answer);
             }
         });
-		app.io.route('getAvailableTiles', function(req) {
+		s.io.on('getAvailableTiles', function(req) {
 			var answer = {
 				'green': {
 					imgPath: '/assets/img/tiles/square1.png',
@@ -203,7 +203,7 @@ define(['Player', 'G2moku', 'utils'], function(Player, G2moku, utils){
 			global.log.logResponse([address, req.socket.id], "getAvailableTiles", JSON.stringify(answer));
 			req.io.emit('getAvailableTiles', answer);
 		});
-		app.io.route('moveToTile', function(req) {
+		s.io.on('moveToTile', function(req) {
 			var address = req.socket.handshake.address;
 			address = address.address + ':' + address.port;
 			global.log.logRequest([req.data.player.name, req.data.gameID, address, req.socket.id], "moveToTile | " + JSON.stringify(req.data));
@@ -226,7 +226,7 @@ define(['Player', 'G2moku', 'utils'], function(Player, G2moku, utils){
 				//s.games[s.games.group][req.data.gameID] = this;
 			});
 	    });
-		app.io.route('beforeMoveToTile', function(req) {
+		s.io.on('beforeMoveToTile', function(req) {
 			var answer = {
 				gameID: game.gameID,
 				canMove: true,
@@ -244,7 +244,7 @@ define(['Player', 'G2moku', 'utils'], function(Player, G2moku, utils){
             req.io.emit('beforeMoveToTile', answer);
             //});
 		});
-		app.io.route('startGame', function(req) {
+		s.io.on('startGame', function(req) {
 			var address = req.socket.handshake.address;
 			address = address.address + ':' + address.port;
 			global.log.logRequest([req.data.gameID, address, req.socket.id], "startGame | " + JSON.stringify(req.data));
@@ -270,7 +270,7 @@ define(['Player', 'G2moku', 'utils'], function(Player, G2moku, utils){
                 });
             });
 		});
-		app.io.route('playGame', function(req) {
+		s.io.on('playGame', function(req) {
 			var address = req.socket.handshake.address;
 			address = address.address + ':' + address.port;
 			global.log.logRequest([address, req.socket.id], "playGame | " + JSON.stringify(req.data));
@@ -305,7 +305,7 @@ define(['Player', 'G2moku', 'utils'], function(Player, G2moku, utils){
 
 			//global.game = new G2moku();
 		});
-		app.io.route('ready', function(req) {
+		s.io.on('ready', function(req) {
 			var answer = {
 				message: 'Realtime'
 			};
@@ -317,6 +317,6 @@ define(['Player', 'G2moku', 'utils'], function(Player, G2moku, utils){
 			//send some information on DOM loaded
 			req.io.emit('welcome', answer);
 		});
-	}
+	};
 	return routes; 
 });

@@ -59,12 +59,19 @@ require(['Server'], function(Server){
 
 
 		it('Main page should respond with a 200 answer and html as a content-type', function (done) {
-			console.log(server.app);
+			// console.log(server.app);
 			request(server.app)
 				.get('/')
 				.expect('Content-Type', /html/)
 				.expect(200, done);
 		});
-
+		it('AllGames should return 200 OK', function (done) {
+			// console.log(server.app);
+			request(server.app)
+				.get('/allGames')
+				.expect('Content-Type', /html/)
+				.expect(200, done);
+		});
+		
 	});
 });

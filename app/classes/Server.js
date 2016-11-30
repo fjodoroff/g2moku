@@ -79,7 +79,8 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 
 		s.app = app = s.express();
 		s.port = port;
-		require('http').Server(app);
+		s.server = require('http').Server(app);
+		s.io = require('socket.io')(s.server);
 
 		// configure app
 		app.set('view engine', 'ejs');
@@ -112,15 +113,15 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 		//app.use(passport.session());
 		s.games = new games(port);
 		s.routes = new routes(s);
-		app.use(s.routes);
+		// app.use(s.routes);
 		//app.use(require('./auth'));
 
 		//require('./mysql');
 
-		s.serv = app.listen(port, function(){
+		s.server.listen(port, function(){
 			s.log.console.info("New server started at port " + port);
 			s.log.file.info("New server started at port " + port);
-			console.log('Server running on port ' + s.serv.address().port + '...');
+			console.log('Server running on port ' + s.server.address().port + '...');
 		});
 	};
 	return Server;
