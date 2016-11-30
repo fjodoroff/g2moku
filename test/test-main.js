@@ -25,7 +25,7 @@
 		baseUrl: baseUrl,
         paths: {
             //Classes
-            'AbstractG2moku':  '_site/assets/js/classes/AbstractG2moku',
+            'AbstractG2moku':  '_site/assets/js/classes/AbstractG2moku2',
             'G2moku':  '_site/assets/js/classes/frontend/G2moku',
             'AbstractPlayer':  '_site/assets/js/classes/AbstractPlayer',
             'Player':  '_site/assets/js/classes/frontend/Player',

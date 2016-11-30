@@ -1,6 +1,6 @@
 define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', 'utils', 'Players'], function(AbstractG2moku, proto, io, Player, Timer, Game, utils, Players){
 	var g2 = (function(g) {
-		g.io = io.connect('http://localhost:' + location.port, {
+		g.io = io.connect('http://localhost:3000', {
 			'force new connection': true
 		});
 		g.game = new Phaser.Game('100%', '100%', Phaser.AUTO);
@@ -690,7 +690,7 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
                 g.$gameModal.find('.game-mode.multiplayer .options .player-add fieldset').prop('disabled', 'true');
                 g.$gameModal.find('.game-mode.multiplayer .online-players').append('<div class="player">' +
                     '<div class="row">' +
-                        '<div class="col-xs-12 col-sm-6 col-md-6">' +
+                        '<div class="col-xs-12 col-sm-12 col-md-12">' +
                             '<h5>' + player.name + '</h5>' +
                         '</div>' +
                     '</div>' +
@@ -796,6 +796,6 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer', 'Game', '
 			});
 		};
 		return g;
-	}(new AbstractG2moku() || {}));
+	}(new AbstractG2moku()));
 	return Class.create(AbstractG2moku, g2);
 });

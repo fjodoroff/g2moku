@@ -352,6 +352,9 @@ body #game-modal .modal-content .short-message i.fa-circle.bg-yellow {
 .game-mode.multiplayer .game-room-add h3{
     margin-top: 0;
 }
+.game-mode.multiplayer .game-players .player h5{
+	margin: 3px;
+}
 .game-mode.multiplayer .game-players {
 	margin-top: 15px;
 }

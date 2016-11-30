@@ -2,7 +2,7 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 	var Server = function(port){
 		var s = this;
 		var bunyan = require('bunyan');
-		s.express = require('express.io');		
+		s.express = require('express.io');
 		//var passport = require('passport');
 		//var session = require('express-session');
 		s.path = require('path');
@@ -46,7 +46,7 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 			var message = color.black.bgWhite.underline(JSON.stringify(requestData)) + "" + color.black.bgMagenta.underline(" ACTION: " + method) + (msg ? "|" + msg : "");
 			global.log.file.info(requestData, message);
 			console.log(message);
-		};	
+		};
 		s.log.logResponse = function(requestData, method, msg) {
 			var message = color.black.bgWhite.underline(JSON.stringify(requestData)) + "" + color.black.bgGreen.underline(" RESPONSE: " + method) + (msg ? "|" + msg : "");
 			global.log.file.info(requestData, message);
@@ -58,25 +58,24 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 
 
 		var mysql = require('mysql');
-        s.pool = global.pool = mysql.createPool({
+		s.pool = global.pool = mysql.createPool({
 			connectionLimit : 10,
 			host     : 'localhost',
 			user     : 'root',
 			password : '',
-			database : 'g2moku',
-            multipleStatements: true
+			database : 'g2moku'
 		});
 		var dirs = __dirname.split(__dirname.indexOf('/') != -1 ? '/' : '\\'),
-			onProduction = false;
+				onProduction = true;
 		var tempDirs = dirs;
 		tempDirs.pop();
 		global.APP_PATH = tempDirs.join(__dirname.indexOf('/') != -1 ? '/' : '\\');
-		console.log(dirs);
+		//console.log(dirs);
 		console.log(global.APP_PATH);
 		for(var i = 0; i < dirs.length; i++) {
-			if(dirs[i].indexOf('axive') !== -1) onProduction = true;
+			//if(dirs[i].indexOf('axive') !== -1) onProduction = true;
 		}
-		
+
 		s.app = app = s.express();
 		s.port = port;
 		app.http().io();
@@ -88,7 +87,7 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 
 		//app.use('/coverage', s.express.static(__dirname + '/../test/coverage/reports'));
 		// use middleware
-		app.use(s.cookieParser('secret')); 
+		app.use(s.cookieParser('secret'));
 
 		app.use(require('express-bunyan-logger')({
 			streams: [{
@@ -96,22 +95,22 @@ define(['routes', 'games', 'utils'], function(routes, games, utils){
 				path: s.path.join(global.APP_PATH, '/logs/access.log')
 			}]
 		}));
-		app.use(s.express.static(s.path.join(global.APP_PATH, !onProduction ? '/../_site' : '_site')));
+		console.log(s.path.join(global.APP_PATH, '/../_site'));
+		app.use(s.express.static(s.path.join(global.APP_PATH, '/../_site')));
 		app.use(s.bodyParser.json());
 		app.use(s.bodyParser.urlencoded());
 		//app.use(favicon(path.join(__dirname, '../_site/favicon.ico')));
 		//app.use(flash());
 		// app.use(session({
-			// secret: 'keyboard cat',
-			// resave: true,
-			// saveUninitialized: true,
-			// maxAge: 60000
+		// secret: 'keyboard cat',
+		// resave: true,
+		// saveUninitialized: true,
+		// maxAge: 60000
 		// }));
 		//app.use(passport.initialize());
 		//app.use(passport.session());
 		s.games = new games(port);
 		s.routes = new routes(s);
-
 		app.use(s.routes);
 		//app.use(require('./auth'));
 
