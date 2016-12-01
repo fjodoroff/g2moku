@@ -170,6 +170,8 @@ require([
     g2moku.io.on('response.tiles.available', function(data) {
         console.log('response.tiles.available');
         g2moku.gameTiles.parseFromServer(data, function(gameTiles){
+			var $players = g2moku.$gameModal.find('.game-mode.player-vs-player'),
+				$bar = g2moku.$gameModal.find('.modal-header .title');
         	console.log(gameTiles);
             var tiles = gameTiles.availableTiles;
             $players.empty();
@@ -180,6 +182,7 @@ require([
                 //easing: 'easeInOutExpo'
             });
             $bar.fadeToggle(350);
+			console.log(g2moku.$gameModal.find('.btn-play-game'));
             g2moku.$gameModal.find('.btn-play-game').fadeToggle(350);
             //g2moku.$gameModal.modal('hide');
             //g2moku.gameStart('playerVSplayer');
@@ -187,8 +190,6 @@ require([
         });
     });
 	g2moku.$gameModal.find('.btn-play').on('click', function(e){
-		var $players = g2moku.$gameModal.find('.game-mode.player-vs-player'),
-			$bar = g2moku.$gameModal.find('.modal-header .title');
 			console.log('PARSE FROM SERVER');//tiles.available
 		g2moku.io.emit('request.tiles.available');
 		//map.setTileSize(20, 20);

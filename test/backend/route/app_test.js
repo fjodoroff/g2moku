@@ -71,13 +71,13 @@ require(['Server'], function(Server){
 				.expect('Content-Type', /html/)
 				.expect(200, done);
 		});
-		it('AllGames should return 200 OK', function (done) {
-			// console.log(server.app);
-			request(server.app)
-				.get('/allGames')
-				.expect('Content-Type', /html/)
-				.expect(200, done);
-		});
+		// it('AllGames should return 200 OK', function (done) {
+		// 	// console.log(server.app);
+		// 	request(server.app)
+		// 		.get('/allGames')
+		// 		.expect('Content-Type', /html/)
+		// 		.expect(200, done);
+		// });
 		
 	});
 });

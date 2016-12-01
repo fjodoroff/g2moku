@@ -153,7 +153,7 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 						console.log('clicked');
 						if(g.players.currentPlaying === false) {//first turn
 							//GameStart
-							g.io.emit('startGame', {
+							g.io.emit('request.game.start', {
 								timeStamp: +new Date()
 							});
 							if(g.gameStarted) g.players.next();
@@ -353,7 +353,7 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 					});
 					g.players.parseFromGameModal(data);
 					//add player box for each playing player.
-					g.io.emit('playGame', g.players.getPlaying());
+					g.io.emit('request.game.play', g.players.getPlaying());
 					g.players.playing.each(function(e, i){
 						g.preparePlayerBlock(e, i);
 					});

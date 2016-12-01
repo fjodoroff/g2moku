@@ -6,9 +6,6 @@ node_js:
 before_script:
   - npm install grunt-cli -g
   - mysql -u root -e 'create database g2moku;'
-  - mysqldump --defaults-file=./.my.cnf -u root g2moku < ./g2moku.sql
-  - mysql --defaults-file=./.my.cnf -u root
-  - SELECT game();
 services:
   - mysql
 env:
