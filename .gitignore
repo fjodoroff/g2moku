@@ -29,3 +29,4 @@ Thumbs.db
 ######################
 
 /bower_components/*
+/app/logs/
