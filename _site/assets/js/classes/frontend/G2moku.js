@@ -426,10 +426,10 @@ define(['AbstractG2moku', 'prototype', 'socket.io', 'Player', 'Timer'], function
 			g.mapHeight = g.game.height;
 			g.mapWidth = g.game.width;
 			// Listen for the talk event.
-			g.io.on('log', function(data) {
+			g.io.on('response.log', function(data) {
 				console.log(data);
 			});
-			g.io.on('welcome', function(data) {
+			g.io.on('response.welcome', function(data) {
 				console.log(data);
 				g.$gameModal.find('.logo').append('<div class="short-message"><i class="fa fa-circle"></i> ' + data.message + '</div>');
 				jQuery('body').addClass('online');

@@ -35,7 +35,7 @@ define(['prototype', 'utils'], function(proto, utils){
 			if(this.status) js.status = this.status;
 			if(this.getMovingPlayer()) js.movingPlayer = this.getMovingPlayer().getJSON();
 			if(this.g2moku) {
-				js.gameID = this.g2moku.getGameID();
+				js.gameID = this.g2moku.gameID;
 				js.players = players;
                 for(var i = 0; i < players.length; i++) {
                     playersList.push(players[i].name);

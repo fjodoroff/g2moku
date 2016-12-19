@@ -9,7 +9,7 @@ define(['AbstractGame', 'prototype', 'G2moku', 'utils'], function(AbstractGame, 
 			if(utils.isObject(data)) {
 				this.tile = data.tile;
 				this.timer = data.timer;
-				if(data.gameID || data.g2moku.getGameID()) this.gameID = data.gameID || data.g2moku.getGameID();
+				if(data.gameID) this.gameID = data.gameID;
 				if(data.g2moku) this.g2moku = data.g2moku;
 			}
 			this.initHandlers();
