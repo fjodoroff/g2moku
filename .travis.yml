@@ -4,9 +4,6 @@ node_js:
   - "6.1"
   - "5.11"
 before_script:
-  - npm install grunt-cli -g
-  - mysql -u root -e 'create database g2moku;'
-services:
-  - mysql
-env:
-  - BASE_PATH=./
+  - npm install gulp-cli -g
+  - npm install gulp -D
+  - npm test

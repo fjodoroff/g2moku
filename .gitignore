@@ -1,32 +1,9 @@
-# Ignore certain .css files #
-######################
-
-/assets/less/*.css
-
-# Ignore OS generated files #
-######################
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-Icon?
-ehthumbs.db
-Thumbs.db
-
-# Editors
-.idea
-.sync/
-*.iml
-
-# Ignore node files #
-######################
-
-/node_modules/*
-/dist/*
-
-# Ignore node files #
-######################
-
-/bower_components/*
-/app/logs/
+node_modules
+.tern-port
+.tern-project
+*.log
+*.tmp
+notes.org
+platforms/*
+plugins/*
+!www/.gitignore

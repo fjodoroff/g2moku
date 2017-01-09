@@ -1,83 +1,83 @@
-module.exports = function (config) {
-    'use strict';
+// Karma configuration
+// Generated on Fri Jul 01 2016 13:39:25 GMT-0700 (PDT)
+
+module.exports = function(config) {
     config.set({
 
-        basePath: './',
-
-        frameworks: ['mocha', 'requirejs', 'chai'],
-		
-		// list of files / patterns to load in the browser
-        // files: [
-            // {pattern: 'node_modules/**/*.js', included: false},   // allow to load any *.js from node_modules by karma web-server
-            // {pattern: '_site/assets/js/libs/prototype/prototype.js', include: true},
-            // '_site/assets/js/modules/player.js',
-            // 'test/frontend/*.js'
-        // ],
-		
-		files: [
-			{pattern: 'node_modules/chai/*.js', included: false},   // allow to load any *.js from node_modules by karma web-server
-			{pattern: '_site/assets/js/**/*.js', included: false},
-			//{pattern: '_site/assets/js/player.js', included: false},
-			{pattern: 'test/frontend/**/*Spec.js', included: false},
-			'test/test-main.js'
-		],
+        // base path that will be used to resolve all patterns (eg. files, exclude)
+        basePath: '',
 
 
-		// list of files to exclude
-        exclude: [
-            'karma.conf.js',
-			'node_modules/grunt**/*.js'
+        // frameworks to use
+        // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+        frameworks: ['browserify', 'jasmine'],
+
+
+        // list of files / patterns to load in the browser
+        files: [
+            'node_modules/phaser/build/phaser.js',
+            'src/**/*.js',
+            'test/*.spec.js'
         ],
 
 
-		// use dots reporter, as travis terminal does not support escaping sequences
-		// possible values: 'dots', 'progress', 'junit', 'teamcity'
-		// CLI --reporters progress
-        reporters: ['progress', 'junit', 'coverage', 'html'],
+        // list of files to exclude
+        exclude: [
+        ],
 
-        junitReporter: {
-            // will be resolved to basePath (in the same way as files/exclude patterns)
-            outputFile: 'test-results.xml',
-			outputDir: 'test/frontend/'
-        },
-		htmlReporter: {
-			outputFile: 'test/frontend/units.html',
-				
-			// Optional 
-			pageTitle: 'G2moku Frontend Unit Tests',
-			subPageTitle: 'Multiplayer game, like gomoku'
-		},
-		coverageReporter: {
-			// cf. http://gotwarlost.github.com/istanbul/public/apidocs/
-			type: 'html',
-			dir: 'coverage/'
-		},
+
+        // preprocess matching files before serving them to the browser
+        // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            '_site/assets/js/**/*.js': 'coverage'
+            // 'node_modules/phaser/build/phaser.js': ['browserify'],
+            // 'external/*.js': ['browserify'],
+            'src/**/*.js': ['browserify'],
+            'test/*.spec.js': ['browserify']
         },
-		
-		plugins: [
-		  'karma-mocha',
-		  'karma-requirejs',
-		  'karma-chai',
-		  'karma-junit-reporter',
-          'karma-coverage',
-		  'karma-htmlfile-reporter',
-		  'karma-chrome-launcher'
-		  //'karma-firefox-launcher',
-		  //'karma-safari-launcher'
-		],
 
+        browserify: {
+            paths: [__dirname + '/src'],
+            transform: [
+                ['babelify', {
+                    presets: ['es2015']
+                }]
+            ]
+        },
+
+        // test results reporter to use
+        // possible values: 'dots', 'progress'
+        // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+        reporters: ['progress'],
+
+
+        // web server port
         port: 9876,
+
+
+        // enable / disable colors in the output (reporters and logs)
         colors: true,
-        autoWatch: true,
-        singleRun: false,
+
 
         // level of logging
         // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
         logLevel: config.LOG_INFO,
 
-        browsers: ['Chrome']//, 'Firefox', 'Safari']
 
+        // enable / disable watching file and executing tests whenever any file changes
+        autoWatch: true,
+
+
+        // start these browsers
+        // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
+        browsers: ['PhantomJS'],
+
+
+        // Continuous Integration mode
+        // if true, Karma captures browsers, runs the tests and exits
+        singleRun: false,
+
+        // Concurrency level
+        // how many browser should be started simultaneous
+        concurrency: Infinity
     });
 };
