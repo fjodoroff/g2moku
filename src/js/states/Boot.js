@@ -8,9 +8,9 @@ export default class Preload extends Phaser.State {
     }
 
     create(){
-		    this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-		    this.game.scale.pageAlignHorizontally = true;
-		    this.game.scale.pageAlignVertically = true;
+        this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.game.scale.pageAlignHorizontally = true;
+        this.game.scale.pageAlignVertically = true;
         this.game.scale.refresh();
 
         this.game.input.maxPointers = 1;
