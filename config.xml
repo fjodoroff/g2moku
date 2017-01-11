@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.hellomorning.phasercordova" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.nodemons.g2moku" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>G2moku</name>
     <description>
     G2moku game app
@@ -16,8 +16,37 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <platform name="browser">
+        <preference name="SplashScreen" value="img/splashscreen.png" /> <!-- defaults to "/img/logo.png" -->
+        <preference name="SplashScreenDelay" value="3000" /> <!-- defaults to "3000" -->
+        <preference name="SplashScreenBackgroundColor" value="#02bad2" /> <!-- defaults to "#464646" -->
+        <preference name="ShowSplashScreen" value="true" /> <!-- defaults to "true" -->
+        <preference name="SplashScreenWidth" value="512" /> <!-- defaults to "170" -->
+        <preference name="SplashScreenHeight" value="512" /> <!-- defaults to "200" -->
+    </platform>
+    <platform name="windows">
+        <preference name="windows-target-version" value="8.1" />
+        <preference name="SplashScreenSpinnerColor" value="#242424"/>
+        <preference name="SplashScreenSpinnerColor" value="DarkRed"/>
+        <preference name="SplashScreenSpinnerColor" value="rgb(50,128,128)"/>
+        <icon src="res/windows/storelogo.png" target="StoreLogo" />
+        <icon src="res/windows/smalllogo.png" target="Square30x30Logo" />
+    </platform>
     <platform name="android">
+        <!--
+            ldpi    : 36x36 px
+            mdpi    : 48x48 px
+            hdpi    : 72x72 px
+            xhdpi   : 96x96 px
+            xxhdpi  : 144x144 px
+            xxxhdpi : 192x192 px
+        -->
         <allow-intent href="market:*" />
+        <plugin name="NetworkStatus" value="org.apache.cordova.NetworkManager" />
+        <preference name="SplashMaintainAspectRatio" value="false" />
+        <preference name="SplashShowOnlyFirstTime" value="false" />
+        <!-- <icon src="res/android/ldpi.png" density="ldpi" /> -->
+        <icon src="res/android/mdpi.png" density="mdpi" />
     </platform>
     <platform name="ios">
         <hook src="hooks/xcode8.js" type="before_compile" />
@@ -27,4 +56,7 @@
     <engine name="ios" spec="~4.2.1" />
     <plugin name="cordova-plugin-console" spec="~1.0.4" />
     <plugin name="cordova-plugin-screen-orientation" spec="~1.4.2" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="SplashScreenDelay" value="3000" />
+    <hook type="after_prepare" src="hooks/after_prepare.js" />
 </widget>

@@ -10,17 +10,15 @@ var app = {
         if (config.isCordova) {
             document.addEventListener("deviceready", this.deviceReady, false);
         } else {
-            document.addEventListener("DOMContentLoaded", this.desktopReady, false);
+            document.addEventListener("DOMContentLoaded", this.deviceReady, false);
         }
     },
 
-    deviceReady: function() {
+    deviceReady: function() { 
+        console.log("cordova", device, window.cordova);
         app.deviceSetup();
         app.gameStart();
-    },
 
-    desktopReady: function(){
-        app.gameStart();
     },
 
     deviceSetup: function(){

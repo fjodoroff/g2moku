@@ -10,6 +10,7 @@ let clientHeight = function () {
 
 export default {
     init: function(){
+        let config = this;
         this.screen.width = window.innerWidth * window.devicePixelRatio;
         this.screen.height = window.innerHeight * window.devicePixelRatio;
         this.screen.offsetX = 0;
@@ -33,6 +34,30 @@ export default {
 
         this.buttonPadding = this.buttonPaddingScale * this.screen.gameHeight;
         this.screen.padding = this.paddingScale * this.screen.gameHeight;
+
+        console.log('globalization', navigator.globalization);
+        if(navigator.globalization) { //if globalization plugin active
+            navigator.globalization.getLocaleName((locale) => { // getting locale name
+                    config.locale = locale.value;
+                }, () => {
+                    alert('Error getting locale\n');
+                }
+            );
+            navigator.globalization.getPreferredLanguage((language) => {
+                    config.language = language.value;
+                }, () => {
+                    alert('Error getting language\n');
+                }
+            );
+        } else {
+            var lang = navigator.languages ? navigator.languages[0] : (navigator.language || navigator.userLanguage);
+            if (lang != undefined) {
+                config.locale = lang;
+                config.language = lang;
+            }
+        }
+        console.log("device", config.device);
+        console.log(config.locale);
     },
     init2(game){
         this.game = game;
@@ -69,6 +94,8 @@ export default {
         yellow0: "0xFFFF00",
         purple0: "0xd21acc"
     },
+    locale: 'en-GB',
+    language: 'en',
     dialog: {
         paddingLeft: 0
     },

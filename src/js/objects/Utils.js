@@ -12,7 +12,7 @@ class DeepDiffMapper {
     constructor(){
         this.VALUE_CREATED = 'created';
         this.VALUE_UPDATED = 'updated';
-        this.VALUE_DELETED = 'deleted';
+        this.VALUE_DELETED = 'deleted'; 
         this.VALUE_UNCHANGED = 'unchanged';
     }
     map(obj1, obj2) {
