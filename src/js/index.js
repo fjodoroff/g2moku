@@ -15,10 +15,9 @@ var app = {
     },
 
     deviceReady: function() { 
-        console.log("cordova", device, window.cordova);
+        console.log("cordova", config.device, window.cordova);
         app.deviceSetup();
         app.gameStart();
-
     },
 
     deviceSetup: function(){

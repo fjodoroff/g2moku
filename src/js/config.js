@@ -56,7 +56,7 @@ export default {
                 config.language = lang;
             }
         }
-        console.log("device", config.device);
+        console.log("device", config);
         console.log(config.locale);
     },
     init2(game){
