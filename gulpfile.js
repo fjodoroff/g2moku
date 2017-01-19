@@ -13,7 +13,14 @@ var babelify = require('babelify');
 var browserify = require('browserify');
 var browserSync = require('browser-sync');
 var server = require('karma').Server;
-
+var run = require('gulp-run');
+var open = require('gulp-open');
+var os = require('os');
+var browser = os.platform() === 'linux' ? 'google-chrome' : (
+    os.platform() === 'darwin' ? 'google chrome' : (
+        os.platform() === 'win32' ? 'chrome' : 'firefox'
+    )
+);
 /**
  * LIB PATHS
  */
@@ -88,8 +95,10 @@ function buildHtml() {
  */
 function copyLibs() {
 
-    var srcList = [PHASER_PATH + 'phaser.min.js',
-                   STATE_MACHINE_PATH + 'state-machine.min.js'];
+    var srcList = [
+        PHASER_PATH + 'phaser.min.js',
+        STATE_MACHINE_PATH + 'state-machine.min.js'
+    ];
     
     if (!isProduction()) {
         srcList.push(PHASER_PATH + 'phaser.map');
@@ -116,7 +125,10 @@ function build() {
     logBuildMode();
 
     return browserify({
-        paths: [path.join(__dirname, "node_modules"),path.join(__dirname, 'src/js')],
+        paths: [
+            path.join(__dirname, "node_modules"),
+            path.join(__dirname, 'src/js')
+        ],
         entries: ENTRY_FILE,
         debug: true,
         transform: [
@@ -151,7 +163,7 @@ function serve() {
             baseDir: BUILD_PATH,
             index: INDEX
         },
-        open: false // Change it to true if you wish to allow Browsersync to open a browser window.
+        open: true // Change it to true if you wish to allow Browsersync to open a browser window.
     };
     
     browserSync(options);
@@ -165,7 +177,7 @@ function serve() {
     });
 
 
-    gulp.watch(HTML_PATH + '/html/index.html', ['watch-html']).on('change', function() {
+    gulp.watch(HTML_PATH + '/index.html', ['watch-html']).on('change', function() {
         keepFiles = true;
     });
 }
@@ -188,5 +200,19 @@ gulp.task('serve', ['build'], serve);
 gulp.task('watch-html', ['buildHtml'], browserSync.reload);
 gulp.task('watch-js', ['fastBuild'], browserSync.reload);
 gulp.task('watch-static', ['copyLibs'], browserSync.reload);
+gulp.task('android-watcher-with-chrome-open', ['android-watcher', 'open-browser-while-android']);
+
+gulp.task('android-watcher', function() {
+    return run('cordova run android -- --live-reload --ignore=node_modules/**/*').exec()    // prints "Hello World\n".
+        .pipe(gulp.dest('output'));      // writes "Hello World\n" to output/echo.;
+});
+gulp.task('open-browser-while-android', function(){
+    gulp.src(__filename)
+        .pipe(open({uri: 'http://localhost:3000/platforms/browser/www/index.html'}));
+});
+gulp.task('reset-port', function() {
+    return run(`FOR /F "tokens=5 delims= " %P IN ('netstat -a -n -o ^|findstr :2002') DO TaskKill.exe /PID %P /T /F`).exec()    // prints "Hello World\n".
+        .pipe(gulp.dest('output'));      // writes "Hello World\n" to output/echo.;
+});
 
 gulp.task('default', ['serve', 'tdd']);

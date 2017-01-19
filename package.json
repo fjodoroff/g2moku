@@ -23,7 +23,9 @@
     "gulp": "^3.9.1",
     "gulp-buffer": "0.0.2",
     "gulp-if": "^2.0.0",
+    "gulp-open": "^2.0.0",
     "gulp-preprocess": "^2.0.0",
+    "gulp-run": "^1.7.1",
     "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.7",
     "jasmine-core": "~2.4.1",
@@ -37,6 +39,7 @@
     "yargs": "^4.6.0"
   },
   "dependencies": {
-    "phaser": "^2.4.7"
+    "phaser": "^2.4.7",
+    "sequelize-cli": "^2.5.1"
   }
 }
