@@ -14,7 +14,11 @@ cheerio@0.19.0 node_modules\cheerio
 ├── entities@1.1.1
 ├── dom-serializer@0.1.0 (domelementtype@1.1.3)
 ├── css-select@1.0.0 (boolbase@1.0.0, css-what@1.0.0, nth-check@1.0.1, domutils@1.4.3)
+<<<<<<< HEAD
 ├── htmlparser2@3.8.3 (domelementtype@1.3.0, entities@1.0.0, domhandler@2.3.0, domutils@1.5.1)
+=======
+├── htmlparser2@3.8.3 (domelementtype@1.3.0, domutils@1.5.1, entities@1.0.0, domhandler@2.3.0)
+>>>>>>> 4c97d6a726a2ee6c6172912ffc01d3a6931d26ec
 └── lodash@3.10.1
 
 plist@1.2.0 node_modules\plist
@@ -26,13 +30,21 @@ browser-sync-logger@1.0.3 node_modules\browser-sync-logger
 └── eazy-logger@2.1.3 (lodash.clonedeep@4.3.1, opt-merger@1.1.1)
 
 npm@2.15.11 node_modules\npm
+<<<<<<< HEAD
 OPTIONS {"logFileChanges":true,"logConnections":true,"open":false,"snippetOptions":{"rule":{"match":{}}},"minify":false,"watchOptions":{"ignoreInitial":true,"ignored":["node_modules/"]},"files":[{"match":["src/**/*.js"],"options":{"ignored":"node_modules/"}}],"server":{"baseDir":"c:\\_dev2\\g2moku","routes":{"/platforms/android\\assets\\www":"c:\\_dev2\\g2moku\\platforms\\android\\assets\\www","/platforms/ios\\www":"c:\\_dev2\\g2moku\\platforms\\ios\\www","/platforms/browser\\www":"c:\\_dev2\\g2moku\\platforms\\browser\\www"}}}
+=======
+OPTIONS {"logFileChanges":true,"logConnections":true,"open":false,"plugins":["browser-sync-logger"],"snippetOptions":{"rule":{"match":{}}},"minify":false,"watchOptions":{"ignoreInitial":true,"ignored":["node_modules/"]},"files":[{"match":["src/**/*.js"],"options":{"ignored":"node_modules/"}}],"server":{"baseDir":"c:\\_dev2\\g2moku","routes":{"/platforms/android\\assets\\www":"c:\\_dev2\\g2moku\\platforms\\android\\assets\\www","/platforms/ios\\www":"c:\\_dev2\\g2moku\\platforms\\ios\\www","/platforms/browser\\www":"c:\\_dev2\\g2moku\\platforms\\browser\\www"}}}
+>>>>>>> 4c97d6a726a2ee6c6172912ffc01d3a6931d26ec
 will push strings array {"name":"lang","titles":["English (US)","English (UK)"],"values":["en-us","en-gb"]}
 android preferences file was successfully generated
 ANDROID_HOME=C:\_dev\_android\sdk
 JAVA_HOME=C:\Program Files\Java\jdk1.8.0_74
 Reading build config file: c:\_dev2\g2moku\build.json
 Subproject Path: CordovaLib
+<<<<<<< HEAD
+=======
+[BS] Browser Connected: Chrome, version: 55.0.2883.87
+>>>>>>> 4c97d6a726a2ee6c6172912ffc01d3a6931d26ec
 [BS] Access URLs:
  --------------------------------------
        Local: http://localhost:3000
@@ -43,6 +55,7 @@ Subproject Path: CordovaLib
  --------------------------------------
 [BS] Serving files from: c:\_dev2\g2moku
 [BS] Watching files...
+<<<<<<< HEAD
 event add src\js\config.js
 event add src\js\index.js
 event add src\js\states\Play.js
@@ -51,6 +64,8 @@ event add src\js\states\Preload.js
 event add src\js\states\ScreenTest.js
 event add src\js\objects\Game.js
 event add src\js\objects\Utils.js
+=======
+>>>>>>> 4c97d6a726a2ee6c6172912ffc01d3a6931d26ec
 Incremental java compilation is an incubating feature.
 :preBuild UP-TO-DATE
 :preDebugBuild UP-TO-DATE
@@ -93,10 +108,17 @@ Incremental java compilation is an incubating feature.
 :generateDebugBuildConfig UP-TO-DATE
 :generateDebugResValues UP-TO-DATE
 :generateDebugResources UP-TO-DATE
+<<<<<<< HEAD
 :mergeDebugResources UP-TO-DATE
 :processDebugManifest UP-TO-DATE
 :processDebugResources UP-TO-DATE
 :generateDebugSources UP-TO-DATE
+=======
+:mergeDebugResources
+:processDebugManifest UP-TO-DATE
+:processDebugResources
+:generateDebugSources
+>>>>>>> 4c97d6a726a2ee6c6172912ffc01d3a6931d26ec
 :incrementalDebugJavaCompilationSafeguard UP-TO-DATE
 :compileDebugJavaWithJavac UP-TO-DATE
 :compileDebugNdk UP-TO-DATE
@@ -104,13 +126,359 @@ Incremental java compilation is an incubating feature.
 :mergeDebugShaders UP-TO-DATE
 :compileDebugShaders UP-TO-DATE
 :generateDebugAssets UP-TO-DATE
+<<<<<<< HEAD
 :mergeDebugAssets UP-TO-DATE
+=======
+:mergeDebugAssetsevent add src\js\config.js
+event add src\js\index.js
+[BS] Browser Connected: Chrome, version: 55.0.2883.87
+event add src\js\accessibility-developer-tools\main.js
+event add src\js\marked\Gulpfile.js
+event add src\js\marked\index.js
+event add src\js\marked\marked.min.js
+event add src\js\objects\Game.js
+event add src\js\objects\Utils.js
+event add src\js\async\karma.conf.js
+event add src\js\mocha\browser-entry.js
+event add src\js\mocha\karma.conf.js
+event add src\js\mocha\mocha.js
+event add src\js\prism\components.js
+event add src\js\prism\examples.js
+event add src\js\prism\gulpfile.js
+event add src\js\prism\prism.js
+event add src\js\stacky\browser.js
+event add src\js\states\Boot.js
+event add src\js\states\Play.js
+event add src\js\states\Preload.js
+event add src\js\states\ScreenTest.js
+event add src\js\web-component-tester\browser.js
+event add src\js\marked\lib\marked.js
+event add src\js\async\dist\async.js
+event add src\js\async\dist\async.min.js
+event add src\js\async\deps\nodeunit.js
+event add src\js\async\mocha_test\forever.js
+event add src\js\async\mocha_test\compose.js
+event add src\js\async\perf\benchmark.js
+event add src\js\async\perf\memory.js
+event add src\js\async\lib\async.js
+event add src\js\async\perf\suites.js
+event add src\js\async\support\sync-package-managers.js
+event add src\js\mocha\scripts\upgrade-npm.js
+event add src\js\sinon-chai\test\common.js
+event add src\js\sinon-chai\lib\sinon-chai.js
+event add src\js\stacky\lib\index.js
+event add src\js\stacky\lib\normalization.js
+event add src\js\stacky\lib\parsing.js
+event add src\js\stacky\lib\formatting.js
+event add src\js\prism\vendor\FileSaver.min.js
+event add src\js\prism\vendor\jszip.min.js
+event add src\js\prism\vendor\promise.js
+event add src\js\prism\components\prism-abap.min.js
+event add src\js\prism\components\prism-abap.js
+event add src\js\prism\components\prism-actionscript.js
+event add src\js\prism\components\prism-ada.js
+event add src\js\prism\components\prism-actionscript.min.js
+event add src\js\prism\components\prism-ada.min.js
+event add src\js\prism\components\prism-apacheconf.js
+event add src\js\prism\components\prism-apl.js
+event add src\js\prism\components\prism-apacheconf.min.js
+event add src\js\prism\components\prism-apl.min.js
+event add src\js\prism\components\prism-applescript.js
+event add src\js\prism\components\prism-asciidoc.min.js
+event add src\js\prism\components\prism-applescript.min.js
+event add src\js\prism\components\prism-asciidoc.js
+event add src\js\prism\components\prism-aspnet.js
+event add src\js\prism\components\prism-autohotkey.js
+event add src\js\prism\components\prism-autohotkey.min.js
+event add src\js\prism\components\prism-aspnet.min.js
+event add src\js\prism\components\prism-autoit.js
+event add src\js\prism\components\prism-bash.min.js
+event add src\js\prism\components\prism-bash.js
+event add src\js\prism\components\prism-autoit.min.js
+event add src\js\prism\components\prism-basic.js
+event add src\js\prism\components\prism-basic.min.js
+event add src\js\prism\components\prism-batch.js
+event add src\js\prism\components\prism-bison.js
+event add src\js\prism\components\prism-batch.min.js
+event add src\js\prism\components\prism-bison.min.js
+event add src\js\prism\components\prism-brainfuck.js
+event add src\js\prism\components\prism-brainfuck.min.js
+event add src\js\prism\components\prism-bro.min.js
+event add src\js\prism\components\prism-bro.js
+event add src\js\prism\components\prism-c.js
+event add src\js\prism\components\prism-c.min.js
+event add src\js\prism\components\prism-clike.js
+event add src\js\prism\components\prism-clike.min.js
+event add src\js\prism\components\prism-coffeescript.js
+event add src\js\prism\components\prism-coffeescript.min.js
+event add src\js\prism\components\prism-core.js
+event add src\js\prism\components\prism-core.min.js
+event add src\js\prism\components\prism-cpp.js
+event add src\js\prism\components\prism-cpp.min.js
+event add src\js\prism\components\prism-crystal.js
+event add src\js\prism\components\prism-crystal.min.js
+event add src\js\prism\components\prism-csharp.js
+event add src\js\prism\components\prism-csharp.min.js
+event add src\js\prism\components\prism-css-extras.js
+event add src\js\prism\components\prism-css.js
+event add src\js\prism\components\prism-css-extras.min.js
+event add src\js\prism\components\prism-d.js
+event add src\js\prism\components\prism-css.min.js
+event add src\js\prism\components\prism-d.min.js
+event add src\js\prism\components\prism-dart.js
+event add src\js\prism\components\prism-dart.min.js
+event add src\js\prism\components\prism-diff.js
+event add src\js\prism\components\prism-diff.min.js
+event add src\js\prism\components\prism-docker.js
+event add src\js\prism\components\prism-eiffel.js
+event add src\js\prism\components\prism-docker.min.js
+event add src\js\prism\components\prism-eiffel.min.js
+event add src\js\prism\components\prism-elixir.js
+event add src\js\prism\components\prism-erlang.js
+event add src\js\prism\components\prism-elixir.min.js
+event add src\js\prism\components\prism-erlang.min.js
+event add src\js\prism\components\prism-fortran.js
+event add src\js\prism\components\prism-fortran.min.js
+event add src\js\prism\components\prism-fsharp.js
+event add src\js\prism\components\prism-fsharp.min.js
+event add src\js\prism\components\prism-gherkin.js
+event add src\js\prism\components\prism-gherkin.min.js
+event add src\js\prism\components\prism-git.js
+event add src\js\prism\components\prism-git.min.js
+event add src\js\prism\components\prism-glsl.js
+event add src\js\prism\components\prism-glsl.min.js
+event add src\js\prism\components\prism-go.js
+event add src\js\prism\components\prism-go.min.js
+event add src\js\prism\components\prism-graphql.js
+event add src\js\prism\components\prism-graphql.min.js
+event add src\js\prism\components\prism-haml.js
+event add src\js\prism\components\prism-groovy.min.js
+event add src\js\prism\components\prism-haml.min.js
+event add src\js\prism\components\prism-groovy.js
+event add src\js\prism\components\prism-handlebars.js
+event add src\js\prism\components\prism-handlebars.min.js
+event add src\js\prism\components\prism-haskell.min.js
+event add src\js\prism\components\prism-haskell.js
+event add src\js\prism\components\prism-haxe.js
+event add src\js\prism\components\prism-http.js
+event add src\js\prism\components\prism-http.min.js
+event add src\js\prism\components\prism-haxe.min.js
+event add src\js\prism\components\prism-icon.js
+event add src\js\prism\components\prism-icon.min.js
+event add src\js\prism\components\prism-inform7.min.js
+event add src\js\prism\components\prism-inform7.js
+event add src\js\prism\components\prism-j.js
+event add src\js\prism\components\prism-ini.min.js
+event add src\js\prism\components\prism-ini.js
+event add src\js\prism\components\prism-j.min.js
+event add src\js\prism\components\prism-jade.js
+event add src\js\prism\components\prism-jade.min.js
+event add src\js\prism\components\prism-java.js
+event add src\js\prism\components\prism-java.min.js
+event add src\js\prism\components\prism-javascript.js
+event add src\js\prism\components\prism-javascript.min.js
+event add src\js\prism\components\prism-jolie.js
+event add src\js\prism\components\prism-jolie.min.js
+event add src\js\prism\components\prism-json.js
+event add src\js\prism\components\prism-json.min.js
+event add src\js\prism\components\prism-jsx.js
+event add src\js\prism\components\prism-jsx.min.js
+event add src\js\prism\components\prism-julia.min.js
+event add src\js\prism\components\prism-julia.js
+event add src\js\prism\components\prism-keyman.js
+event add src\js\prism\components\prism-keyman.min.js
+event add src\js\prism\components\prism-kotlin.js
+event add src\js\prism\components\prism-kotlin.min.js
+event add src\js\prism\components\prism-latex.js
+event add src\js\prism\components\prism-latex.min.js
+event add src\js\prism\components\prism-less.min.js
+event add src\js\prism\components\prism-livescript.js
+event add src\js\prism\components\prism-less.js
+event add src\js\prism\components\prism-livescript.min.js
+event add src\js\prism\components\prism-lolcode.js
+event add src\js\prism\components\prism-lolcode.min.js
+event add src\js\prism\components\prism-lua.js
+event add src\js\prism\components\prism-lua.min.js
+event add src\js\prism\components\prism-makefile.js
+event add src\js\prism\components\prism-makefile.min.js
+event add src\js\prism\components\prism-markdown.js
+event add src\js\prism\components\prism-markdown.min.js
+event add src\js\prism\components\prism-markup.js
+event add src\js\prism\components\prism-markup.min.js
+event add src\js\prism\components\prism-matlab.js
+event add src\js\prism\components\prism-matlab.min.js
+event add src\js\prism\components\prism-mel.js
+event add src\js\prism\components\prism-mel.min.js
+event add src\js\prism\components\prism-mizar.js
+event add src\js\prism\components\prism-mizar.min.js
+event add src\js\prism\components\prism-monkey.js
+event add src\js\prism\components\prism-nasm.js
+event add src\js\prism\components\prism-monkey.min.js
+event add src\js\prism\components\prism-nasm.min.js
+event add src\js\prism\components\prism-nginx.js
+event add src\js\prism\components\prism-nginx.min.js
+event add src\js\prism\components\prism-nim.js
+event add src\js\prism\components\prism-nim.min.js
+event add src\js\prism\components\prism-nix.js
+event add src\js\prism\components\prism-nix.min.js
+event add src\js\prism\components\prism-nsis.min.js
+event add src\js\prism\components\prism-nsis.js
+event add src\js\prism\components\prism-objectivec.js
+event add src\js\prism\components\prism-objectivec.min.js
+event add src\js\prism\components\prism-ocaml.js
+event add src\js\prism\components\prism-ocaml.min.js
+event add src\js\prism\components\prism-oz.js
+event add src\js\prism\components\prism-oz.min.js
+event add src\js\prism\components\prism-parigp.js
+event add src\js\prism\components\prism-parser.js
+event add src\js\prism\components\prism-parigp.min.js
+event add src\js\prism\components\prism-parser.min.js
+event add src\js\prism\components\prism-pascal.js
+event add src\js\prism\components\prism-pascal.min.js
+event add src\js\prism\components\prism-perl.js
+event add src\js\prism\components\prism-perl.min.js
+event add src\js\prism\components\prism-php-extras.js
+event add src\js\prism\components\prism-php-extras.min.js
+event add src\js\prism\components\prism-php.js
+event add src\js\prism\components\prism-php.min.js
+event add src\js\prism\components\prism-powershell.js
+event add src\js\prism\components\prism-powershell.min.js
+event add src\js\prism\components\prism-processing.js
+event add src\js\prism\components\prism-processing.min.js
+event add src\js\prism\components\prism-prolog.js
+event add src\js\prism\components\prism-prolog.min.js
+event add src\js\prism\components\prism-properties.js
+event add src\js\prism\components\prism-properties.min.js
+event add src\js\prism\components\prism-protobuf.js
+event add src\js\prism\components\prism-protobuf.min.js
+event add src\js\prism\components\prism-puppet.js
+event add src\js\prism\components\prism-puppet.min.js
+event add src\js\prism\components\prism-pure.js
+event add src\js\prism\components\prism-python.js
+event add src\js\prism\components\prism-pure.min.js
+event add src\js\prism\components\prism-python.min.js
+event add src\js\prism\components\prism-q.js
+event add src\js\prism\components\prism-q.min.js
+event add src\js\prism\components\prism-qore.js
+event add src\js\prism\components\prism-qore.min.js
+event add src\js\prism\components\prism-r.js
+event add src\js\prism\components\prism-r.min.js
+event add src\js\prism\components\prism-reason.min.js
+event add src\js\prism\components\prism-reason.js
+event add src\js\prism\components\prism-rest.js
+event add src\js\prism\components\prism-rest.min.js
+event add src\js\prism\components\prism-rip.min.js
+event add src\js\prism\components\prism-rip.js
+event add src\js\prism\components\prism-roboconf.js
+event add src\js\prism\components\prism-roboconf.min.js
+event add src\js\prism\components\prism-ruby.min.js
+event add src\js\prism\components\prism-rust.js
+event add src\js\prism\components\prism-ruby.js
+event add src\js\prism\components\prism-rust.min.js
+event add src\js\prism\components\prism-sas.js
+event add src\js\prism\components\prism-sas.min.js
+event add src\js\prism\components\prism-sass.js
+event add src\js\prism\components\prism-sass.min.js
+event add src\js\prism\components\prism-scala.js
+event add src\js\prism\components\prism-scala.min.js
+event add src\js\prism\components\prism-scheme.js
+event add src\js\prism\components\prism-scheme.min.js
+event add src\js\prism\components\prism-scss.js
+event add src\js\prism\components\prism-scss.min.js
+event add src\js\prism\components\prism-smalltalk.js
+event add src\js\prism\components\prism-smalltalk.min.js
+event add src\js\prism\components\prism-smarty.js
+event add src\js\prism\components\prism-smarty.min.js
+event add src\js\prism\components\prism-sql.js
+event add src\js\prism\components\prism-stylus.js
+event add src\js\prism\components\prism-sql.min.js
+event add src\js\prism\components\prism-stylus.min.js
+event add src\js\prism\components\prism-swift.js
+event add src\js\prism\components\prism-swift.min.js
+event add src\js\prism\components\prism-tcl.js
+event add src\js\prism\components\prism-tcl.min.js
+event add src\js\prism\components\prism-textile.js
+event add src\js\prism\components\prism-textile.min.js
+event add src\js\prism\components\prism-twig.min.js
+event add src\js\prism\components\prism-twig.js
+event add src\js\prism\components\prism-typescript.js
+event add src\js\prism\components\prism-typescript.min.js
+event add src\js\prism\components\prism-verilog.min.js
+event add src\js\prism\components\prism-verilog.js
+event add src\js\prism\components\prism-vhdl.js
+event add src\js\prism\components\prism-vhdl.min.js
+event add src\js\prism\components\prism-vim.min.js
+event add src\js\prism\components\prism-vim.js
+event add src\js\prism\components\prism-wiki.min.js
+event add src\js\prism\components\prism-wiki.js
+event add src\js\prism\components\prism-xojo.min.js
+event add src\js\prism\components\prism-xojo.js
+event add src\js\prism\components\prism-yaml.min.js
+event add src\js\prism\components\prism-yaml.js
+event add src\js\web-component-tester\data\a11ySuite.js
+event add src\js\accessibility-developer-tools\dist\js\axs_testing.js
+event add src\js\prism\plugins\autolinker\prism-autolinker.js
+event add src\js\prism\plugins\autolinker\prism-autolinker.min.js
+event add src\js\async\mocha_test\support\is_browser.js
+event add src\js\prism\plugins\command-line\prism-command-line.js
+event add src\js\prism\plugins\command-line\prism-command-line.min.js
+event add src\js\prism\plugins\autoloader\prism-autoloader.js
+event add src\js\prism\plugins\autoloader\prism-autoloader.min.js
+event add src\js\prism\plugins\copy-to-clipboard\prism-copy-to-clipboard.js
+event add src\js\prism\plugins\copy-to-clipboard\prism-copy-to-clipboard.min.js
+event add src\js\prism\plugins\custom-class\prism-custom-class.js
+event add src\js\prism\plugins\custom-class\prism-custom-class.min.js
+event add src\js\prism\plugins\data-uri-highlight\prism-data-uri-highlight.js
+event add src\js\prism\plugins\data-uri-highlight\prism-data-uri-highlight.min.js
+event add src\js\prism\plugins\highlight-keywords\prism-highlight-keywords.js
+event add src\js\prism\plugins\highlight-keywords\prism-highlight-keywords.min.js
+event add src\js\prism\plugins\jsonp-highlight\prism-jsonp-highlight.min.js
+event add src\js\prism\plugins\jsonp-highlight\prism-jsonp-highlight.js
+event add src\js\prism\plugins\file-highlight\prism-file-highlight.js
+event add src\js\prism\plugins\file-highlight\prism-file-highlight.min.js
+event add src\js\prism\plugins\ie8\prism-ie8.js
+event add src\js\prism\plugins\ie8\prism-ie8.min.js
+event add src\js\prism\plugins\keep-markup\prism-keep-markup.js
+event add src\js\prism\plugins\keep-markup\prism-keep-markup.min.js
+event add src\js\prism\plugins\line-numbers\prism-line-numbers.js
+event add src\js\prism\plugins\line-numbers\prism-line-numbers.min.js
+event add src\js\prism\plugins\normalize-whitespace\prism-normalize-whitespace.js
+event add src\js\prism\plugins\normalize-whitespace\prism-normalize-whitespace.min.js
+event add src\js\prism\plugins\line-highlight\prism-line-highlight.min.js
+event add src\js\prism\plugins\line-highlight\prism-line-highlight.js
+event add src\js\prism\plugins\previewer-angle\prism-previewer-angle.js
+event add src\js\prism\plugins\previewer-angle\prism-previewer-angle.min.js
+event add src\js\prism\plugins\previewer-base\prism-previewer-base.min.js
+event add src\js\prism\plugins\previewer-base\prism-previewer-base.js
+event add src\js\prism\plugins\previewer-color\prism-previewer-color.js
+event add src\js\prism\plugins\previewer-color\prism-previewer-color.min.js
+event add src\js\prism\plugins\previewer-time\prism-previewer-time.min.js
+event add src\js\prism\plugins\previewer-time\prism-previewer-time.js
+event add src\js\prism\plugins\previewer-easing\prism-previewer-easing.min.js
+event add src\js\prism\plugins\previewer-easing\prism-previewer-easing.js
+event add src\js\prism\plugins\previewer-gradient\prism-previewer-gradient.js
+event add src\js\prism\plugins\previewer-gradient\prism-previewer-gradient.min.js
+event add src\js\prism\plugins\show-invisibles\prism-show-invisibles.js
+event add src\js\prism\plugins\show-invisibles\prism-show-invisibles.min.js
+event add src\js\prism\plugins\remove-initial-line-feed\prism-remove-initial-line-feed.min.js
+event add src\js\prism\plugins\remove-initial-line-feed\prism-remove-initial-line-feed.js
+event add src\js\prism\plugins\show-language\prism-show-language.js
+event add src\js\prism\plugins\show-language\prism-show-language.min.js
+event add src\js\prism\plugins\wpd\prism-wpd.js
+event add src\js\prism\plugins\wpd\prism-wpd.min.js
+event add src\js\prism\plugins\unescaped-markup\prism-unescaped-markup.min.js
+event add src\js\prism\plugins\unescaped-markup\prism-unescaped-markup.js
+event add src\js\prism\plugins\toolbar\prism-toolbar.js
+event add src\js\prism\plugins\toolbar\prism-toolbar.min.js
+
+>>>>>>> 4c97d6a726a2ee6c6172912ffc01d3a6931d26ec
 :transformClassesWithDexForDebug UP-TO-DATE
 :mergeDebugJniLibFolders UP-TO-DATE
 :transformNative_libsWithMergeJniLibsForDebug UP-TO-DATE
 :processDebugJavaRes UP-TO-DATE
 :transformResourcesWithMergeJavaResForDebug UP-TO-DATE
 :validateSigningDebug
+<<<<<<< HEAD
 :packageDebug UP-TO-DATE
 :assembleDebug UP-TO-DATE
 :cdvBuildDebug UP-TO-DATE
@@ -118,12 +486,24 @@ Incremental java compilation is an incubating feature.
 BUILD SUCCESSFUL
 
 Total time: 24.708 secs
+=======
+:packageDebug
+:assembleDebug
+:cdvBuildDebug
+
+BUILD SUCCESSFUL
+
+Total time: 5.03 secs
+>>>>>>> 4c97d6a726a2ee6c6172912ffc01d3a6931d26ec
 Built the following apk(s): 
 	C:/_dev2/g2moku/platforms/android/build/outputs/apk/android-debug.apk
 ANDROID_HOME=C:\_dev\_android\sdk
 JAVA_HOME=C:\Program Files\Java\jdk1.8.0_74
 No target specified and no devices found, deploying to emulator
+<<<<<<< HEAD
 [BS] Browser Connected: Chrome, version: 55.0.2883.87
+=======
+>>>>>>> 4c97d6a726a2ee6c6172912ffc01d3a6931d26ec
 Reading build config file: c:\_dev2\g2moku\build.json
 Skipping build...
 Built the following apk(s): 
@@ -131,6 +511,7 @@ Built the following apk(s):
 Using apk: C:/_dev2/g2moku/platforms/android/build/outputs/apk/android-debug.apk
 Package name: com.nodemons.g2moku
 INSTALL SUCCESS
+<<<<<<< HEAD
 [BS] Browser Connected: Chrome, version: 55.0.2883.87
 LAUNCH SUCCESS
 [BS] Browser Connected: Android Browser, version: 4.0
@@ -308,3 +689,7 @@ browser-sync-logger@1.0.3 node_modules\browser-sync-logger
 └── eazy-logger@2.1.3 (lodash.clonedeep@4.3.1, opt-merger@1.1.1)
 
 npm@2.15.11 node_modules\npm
+=======
+LAUNCH SUCCESS
+[BS] Browser Connected: Android Browser, version: 4.0
+>>>>>>> 4c97d6a726a2ee6c6172912ffc01d3a6931d26ec

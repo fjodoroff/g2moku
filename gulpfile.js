@@ -215,4 +215,9 @@ gulp.task('reset-port', function() {
         .pipe(gulp.dest('output'));      // writes "Hello World\n" to output/echo.;
 });
 
+gulp.task('android-watcher', function() {
+    return run('cordova run android -- --live-reload --ignore=node_modules/**/*').exec()    // prints "Hello World\n".
+        .pipe(gulp.dest('output'));      // writes "Hello World\n" to output/echo.;
+});
+
 gulp.task('default', ['serve', 'tdd']);

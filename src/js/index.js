@@ -20,6 +20,7 @@ var app = {
 
     deviceReady: function() { 
         console.log("cordova", config.device, window.cordova);
+<<<<<<< HEAD
         // var onload = function() {
         //     // For native Imports, manually fire WebComponentsReady so user code
         //     // can use the same code path for native and polyfill'd imports.
@@ -45,6 +46,8 @@ var app = {
         // } else {
         //     onload();
         // }
+=======
+>>>>>>> 4c97d6a726a2ee6c6172912ffc01d3a6931d26ec
         app.deviceSetup();
         app.gameStart();
     },
