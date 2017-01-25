@@ -1,0 +1,310 @@
+csp-parse@0.0.2 node_modules\csp-parse
+
+glob@5.0.15 node_modules\glob
+
+q@1.4.1 node_modules\q
+
+elementtree@0.1.7 node_modules\elementtree
+└── sax@1.1.4
+
+browser-sync@2.18.6 node_modules\browser-sync
+└── yargs@6.4.0 (window-size@0.2.0)
+
+cheerio@0.19.0 node_modules\cheerio
+├── entities@1.1.1
+├── dom-serializer@0.1.0 (domelementtype@1.1.3)
+├── css-select@1.0.0 (boolbase@1.0.0, css-what@1.0.0, nth-check@1.0.1, domutils@1.4.3)
+├── htmlparser2@3.8.3 (domelementtype@1.3.0, entities@1.0.0, domhandler@2.3.0, domutils@1.5.1)
+└── lodash@3.10.1
+
+plist@1.2.0 node_modules\plist
+├── base64-js@0.0.8
+├── xmldom@0.1.27
+└── xmlbuilder@4.0.0 (lodash@3.10.1)
+
+browser-sync-logger@1.0.3 node_modules\browser-sync-logger
+└── eazy-logger@2.1.3 (lodash.clonedeep@4.3.1, opt-merger@1.1.1)
+
+npm@2.15.11 node_modules\npm
+OPTIONS {"logFileChanges":true,"logConnections":true,"open":false,"snippetOptions":{"rule":{"match":{}}},"minify":false,"watchOptions":{"ignoreInitial":true,"ignored":["node_modules/"]},"files":[{"match":["src/**/*.js"],"options":{"ignored":"node_modules/"}}],"server":{"baseDir":"c:\\_dev2\\g2moku","routes":{"/platforms/android\\assets\\www":"c:\\_dev2\\g2moku\\platforms\\android\\assets\\www","/platforms/ios\\www":"c:\\_dev2\\g2moku\\platforms\\ios\\www","/platforms/browser\\www":"c:\\_dev2\\g2moku\\platforms\\browser\\www"}}}
+will push strings array {"name":"lang","titles":["English (US)","English (UK)"],"values":["en-us","en-gb"]}
+android preferences file was successfully generated
+ANDROID_HOME=C:\_dev\_android\sdk
+JAVA_HOME=C:\Program Files\Java\jdk1.8.0_74
+Reading build config file: c:\_dev2\g2moku\build.json
+Subproject Path: CordovaLib
+[BS] Access URLs:
+ --------------------------------------
+       Local: http://localhost:3000
+    External: http://192.168.0.102:3000
+ --------------------------------------
+          UI: http://localhost:3001
+ UI External: http://192.168.0.102:3001
+ --------------------------------------
+[BS] Serving files from: c:\_dev2\g2moku
+[BS] Watching files...
+event add src\js\config.js
+event add src\js\index.js
+event add src\js\states\Play.js
+event add src\js\states\Boot.js
+event add src\js\states\Preload.js
+event add src\js\states\ScreenTest.js
+event add src\js\objects\Game.js
+event add src\js\objects\Utils.js
+Incremental java compilation is an incubating feature.
+:preBuild UP-TO-DATE
+:preDebugBuild UP-TO-DATE
+:checkDebugManifest
+:CordovaLib:preBuild UP-TO-DATE
+:CordovaLib:preDebugBuild UP-TO-DATE
+:CordovaLib:checkDebugManifest
+:CordovaLib:prepareDebugDependencies
+:CordovaLib:compileDebugAidl UP-TO-DATE
+:CordovaLib:compileDebugNdk UP-TO-DATE
+:CordovaLib:compileLint UP-TO-DATE
+:CordovaLib:copyDebugLint UP-TO-DATE
+:CordovaLib:mergeDebugShaders UP-TO-DATE
+:CordovaLib:compileDebugShaders UP-TO-DATE
+:CordovaLib:generateDebugAssets UP-TO-DATE
+:CordovaLib:mergeDebugAssets UP-TO-DATE
+:CordovaLib:mergeDebugProguardFiles UP-TO-DATE
+:CordovaLib:packageDebugRenderscript UP-TO-DATE
+:CordovaLib:compileDebugRenderscript UP-TO-DATE
+:CordovaLib:generateDebugResValues UP-TO-DATE
+:CordovaLib:generateDebugResources UP-TO-DATE
+:CordovaLib:packageDebugResources UP-TO-DATE
+:CordovaLib:processDebugManifest UP-TO-DATE
+:CordovaLib:generateDebugBuildConfig UP-TO-DATE
+:CordovaLib:processDebugResources UP-TO-DATE
+:CordovaLib:generateDebugSources UP-TO-DATE
+:CordovaLib:incrementalDebugJavaCompilationSafeguard UP-TO-DATE
+:CordovaLib:compileDebugJavaWithJavac UP-TO-DATE
+:CordovaLib:processDebugJavaRes UP-TO-DATE
+:CordovaLib:transformResourcesWithMergeJavaResForDebug UP-TO-DATE
+:CordovaLib:transformClassesAndResourcesWithSyncLibJarsForDebug UP-TO-DATE
+:CordovaLib:mergeDebugJniLibFolders UP-TO-DATE
+:CordovaLib:transformNative_libsWithMergeJniLibsForDebug UP-TO-DATE
+:CordovaLib:transformNative_libsWithSyncJniLibsForDebug UP-TO-DATE
+:CordovaLib:bundleDebug UP-TO-DATE
+:prepareAndroidCordovaLibUnspecifiedDebugLibrary UP-TO-DATE
+:prepareDebugDependencies
+:compileDebugAidl UP-TO-DATE
+:compileDebugRenderscript UP-TO-DATE
+:generateDebugBuildConfig UP-TO-DATE
+:generateDebugResValues UP-TO-DATE
+:generateDebugResources UP-TO-DATE
+:mergeDebugResources UP-TO-DATE
+:processDebugManifest UP-TO-DATE
+:processDebugResources UP-TO-DATE
+:generateDebugSources UP-TO-DATE
+:incrementalDebugJavaCompilationSafeguard UP-TO-DATE
+:compileDebugJavaWithJavac UP-TO-DATE
+:compileDebugNdk UP-TO-DATE
+:compileDebugSources UP-TO-DATE
+:mergeDebugShaders UP-TO-DATE
+:compileDebugShaders UP-TO-DATE
+:generateDebugAssets UP-TO-DATE
+:mergeDebugAssets UP-TO-DATE
+:transformClassesWithDexForDebug UP-TO-DATE
+:mergeDebugJniLibFolders UP-TO-DATE
+:transformNative_libsWithMergeJniLibsForDebug UP-TO-DATE
+:processDebugJavaRes UP-TO-DATE
+:transformResourcesWithMergeJavaResForDebug UP-TO-DATE
+:validateSigningDebug
+:packageDebug UP-TO-DATE
+:assembleDebug UP-TO-DATE
+:cdvBuildDebug UP-TO-DATE
+
+BUILD SUCCESSFUL
+
+Total time: 24.708 secs
+Built the following apk(s): 
+	C:/_dev2/g2moku/platforms/android/build/outputs/apk/android-debug.apk
+ANDROID_HOME=C:\_dev\_android\sdk
+JAVA_HOME=C:\Program Files\Java\jdk1.8.0_74
+No target specified and no devices found, deploying to emulator
+[BS] Browser Connected: Chrome, version: 55.0.2883.87
+Reading build config file: c:\_dev2\g2moku\build.json
+Skipping build...
+Built the following apk(s): 
+	C:/_dev2/g2moku/platforms/android/build/outputs/apk/android-debug.apk
+Using apk: C:/_dev2/g2moku/platforms/android/build/outputs/apk/android-debug.apk
+Package name: com.nodemons.g2moku
+INSTALL SUCCESS
+[BS] Browser Connected: Chrome, version: 55.0.2883.87
+LAUNCH SUCCESS
+[BS] Browser Connected: Android Browser, version: 4.0
+event change src\js\index.js
+event change src\js\config.js
+glob@5.0.15 node_modules\glob
+
+csp-parse@0.0.2 node_modules\csp-parse
+
+q@1.4.1 node_modules\q
+
+elementtree@0.1.7 node_modules\elementtree
+└── sax@1.1.4
+
+browser-sync@2.18.6 node_modules\browser-sync
+└── yargs@6.4.0 (window-size@0.2.0)
+
+plist@1.2.0 node_modules\plist
+├── base64-js@0.0.8
+├── xmldom@0.1.27
+└── xmlbuilder@4.0.0 (lodash@3.10.1)
+
+cheerio@0.19.0 node_modules\cheerio
+├── entities@1.1.1
+├── dom-serializer@0.1.0 (domelementtype@1.1.3)
+├── css-select@1.0.0 (boolbase@1.0.0, css-what@1.0.0, nth-check@1.0.1, domutils@1.4.3)
+├── htmlparser2@3.8.3 (domelementtype@1.3.0, entities@1.0.0, domutils@1.5.1, domhandler@2.3.0)
+└── lodash@3.10.1
+
+browser-sync-logger@1.0.3 node_modules\browser-sync-logger
+└── eazy-logger@2.1.3 (lodash.clonedeep@4.3.1, opt-merger@1.1.1)
+
+npm@2.15.11 node_modules\npm
+csp-parse@0.0.2 node_modules\csp-parse
+
+glob@5.0.15 node_modules\glob
+
+q@1.4.1 node_modules\q
+
+elementtree@0.1.7 node_modules\elementtree
+└── sax@1.1.4
+
+browser-sync@2.18.6 node_modules\browser-sync
+└── yargs@6.4.0 (window-size@0.2.0)
+
+cheerio@0.19.0 node_modules\cheerio
+├── entities@1.1.1
+├── dom-serializer@0.1.0 (domelementtype@1.1.3)
+├── css-select@1.0.0 (boolbase@1.0.0, css-what@1.0.0, nth-check@1.0.1, domutils@1.4.3)
+├── htmlparser2@3.8.3 (domelementtype@1.3.0, entities@1.0.0, domutils@1.5.1, domhandler@2.3.0)
+└── lodash@3.10.1
+
+plist@1.2.0 node_modules\plist
+├── base64-js@0.0.8
+├── xmldom@0.1.27
+└── xmlbuilder@4.0.0 (lodash@3.10.1)
+
+browser-sync-logger@1.0.3 node_modules\browser-sync-logger
+└── eazy-logger@2.1.3 (lodash.clonedeep@4.3.1, opt-merger@1.1.1)
+
+npm@2.15.11 node_modules\npm
+will push strings array {"name":"lang","titles":["English (US)","English (UK)"],"values":["en-us","en-gb"]}
+will push strings array {"name":"lang","titles":["English (US)","English (UK)"],"values":["en-us","en-gb"]}
+android preferences file was successfully generated
+android preferences file was successfully generated
+error { SyntaxError: Expected "/*", "//", or "{" but end of input found.
+    at peg$buildStructuredError (C:\Users\Maksim\AppData\Roaming\npm\node_modules\cordova\node_modules\xcode\lib\parser\pbxproj.js:412:12)
+    at Object.peg$parse [as parse] (C:\Users\Maksim\AppData\Roaming\npm\node_modules\cordova\node_modules\xcode\lib\parser\pbxproj.js:1886:11)
+    at pbxProject.parseSync (C:\Users\Maksim\AppData\Roaming\npm\node_modules\cordova\node_modules\xcode\lib\pbxProject.js:46:24)
+    at parseXCode (C:\_dev2\g2moku\plugins\cordova-plugin-app-preferences\bin\lib\ios.js:76:8)
+    at C:\_dev2\g2moku\plugins\cordova-plugin-app-preferences\bin\lib\ios.js:86:17
+    at _fulfilled (C:\Users\Maksim\AppData\Roaming\npm\node_modules\cordova\node_modules\q\q.js:787:54)
+    at self.promiseDispatch.done (C:\Users\Maksim\AppData\Roaming\npm\node_modules\cordova\node_modules\q\q.js:816:30)
+    at Promise.promise.promiseDispatch (C:\Users\Maksim\AppData\Roaming\npm\node_modules\cordova\node_modules\q\q.js:749:13)
+    at C:\Users\Maksim\AppData\Roaming\npm\node_modules\cordova\node_modules\q\q.js:557:44
+    at flush (C:\Users\Maksim\AppData\Roaming\npm\node_modules\cordova\node_modules\q\q.js:108:17)
+  message: 'Expected "/*", "//", or "{" but end of input found.',
+  expected: 
+   [ { type: 'literal', text: '//', ignoreCase: false },
+     { type: 'literal', text: '/*', ignoreCase: false },
+     { type: 'literal', text: '{', ignoreCase: false } ],
+  found: null,
+  location: 
+   { start: { offset: 0, line: 1, column: 1 },
+     end: { offset: 0, line: 1, column: 1 } },
+  name: 'SyntaxError' }
+unhandled exception { SyntaxError: Expected "/*", "//", or "{" but end of input found.
+    at peg$buildStructuredError (C:\Users\Maksim\AppData\Roaming\npm\node_modules\cordova\node_modules\xcode\lib\parser\pbxproj.js:412:12)
+    at Object.peg$parse [as parse] (C:\Users\Maksim\AppData\Roaming\npm\node_modules\cordova\node_modules\xcode\lib\parser\pbxproj.js:1886:11)
+    at pbxProject.parseSync (C:\Users\Maksim\AppData\Roaming\npm\node_modules\cordova\node_modules\xcode\lib\pbxProject.js:46:24)
+    at parseXCode (C:\_dev2\g2moku\plugins\cordova-plugin-app-preferences\bin\lib\ios.js:76:8)
+    at C:\_dev2\g2moku\plugins\cordova-plugin-app-preferences\bin\lib\ios.js:86:17
+    at _fulfilled (C:\Users\Maksim\AppData\Roaming\npm\node_modules\cordova\node_modules\q\q.js:787:54)
+    at self.promiseDispatch.done (C:\Users\Maksim\AppData\Roaming\npm\node_modules\cordova\node_modules\q\q.js:816:30)
+    at Promise.promise.promiseDispatch (C:\Users\Maksim\AppData\Roaming\npm\node_modules\cordova\node_modules\q\q.js:749:13)
+    at C:\Users\Maksim\AppData\Roaming\npm\node_modules\cordova\node_modules\q\q.js:557:44
+    at flush (C:\Users\Maksim\AppData\Roaming\npm\node_modules\cordova\node_modules\q\q.js:108:17)
+  message: 'Expected "/*", "//", or "{" but end of input found.',
+  expected: 
+   [ { type: 'literal', text: '//', ignoreCase: false },
+     { type: 'literal', text: '/*', ignoreCase: false },
+     { type: 'literal', text: '{', ignoreCase: false } ],
+  found: null,
+  location: 
+   { start: { offset: 0, line: 1, column: 1 },
+     end: { offset: 0, line: 1, column: 1 } },
+  name: 'SyntaxError' }
+ios settings bundle was successfully generated
+[ 'src\\js\\index.js', 'src\\js\\config.js' ]
+[BS] Reloading Browsers...
+event change src\js\config.js
+[BS] Browser Connected: Chrome, version: 55.0.2883.87
+[BS] Browser Connected: Android Browser, version: 4.0
+csp-parse@0.0.2 node_modules\csp-parse
+
+glob@5.0.15 node_modules\glob
+
+q@1.4.1 node_modules\q
+
+elementtree@0.1.7 node_modules\elementtree
+└── sax@1.1.4
+
+browser-sync@2.18.6 node_modules\browser-sync
+└── yargs@6.4.0 (window-size@0.2.0)
+
+cheerio@0.19.0 node_modules\cheerio
+├── entities@1.1.1
+├── dom-serializer@0.1.0 (domelementtype@1.1.3)
+├── css-select@1.0.0 (boolbase@1.0.0, css-what@1.0.0, nth-check@1.0.1, domutils@1.4.3)
+├── htmlparser2@3.8.3 (domelementtype@1.3.0, entities@1.0.0, domutils@1.5.1, domhandler@2.3.0)
+└── lodash@3.10.1
+
+plist@1.2.0 node_modules\plist
+├── base64-js@0.0.8
+├── xmldom@0.1.27
+└── xmlbuilder@4.0.0 (lodash@3.10.1)
+
+browser-sync-logger@1.0.3 node_modules\browser-sync-logger
+└── eazy-logger@2.1.3 (lodash.clonedeep@4.3.1, opt-merger@1.1.1)
+
+npm@2.15.11 node_modules\npm
+will push strings array {"name":"lang","titles":["English (US)","English (UK)"],"values":["en-us","en-gb"]}
+android preferences file was successfully generated
+ios settings bundle was successfully generated
+[ 'src\\js\\config.js' ]
+[BS] Reloading Browsers...
+[BS] Browser Connected: Chrome, version: 55.0.2883.87
+[BS] Browser Connected: Android Browser, version: 4.0
+event change src\js\index.js
+csp-parse@0.0.2 node_modules\csp-parse
+
+glob@5.0.15 node_modules\glob
+
+q@1.4.1 node_modules\q
+
+elementtree@0.1.7 node_modules\elementtree
+└── sax@1.1.4
+
+browser-sync@2.18.6 node_modules\browser-sync
+└── yargs@6.4.0 (window-size@0.2.0)
+
+cheerio@0.19.0 node_modules\cheerio
+├── entities@1.1.1
+├── dom-serializer@0.1.0 (domelementtype@1.1.3)
+├── css-select@1.0.0 (boolbase@1.0.0, css-what@1.0.0, nth-check@1.0.1, domutils@1.4.3)
+├── htmlparser2@3.8.3 (domelementtype@1.3.0, entities@1.0.0, domutils@1.5.1, domhandler@2.3.0)
+└── lodash@3.10.1
+
+plist@1.2.0 node_modules\plist
+├── base64-js@0.0.8
+├── xmldom@0.1.27
+└── xmlbuilder@4.0.0 (lodash@3.10.1)
+
+browser-sync-logger@1.0.3 node_modules\browser-sync-logger
+└── eazy-logger@2.1.3 (lodash.clonedeep@4.3.1, opt-merger@1.1.1)
+
+npm@2.15.11 node_modules\npm
