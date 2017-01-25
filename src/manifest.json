@@ -1,0 +1,7 @@
+{
+  "name": "g2moku",
+  "short_name": "g2moku",
+  "description": "G2moku game for cordova project",
+  "start_url": "/",
+  "display": "standalone"
+}

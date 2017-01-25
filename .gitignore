@@ -7,3 +7,5 @@ notes.org
 platforms/*
 plugins/*
 !www/.gitignore
+static/lib/*
+.idea/*

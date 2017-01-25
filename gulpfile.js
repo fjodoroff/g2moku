@@ -13,6 +13,7 @@ var babelify = require('babelify');
 var browserify = require('browserify');
 var browserSync = require('browser-sync');
 var server = require('karma').Server;
+var run = require('gulp-run');
 
 /**
  * LIB PATHS
@@ -151,7 +152,7 @@ function serve() {
             baseDir: BUILD_PATH,
             index: INDEX
         },
-        open: false // Change it to true if you wish to allow Browsersync to open a browser window.
+        open: true // Change it to true if you wish to allow Browsersync to open a browser window.
     };
     
     browserSync(options);
@@ -165,7 +166,7 @@ function serve() {
     });
 
 
-    gulp.watch(HTML_PATH + '/html/index.html', ['watch-html']).on('change', function() {
+    gulp.watch(HTML_PATH + '/index.html', ['watch-html']).on('change', function() {
         keepFiles = true;
     });
 }
@@ -188,5 +189,10 @@ gulp.task('serve', ['build'], serve);
 gulp.task('watch-html', ['buildHtml'], browserSync.reload);
 gulp.task('watch-js', ['fastBuild'], browserSync.reload);
 gulp.task('watch-static', ['copyLibs'], browserSync.reload);
+
+gulp.task('android-watcher', function() {
+    return run('cordova run android -- --live-reload --ignore=node_modules/**/*').exec()    // prints "Hello World\n".
+        .pipe(gulp.dest('output'));      // writes "Hello World\n" to output/echo.;
+});
 
 gulp.task('default', ['serve', 'tdd']);
