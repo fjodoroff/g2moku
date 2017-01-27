@@ -9,6 +9,8 @@ before_script:
   - npm install -g codecov
   - npm install istanbul -g
   - npm install mocha -g
+  - npm install karma -g
   - npm install grunt-cli -g
 after_success:
-  - istanbul cover _mocha --report lcovonly -- -R spec && codecov
+  - npm run codecov
+  - istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
