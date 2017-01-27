@@ -11,4 +11,4 @@ before_script:
   - npm install mocha -g
   - npm install grunt-cli -g
 after_success:
-  - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && codecov
+  - istanbul cover ./node_modules/mocha/.bin/_mocha --report lcovonly -- -R spec && codecov
