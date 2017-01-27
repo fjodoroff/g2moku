@@ -39,6 +39,7 @@
     "karma-coverage": "^1.1.1",
     "karma-jasmine": "~1.0.2",
     "karma-phantomjs-launcher": "^1.0.2",
+    "mocha": "^3.2.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "~3.7.0",
     "yargs": "^4.6.0"
