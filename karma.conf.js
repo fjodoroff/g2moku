@@ -31,7 +31,7 @@ module.exports = function(config) {
         preprocessors: {
             // 'node_modules/phaser/build/phaser.js': ['browserify'],
             // 'external/*.js': ['browserify'],
-            'src/**/*.js': ['browserify'],
+            'src/**/*.js': ['coverage', 'browserify'],
             'test/*.spec.js': ['browserify']
         },
 
@@ -50,12 +50,7 @@ module.exports = function(config) {
         reporters: ['progress', 'coverage'],
         // Configure code coverage reporter
         coverageReporter: {
-            reporters: [
-                // generates ./coverage/lcov.info
-                {type: 'lcov'},
-                // generates ./coverage/coverage-final.json
-                {type:'json', subdir: '.'},
-            ]
+            reporters: [{type: 'lcov'}]
         },
 
         // web server port
@@ -82,7 +77,7 @@ module.exports = function(config) {
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
-        singleRun: false,
+        singleRun: true,
 
         // Concurrency level
         // how many browser should be started simultaneous
