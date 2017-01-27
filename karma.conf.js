@@ -1,10 +1,6 @@
 // Karma configuration
 // Generated on Fri Jul 01 2016 13:39:25 GMT-0700 (PDT)
 
-
-var isparta = require("isparta");
-var istanbul = require("browserify-istanbul");
-
 module.exports = function(config) {
     config.set({
 
@@ -35,33 +31,24 @@ module.exports = function(config) {
         preprocessors: {
             // 'node_modules/phaser/build/phaser.js': ['browserify'],
             // 'external/*.js': ['browserify'],
-            'src/**/*.js': ['browserify', 'coverage'],
+            'src/**/*.js': ['browserify'],
             'test/*.spec.js': ['browserify']
         },
 
         browserify: {
-            debug: true,
             paths: [__dirname + '/src'],
             transform: [
                 ['babelify', {
-                    ignore: '/node_modules/'
-                }],
-                istanbul({
-                    instrumenter: isparta, // <--module capable of reading babelified code
-                    ignore: ['test/**', '**/node_modules/**']
-                })
-            ],
+                    presets: ['es2015']
+                }]
+            ]
         },
 
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress', 'coverage'],
-        // Configure code coverage reporter
-        coverageReporter: {
-            includeAllSources: true,
-            reporters: [{type: 'lcov'}]
-        },
+        reporters: ['progress'],
+
 
         // web server port
         port: 9876,
@@ -87,7 +74,7 @@ module.exports = function(config) {
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
-        singleRun: true,
+        singleRun: false,
 
         // Concurrency level
         // how many browser should be started simultaneous
