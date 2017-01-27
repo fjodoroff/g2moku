@@ -16,10 +16,10 @@ export default class ScreenTest extends Phaser.State {
     update() {
         let middle = Utils.screenMiddle();
         let screen = config.screen;
-        let img = this.game.add.image(0, 0, 'atlas', 'screen-test-2');
+        //let img = this.game.add.image(0, 0, 'atlas', 'screen-test-2');
 
-        Utils.scaleTo(img, 1);
-        img.reset(config.screen.offsetX, config.screen.offsetY);
+        //Utils.scaleTo(img, 1);
+        //img.reset(config.screen.offsetX, config.screen.offsetY);
         let scr = config.screen;
 
         let debugItems = {

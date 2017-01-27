@@ -8,15 +8,23 @@
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
     <title>Phaser Cordova Template</title>
-    <script type="text/javascript" src="lib/webcomponentsjs/webcomponents-lite.min.js"></script>
-    <link rel="import" href="html/g2moku-app.html">
+    <!--<script type="text/javascript" src="lib/webcomponentsjs/webcomponents-lite.min.js"></script>-->
+    <link rel="import" href="html/g2moku-app.html" async>
   </head>
   <body>
-  <g2moku-app></g2moku-app>
-    <h1>asas</h1>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      canvas {
+        margin: 0!important;
+      }
+    </style>
+    <g2moku-app></g2moku-app>
     <script type="text/javascript" src="cordova.js"></script>
     <!--<script type="text/javascript" src="js/state-machine.min.js"></script>-->
-    <!--<script type="text/javascript" src="js/phaser.min.js"></script>-->
+    <script type="text/javascript" src="js/phaser.min.js"></script>
     <script type="text/javascript" src="js/game.js"></script>
   </body>
 </html>

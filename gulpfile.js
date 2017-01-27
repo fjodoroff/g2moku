@@ -174,11 +174,13 @@ function serve() {
     // Watches for changes in files inside the './static' folder. Also sets 'keepFiles' to true (see cleanBuild()).
     gulp.watch(STATIC_PATH + '/**/*', ['watch-static']).on('change', function() {
         keepFiles = true;
+        browserSync.reload();
     });
 
 
     gulp.watch(HTML_PATH + '/index.html', ['watch-html']).on('change', function() {
         keepFiles = true;
+        browserSync.reload();
     });
 }
 
@@ -211,7 +213,7 @@ gulp.task('open-browser-while-android', function(){
         .pipe(open({uri: 'http://localhost:3000/platforms/browser/www/index.html'}));
 });
 gulp.task('reset-port', function() {
-    return run(`FOR /F "tokens=5 delims= " %P IN ('netstat -a -n -o ^|findstr :2002') DO TaskKill.exe /PID %P /T /F`).exec()    // prints "Hello World\n".
+    return run(`FOR /F "tokens=5 delims= " %P IN ('netstat -a -n -o ^|findstr :3000') DO TaskKill.exe /PID %P /T /F`).exec()    // prints "Hello World\n".
         .pipe(gulp.dest('output'));      // writes "Hello World\n" to output/echo.;
 });
 

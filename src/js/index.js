@@ -16,40 +16,39 @@ var app = {
         } else {
             document.addEventListener("DOMContentLoaded", this.deviceReady, false);
         }
+        document.addEventListener('WebComponentsReady', function(){
+            app.deviceSetup();
+            app.gameStart();
+        });
     },
 
-    deviceReady: function() { 
+    deviceReady: function() {
         console.log("cordova", config.device, window.cordova);
-<<<<<<< HEAD
-        // var onload = function() {
-        //     // For native Imports, manually fire WebComponentsReady so user code
-        //     // can use the same code path for native and polyfill'd imports.
-        //     if (!window.HTMLImports) {
-        //         alert('loaded!window.HTMLImports');
-        //         document.dispatchEvent(
-        //             new CustomEvent('WebComponentsReady', {bubbles: true})
-        //         );
-        //     }
-        //     alert('onload');
-        // };
-        // var webComponentsSupported = (
-        //     'registerElement' in document
-        //     && 'import' in document.createElement('link')
-        //     && 'content' in document.createElement('template')
-        // );
-        // if(!webComponentsSupported) {
-        //     var script = document.createElement('script');
-        //     script.async = true;
-        //     script.src = '/lib/webcomponentsjs/webcomponents-lite.min.js';
-        //     script.onload = onload;
-        //     document.head.appendChild(script);
-        // } else {
-        //     onload();
-        // }
-=======
->>>>>>> 4c97d6a726a2ee6c6172912ffc01d3a6931d26ec
-        app.deviceSetup();
-        app.gameStart();
+        var onload = function() {
+            // For native Imports, manually fire WebComponentsReady so user code
+            // can use the same code path for native and polyfill'd imports.
+            if (!window.HTMLImports) {
+                console.info('not window.HTMLImports, loaded');
+                document.dispatchEvent(
+                    new CustomEvent('WebComponentsReady', {bubbles: true})
+                );
+            }
+            // alert('onload');
+        };
+        var webComponentsSupported = (
+            'registerElement' in document
+            && 'import' in document.createElement('link')
+            && 'content' in document.createElement('template')
+        );
+        if(!webComponentsSupported) {
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = '/lib/webcomponentsjs/webcomponents-lite.min.js';
+            script.onload = onload;
+            document.head.appendChild(script);
+        } else {
+            onload();
+        }
     },
 
     deviceSetup: function(){

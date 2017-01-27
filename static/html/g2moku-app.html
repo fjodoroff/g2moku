@@ -7,11 +7,22 @@
 <link rel="import" href="../lib/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../lib/app-route/app-location.html">
 <link rel="import" href="../lib/app-route/app-route.html">
+<link rel="import" href="../lib/iron-icons/iron-icons.html">
 <link rel="import" href="../lib/iron-pages/iron-pages.html">
+<link rel="import" href="../lib/bottom-nav/bottom-nav.html">
+<link rel="import" href="../lib/bottom-nav/bottom-toolbar.html">
+<link rel="import" href="../lib/bottom-nav/bottom-tab.html">
+<link rel="import" href="../lib/paper-drawer/paper-drawer.html">
+<link rel="import" href="../lib/paper-drawer/paper-drawer-title.html">
+<link rel="import" href="../lib/paper-drawer/paper-drawer-subheader.html">
+<link rel="import" href="../lib/paper-drawer/paper-drawer-icon-item.html">
+<link rel="import" href="../lib/paper-drawer/paper-drawer-divider.html">
+<link rel="import" href="../lib/paper-drawer/paper-drawer-item.html">
 <link rel="import" href="../lib/iron-selector/iron-selector.html">
 <link rel="import" href="../lib/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../lib/qairoe-app-layout/qairoe-app-layout.html">
 <link rel="import" href="./g2moku-icons.html">
+<link rel="import" href="./g2moku-board.html">
 <dom-module id="g2moku-app">
     <template>
         <style>
@@ -27,19 +38,23 @@
             app-header paper-icon-button {
                 --paper-icon-button-ink-color: white;
             }
-            .drawer-list {
-                margin: 0 20px;
+            bottom-nav {
+                color: #fff;
             }
-            .drawer-list a {
-                display: block;
-                padding: 0 16px;
-                text-decoration: none;
-                color: var(--app-secondary-color);
-                line-height: 40px;
+            .grey {
+                background-color: #465C64;
             }
-            .drawer-list a.iron-selected {
-                color: black;
-                font-weight: bold;
+
+            .green {
+                background-color: #0E8767;
+            }
+
+            .brown {
+                background-color: #8B6A65;
+            }
+
+            .darkbrown {
+                background-color: #6C4845;
             }
         </style>
 
@@ -49,36 +64,48 @@
                 pattern="/:page"
                 data="{{routeData}}"
                 tail="{{subroute}}"></app-route>
-
-        <app-drawer-layout fullbleed>
-            <!-- Drawer content -->
-            <app-drawer id="drawer">
-                <app-toolbar>Menu</app-toolbar>
-                <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-                    <a name="view1" href="/view1">View One</a>
-                    <a name="view2" href="/view2">View Two</a>
-                    <a name="view3" href="/view3">View Three</a>
-                </iron-selector>
-            </app-drawer>
-
             <!-- Main content -->
-            <app-header-layout has-scrolling-region>
+            <app-header reveals>
+                <app-toolbar>
+                    <paper-icon-button id="left_menu" icon="menu"></paper-icon-button>
+                    <div main-title>G2moku</div>
+                    <paper-icon-button icon="delete"></paper-icon-button>
+                    <paper-icon-button icon="search"></paper-icon-button>
+                    <paper-icon-button icon="close"></paper-icon-button>
+                </app-toolbar>
+            </app-header>
+            <app-drawer id="drawer" swipe-open>
+                <paper-drawer>
+                    <paper-drawer-title photo="face.png" name="Maxim Maximov" email=""></paper-drawer-title>
 
-                <app-header condenses reveals effects="waterfall">
-                    <app-toolbar>
-                        <paper-icon-button icon=g2moku-icons:menu" drawer-toggle></paper-icon-button>
-                        <div main-title>G2moku App Sample</div>
-                    </app-toolbar>
-                </app-header>
+                    <paper-drawer-subheader>Items with icon</paper-drawer-subheader>
+                    <paper-drawer-icon-item icon="icons:mail">All mail</paper-drawer-icon-item>
+                    <paper-drawer-icon-item icon="icons:delete">Trash</paper-drawer-icon-item>
+                    <paper-drawer-icon-item icon="icons:error">Spam</paper-drawer-icon-item>
 
-                <iron-pages
-                        selected="[[page]]"
-                        attr-for-selected="name"
-                        fallback-selection="view404"
-                        role="main">
-                </iron-pages>
-            </app-header-layout>
-        </app-drawer-layout>
+                    <paper-drawer-divider></paper-drawer-divider>
+
+                    <paper-drawer-subheader>Items without icon</paper-drawer-subheader>
+                    <paper-drawer-item>All mail</paper-drawer-item>
+                    <paper-drawer-item>Trash</paper-drawer-item>
+                    <paper-drawer-item>Spam</paper-drawer-item>
+                </paper-drawer>
+            </app-drawer>
+            <g2moku-board></g2moku-board>
+            <bottom-nav>
+                <bottom-toolbar selected="0">
+                    <bottom-tab selected-class="grey" label="home" icon="icons:home"></bottom-tab>
+                    <bottom-tab selected-class="green" show-label label="lists" icon="icons:menu"></bottom-tab>
+                    <bottom-tab selected-class="brown" label="closers" icon="icons:close"></bottom-tab>
+                    <bottom-tab selected-class="darkbrown" label="next" icon="icons:chevron-right"></bottom-tab>
+                </bottom-toolbar>
+            </bottom-nav>
+            <iron-pages
+                    selected="[[page]]"
+                    attr-for-selected="name"
+                    fallback-selection="view404"
+                    role="main">
+            </iron-pages>
     </template>
 
     <script>
@@ -88,12 +115,16 @@
                 page: {
                     type: String,
                     reflectToAttribute: true,
-                    observer: '_pageChanged',
-                },
+                    observer: '_pageChanged'
+                }
             },
-            observers: [
-                '_routePageChanged(routeData.page)',
-            ],
+            listeners: {
+                'left_menu.tap': 'openMenu'
+                //'_routePageChanged(routeData.page)',
+            },
+            openMenu: function(e){
+                this.$.drawer.toggle();
+            },
             _routePageChanged: function(page) {
                 this.page = page || 'view1';
                 if (!this.$.drawer.persistent) {

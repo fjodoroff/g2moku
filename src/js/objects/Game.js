@@ -6,7 +6,7 @@ import ScreenTest from '../states/ScreenTest';
 
 export default class Game extends Phaser.Game {
 	  constructor() {
-		    super(config.screen.width, config.screen.height, Phaser.AUTO, 'game', null);
+		    super(config.screen.width, config.screen.height - 64, Phaser.AUTO, 'game-board', null);
 		    this.state.add('play', Play, false);
 		    this.state.add('screen-test', ScreenTest, false);
 		    this.state.add('preload', Preload, false);
