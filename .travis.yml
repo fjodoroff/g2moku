@@ -9,8 +9,9 @@ before_script:
   - npm install -g codecov
   - npm install istanbul -g
   - npm install mocha -g
+  - npm install mocha
   - npm install karma -g
   - npm install grunt-cli -g
 after_success:
-  - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec
-  - bash <(curl -s https://codecov.io/bash)
+  - istanbul cover /node_modules/mocha/.bin/_mocha --report lcovonly -- -R spec
+  - codecov
