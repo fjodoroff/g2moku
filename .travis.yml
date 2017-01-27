@@ -12,4 +12,5 @@ before_script:
   - npm install karma -g
   - npm install grunt-cli -g
 after_success:
-  - npm run codecov
+  - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec
+  - bash <(curl -s https://codecov.io/bash)

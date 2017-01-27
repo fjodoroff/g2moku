@@ -1,6 +1,10 @@
 // Karma configuration
 // Generated on Fri Jul 01 2016 13:39:25 GMT-0700 (PDT)
 
+
+var isparta = require("isparta");
+var istanbul = require("browserify-istanbul");
+
 module.exports = function(config) {
     config.set({
 
@@ -31,17 +35,22 @@ module.exports = function(config) {
         preprocessors: {
             // 'node_modules/phaser/build/phaser.js': ['browserify'],
             // 'external/*.js': ['browserify'],
-            'src/**/*.js': ['coverage', 'browserify'],
+            'src/**/*.js': ['browserify', 'coverage'],
             'test/*.spec.js': ['browserify']
         },
 
         browserify: {
+            debug: true,
             paths: [__dirname + '/src'],
             transform: [
                 ['babelify', {
-                    presets: ['es2015']
-                }]
-            ]
+                    ignore: '/node_modules/'
+                }],
+                istanbul({
+                    instrumenter: isparta, // <--module capable of reading babelified code
+                    ignore: ['test/**', '**/node_modules/**']
+                })
+            ],
         },
 
         // test results reporter to use
@@ -50,6 +59,7 @@ module.exports = function(config) {
         reporters: ['progress', 'coverage'],
         // Configure code coverage reporter
         coverageReporter: {
+            includeAllSources: true,
             reporters: [{type: 'lcov'}]
         },
 
