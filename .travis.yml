@@ -12,5 +12,5 @@ before_script:
   - npm install karma -g
   - npm install grunt-cli -g
 after_success:
-  - istanbul cover _mocha --report lcovonly -- -R spec
+  - istanbul cover _mocha --report lcovonly -- -R spec --compilers js:babel/register
   - codecov
