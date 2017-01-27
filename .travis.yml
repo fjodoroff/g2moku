@@ -6,7 +6,8 @@ node_js:
 env:
   - NODE_ENV=test
 before_script:
-  - npm install -g codecov
+  - npm install babel-cli -g
+  - npm install codecov -g
   - npm install istanbul -g
   - npm install mocha -g
   - npm install karma -g
