@@ -1,0 +1,144 @@
+<link rel="import" href="../lib/polymer/polymer.html">
+<link rel="import" href="../lib/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../lib/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../lib/app-layout/app-header/app-header.html">
+<link rel="import" href="../lib/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../lib/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../lib/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../lib/app-route/app-location.html">
+<link rel="import" href="../lib/app-route/app-route.html">
+<link rel="import" href="../lib/iron-icons/iron-icons.html">
+<link rel="import" href="../lib/iron-pages/iron-pages.html">
+<link rel="import" href="../lib/bottom-nav/bottom-nav.html">
+<link rel="import" href="../lib/bottom-nav/bottom-toolbar.html">
+<link rel="import" href="../lib/bottom-nav/bottom-tab.html">
+<link rel="import" href="../lib/paper-drawer/paper-drawer.html">
+<link rel="import" href="../lib/paper-drawer/paper-drawer-title.html">
+<link rel="import" href="../lib/paper-drawer/paper-drawer-subheader.html">
+<link rel="import" href="../lib/paper-drawer/paper-drawer-icon-item.html">
+<link rel="import" href="../lib/paper-drawer/paper-drawer-divider.html">
+<link rel="import" href="../lib/paper-drawer/paper-drawer-item.html">
+<link rel="import" href="../lib/iron-selector/iron-selector.html">
+<link rel="import" href="../lib/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../lib/qairoe-app-layout/qairoe-app-layout.html">
+<link rel="import" href="./g2moku-icons.html">
+<link rel="import" href="./g2moku-board.html">
+<dom-module id="g2moku-app">
+    <template>
+        <style>
+            :host {
+                --app-primary-color: #4285f4;
+                --app-secondary-color: black;
+                display: block;
+            }
+            app-header {
+                color: #fff;
+                background-color: var(--app-primary-color);
+            }
+            app-header paper-icon-button {
+                --paper-icon-button-ink-color: white;
+            }
+            bottom-nav {
+                color: #fff;
+            }
+            .grey {
+                background-color: #465C64;
+            }
+
+            .green {
+                background-color: #0E8767;
+            }
+
+            .brown {
+                background-color: #8B6A65;
+            }
+
+            .darkbrown {
+                background-color: #6C4845;
+            }
+        </style>
+
+        <app-location route="{{route}}"></app-location>
+        <app-route
+                route="{{route}}"
+                pattern="/:page"
+                data="{{routeData}}"
+                tail="{{subroute}}"></app-route>
+            <!-- Main content -->
+            <app-header reveals>
+                <app-toolbar>
+                    <paper-icon-button id="left_menu" icon="menu"></paper-icon-button>
+                    <div main-title>G2moku</div>
+                    <paper-icon-button icon="delete"></paper-icon-button>
+                    <paper-icon-button icon="search"></paper-icon-button>
+                    <paper-icon-button icon="close"></paper-icon-button>
+                </app-toolbar>
+            </app-header>
+            <app-drawer id="drawer" swipe-open>
+                <paper-drawer>
+                    <paper-drawer-title photo="face.png" name="Maxim Maximov" email=""></paper-drawer-title>
+
+                    <paper-drawer-subheader>Items with icon</paper-drawer-subheader>
+                    <paper-drawer-icon-item icon="icons:mail">All mail</paper-drawer-icon-item>
+                    <paper-drawer-icon-item icon="icons:delete">Trash</paper-drawer-icon-item>
+                    <paper-drawer-icon-item icon="icons:error">Spam</paper-drawer-icon-item>
+
+                    <paper-drawer-divider></paper-drawer-divider>
+
+                    <paper-drawer-subheader>Items without icon</paper-drawer-subheader>
+                    <paper-drawer-item>All mail</paper-drawer-item>
+                    <paper-drawer-item>Trash</paper-drawer-item>
+                    <paper-drawer-item>Spam</paper-drawer-item>
+                </paper-drawer>
+            </app-drawer>
+            <g2moku-board></g2moku-board>
+            <bottom-nav>
+                <bottom-toolbar selected="0">
+                    <bottom-tab selected-class="grey" label="home" icon="icons:home"></bottom-tab>
+                    <bottom-tab selected-class="green" show-label label="lists" icon="icons:menu"></bottom-tab>
+                    <bottom-tab selected-class="brown" label="closers" icon="icons:close"></bottom-tab>
+                    <bottom-tab selected-class="darkbrown" label="next" icon="icons:chevron-right"></bottom-tab>
+                </bottom-toolbar>
+            </bottom-nav>
+            <iron-pages
+                    selected="[[page]]"
+                    attr-for-selected="name"
+                    fallback-selection="view404"
+                    role="main">
+            </iron-pages>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'g2moku-app',
+            properties: {
+                page: {
+                    type: String,
+                    reflectToAttribute: true,
+                    observer: '_pageChanged'
+                }
+            },
+            listeners: {
+                'left_menu.tap': 'openMenu'
+                //'_routePageChanged(routeData.page)',
+            },
+            openMenu: function(e){
+                this.$.drawer.toggle();
+            },
+            _routePageChanged: function(page) {
+                this.page = page || 'view1';
+                if (!this.$.drawer.persistent) {
+                    this.$.drawer.close();
+                }
+            },
+            _pageChanged: function(page) {
+                // Load page import on demand. Show 404 page if fails
+                var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
+                //this.importHref(resolvedPageUrl, null, this._showPage404, true);
+            },
+            _showPage404: function() {
+                this.page = 'view404';
+            },
+        });
+    </script>
+</dom-module>

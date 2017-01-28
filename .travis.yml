@@ -6,11 +6,10 @@ node_js:
 env:
   - NODE_ENV=test
 before_script:
-  - pip install --user codecov
+  - npm install -g codecov
   - npm install istanbul -g
   - npm install mocha -g
+  - npm install karma -g
   - npm install grunt-cli -g
 after_success:
-  - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
   - codecov
-  - bash <(curl -s https://codecov.io/bash)

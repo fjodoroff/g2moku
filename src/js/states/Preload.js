@@ -7,12 +7,13 @@ export default class Preload extends Phaser.State {
     }
 
     preload(){
-        this.load.atlasXML('atlas', 'gfx/atlas.png', 'gfx/atlas.xml', Phaser.Loader.TEXTURE_ATLAS_XML_STARLING);
+        //this.load.atlasXML('atlas', 'gfx/atlas.png', 'gfx/atlas.xml', Phaser.Loader.TEXTURE_ATLAS_XML_STARLING);
 
         //fonts
         this.load.bitmapFont('main-font', 'fonts/main-font.png', 'fonts/main-font.fnt');
 
-
+        this.load.tilemap('map', 'gfx/board.csv', null, Phaser.Tilemap.CSV);
+        this.load.image('tiles', 'gfx/gridtiles.png');
         this.load.onLoadComplete.addOnce(()=>{
             console.log('assets loaded');
             this.ready = true;
@@ -28,13 +29,13 @@ export default class Preload extends Phaser.State {
         if(!!this.ready) {
             config.init2(this.game);
 
-            if(true){
+            if(!true){
                 nextState = 'screen-test';
             } else {
                 nextState = 'play';
             }
 
-            this.game.state.start(nextState);
+            this.state.start(nextState);
         }
     }
 }
