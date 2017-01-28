@@ -1,9 +1,12 @@
+codecov:
+  bot: Nodemons
+
 coverage:
   notify:
     slack:
       default:
         url: "https://hooks.slack.com/services/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"
-        threshold: 1%
+        threshold: 90%
 		only_pulls: false
         branches: null
         flags: null
