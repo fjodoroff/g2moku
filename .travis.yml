@@ -6,12 +6,12 @@ node_js:
 env:
   - NODE_ENV=test
 before_script:
-  - npm install babel-cli -g
-  - npm install codecov -g
+  - npm install -g codecov
   - npm install istanbul -g
   - npm install mocha -g
   - npm install karma -g
   - npm install grunt-cli -g
 after_success:
-  - babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha
+  - babel-node ./node_modules/istanbul/lib/cli.js cover _mocha -- ./test
   - codecov
+  - istanbul cover node_modules/mocha/bin/_mocha -- --compilers js:babel-core/register
