@@ -36,18 +36,17 @@ module.exports = function(config) {
         },
 
         browserify: {
+            debug: true,
             paths: [__dirname + '/src'],
             transform: [
-                ['babelify', {
-                    presets: ['es2015']
-                }]
+                ['babelify', { presets: ['es2016'], plugins: ['istanbul'] }]
             ]
         },
 
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress'],
+        reporters: ['progress', 'coverage'],
 
 
         // web server port
@@ -60,7 +59,7 @@ module.exports = function(config) {
 
         // level of logging
         // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-        logLevel: config.LOG_INFO,
+        //logLevel: config.LOG_INFO,
 
 
         // enable / disable watching file and executing tests whenever any file changes
