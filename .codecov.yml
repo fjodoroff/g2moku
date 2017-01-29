@@ -1,6 +1,6 @@
 codecov:
   bot: 4matic
-
+  branch: master
 coverage:
   notify:
     slack:

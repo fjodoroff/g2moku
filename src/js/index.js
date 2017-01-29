@@ -1,5 +1,4 @@
 import config from './config';
-import Game from './objects/Game';
 
 var app = {
     initialize: function() {
@@ -16,9 +15,12 @@ var app = {
         } else {
             document.addEventListener("DOMContentLoaded", this.deviceReady, false);
         }
-        document.addEventListener('WebComponentsReady', function(){
-            app.deviceSetup();
-            app.gameStart();
+        document.addEventListener('G2mokuAppReady', function(){
+            //app.gameStart();
+        });
+        document.addEventListener('MainScreenMenuChange', function(e){
+            //app.gameStart();
+            console.info(e);
         });
     },
 
@@ -28,12 +30,14 @@ var app = {
             // For native Imports, manually fire WebComponentsReady so user code
             // can use the same code path for native and polyfill'd imports.
             if (!window.HTMLImports) {
-                console.info('not window.HTMLImports, loaded');
+                console.log('!window.HTMLImports');
                 document.dispatchEvent(
                     new CustomEvent('WebComponentsReady', {bubbles: true})
                 );
+            } else {
+                console.info('window.HTMLImports');
             }
-            // alert('onload');
+            console.log('onload');
         };
         var webComponentsSupported = (
             'registerElement' in document
@@ -43,23 +47,43 @@ var app = {
         if(!webComponentsSupported) {
             var script = document.createElement('script');
             script.async = true;
-            script.src = '/lib/webcomponentsjs/webcomponents-lite.min.js';
+            script.src = 'lib/webcomponentsjs/webcomponents-lite.min.js';
             script.onload = onload;
-            document.head.appendChild(script);
+            document.getElementsByTagName("head")[0].appendChild(script);
+            console.log('!webComponentsSupported');
         } else {
+            console.info('webComponentsSupported!');
             onload();
         }
+        app.deviceSetup();
     },
 
     deviceSetup: function(){
         //window.screen.lockOrientation('landscape');
+        // if(StatusBar.isVisible) {
+        //     StatusBar.hide();
+        // }
+        if(window.AndroidFullScreen) {
+            AndroidFullScreen.isSupported(function () {
+                AndroidFullScreen.immersiveMode(function () {
+                    console.log('entered into fullscreen');
+                }, function () {
+                    console.error(new Error('AndroidFullScreen immersiveMode'));
+                });
+            }, function () {
+                console.error(new Error('AndroidFullScreen'));
+            });
+        }
+        if(navigator.splashscreen) {
+            navigator.splashscreen.hide();
+        }
     },
 
-    gameStart: function() {
-        config.init();
-        window.game = new Game();
-        window.config = config;
-    }
+    // gameStart: function() {
+    //     config.init();
+    //     window.game = new Game();
+    //     window.config = config;
+    // }
 };
 
 app.initialize();

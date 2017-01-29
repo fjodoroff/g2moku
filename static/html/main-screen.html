@@ -1,0 +1,73 @@
+<dom-module id="main-screen">
+    <template>
+        <style>
+            :host {
+                background: #444;
+                min-height: 320px;
+                display: block;
+                padding-bottom: 50px;
+            }
+            div {
+                padding-top: 50px;
+                padding-bottom: 10px;
+                width: 100%;
+            }
+            iron-image {
+                width: 100%;
+                --iron-image-width: 100%;
+                height: 100%;
+                min-height: 256px;
+            }
+            #menu {
+                width: 50%;
+                min-width: 320px;
+                margin: 0 auto;
+            }
+        </style>
+        <div>
+            <iron-image src="../img/logo.png" preload fade id="example-preload-2" alt="The Polymer logo." class="sized" sizing="contain"></iron-image>
+        </div>
+        <paper-drawer>
+            <paper-menu id="menu" selected="{{menuSelectedIndex}}">
+                <paper-item>Classical Gamoku Game</paper-item>
+                <paper-item>Singleplayer</paper-item>
+                <paper-item>Multiplayer</paper-item>
+                <paper-item>Options</paper-item>
+                <paper-item>Help</paper-item>
+                <paper-item>Quit</paper-item>
+            </paper-menu>
+        </paper-drawer>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'main-screen',
+            properties: {
+                menuSelectedIndex: {
+                    type: Number,
+                    value: 0,
+                    observer: '_menuSelectedIndexChanged'
+                }
+//                page: {
+//                    type: String,
+//                    reflectToAttribute: true,
+//                    observer: '_pageChanged',
+//                },
+            },
+            _menuSelectedIndexChanged: function(newIndex, oldIndex) {
+                this.$.menu.dispatchEvent(
+                    new CustomEvent('MainScreenMenuChange', {
+                        bubbles: true,
+                        cancelable: false,
+                        detail: {
+                            newIndex, oldIndex
+                        }
+                    })
+                );
+            },
+            observers: [
+
+            ]
+        });
+    </script>
+</dom-module>

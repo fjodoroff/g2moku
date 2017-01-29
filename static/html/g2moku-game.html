@@ -1,0 +1,64 @@
+<script type="text/javascript" src="../js/phaser.min.js"></script>
+<dom-module id="g2moku-game">
+    <template>
+        <style>
+            :host {
+                --app-primary-color: #4285f4;
+                --app-secondary-color: black;
+                display: block;
+            }
+            app-header {
+                color: #fff;
+                background-color: var(--app-primary-color);
+            }
+            app-header paper-icon-button {
+                --paper-icon-button-ink-color: white;
+            }
+            .drawer-list {
+                margin: 0 20px;
+            }
+            .drawer-list a {
+                display: block;
+                padding: 0 16px;
+                text-decoration: none;
+                color: var(--app-secondary-color);
+                line-height: 40px;
+            }
+            .drawer-list a.iron-selected {
+                color: black;
+                font-weight: bold;
+            }
+        </style>
+        <div id="game-board"></div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'g2moku-game',
+            properties: {
+                inited: {
+                    type: Boolean,
+                    reflectToAttribute: true,
+                    observer: '_initDeinit'
+                }
+//                page: {
+//                    type: String,
+//                    reflectToAttribute: true,
+//                    observer: '_pageChanged',
+//                },
+            },
+            _initDeinit: function(inited){
+                console.log('initDeinit', inited);
+                if(inited) {//start phaser
+                    config.init();
+                    window.game = new Game();
+                    window.config = config;
+                } else { //destruct phaser
+
+                }
+            },
+            observers: [
+            ]
+        });
+    </script>
+</dom-module>

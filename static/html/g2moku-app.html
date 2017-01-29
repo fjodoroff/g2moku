@@ -8,7 +8,9 @@
 <link rel="import" href="../lib/app-route/app-location.html">
 <link rel="import" href="../lib/app-route/app-route.html">
 <link rel="import" href="../lib/iron-icons/iron-icons.html">
+<link rel="import" href="../lib/iron-image/iron-image.html">
 <link rel="import" href="../lib/iron-pages/iron-pages.html">
+<link rel="import" href="../lib/iron-selector/iron-selector.html">
 <link rel="import" href="../lib/bottom-nav/bottom-nav.html">
 <link rel="import" href="../lib/bottom-nav/bottom-toolbar.html">
 <link rel="import" href="../lib/bottom-nav/bottom-tab.html">
@@ -18,11 +20,13 @@
 <link rel="import" href="../lib/paper-drawer/paper-drawer-icon-item.html">
 <link rel="import" href="../lib/paper-drawer/paper-drawer-divider.html">
 <link rel="import" href="../lib/paper-drawer/paper-drawer-item.html">
-<link rel="import" href="../lib/iron-selector/iron-selector.html">
 <link rel="import" href="../lib/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../lib/paper-menu/paper-menu.html">
 <link rel="import" href="../lib/qairoe-app-layout/qairoe-app-layout.html">
+<link rel="import" href="./play-screen.html">
+<link rel="import" href="./main-screen.html">
 <link rel="import" href="./g2moku-icons.html">
-<link rel="import" href="./g2moku-board.html">
+<link rel="import" href="./g2moku-game.html">
 <dom-module id="g2moku-app">
     <template>
         <style>
@@ -65,41 +69,44 @@
                 data="{{routeData}}"
                 tail="{{subroute}}"></app-route>
             <!-- Main content -->
-            <app-header reveals>
-                <app-toolbar>
-                    <paper-icon-button id="left_menu" icon="menu"></paper-icon-button>
-                    <div main-title>G2moku</div>
-                    <paper-icon-button icon="delete"></paper-icon-button>
-                    <paper-icon-button icon="search"></paper-icon-button>
-                    <paper-icon-button icon="close"></paper-icon-button>
-                </app-toolbar>
-            </app-header>
-            <app-drawer id="drawer" swipe-open>
-                <paper-drawer>
-                    <paper-drawer-title photo="face.png" name="Maxim Maximov" email=""></paper-drawer-title>
+            <main-screen></main-screen>
+            <play-screen hidden>
+                <app-header reveals>
+                    <app-toolbar>
+                        <paper-icon-button id="left_menu" icon="menu"></paper-icon-button>
+                        <div main-title>G2moku</div>
+                        <paper-icon-button icon="delete"></paper-icon-button>
+                        <paper-icon-button icon="search"></paper-icon-button>
+                        <paper-icon-button icon="close"></paper-icon-button>
+                    </app-toolbar>
+                </app-header>
+                <app-drawer id="drawer" swipe-open>
+                    <paper-drawer>
+                        <paper-drawer-title photo="face.png" name="Maxim Maximov" email=""></paper-drawer-title>
 
-                    <paper-drawer-subheader>Items with icon</paper-drawer-subheader>
-                    <paper-drawer-icon-item icon="icons:mail">All mail</paper-drawer-icon-item>
-                    <paper-drawer-icon-item icon="icons:delete">Trash</paper-drawer-icon-item>
-                    <paper-drawer-icon-item icon="icons:error">Spam</paper-drawer-icon-item>
+                        <paper-drawer-subheader>Items with icon</paper-drawer-subheader>
+                        <paper-drawer-icon-item icon="icons:mail">All mail</paper-drawer-icon-item>
+                        <paper-drawer-icon-item icon="icons:delete">Trash</paper-drawer-icon-item>
+                        <paper-drawer-icon-item icon="icons:error">Spam</paper-drawer-icon-item>
 
-                    <paper-drawer-divider></paper-drawer-divider>
+                        <paper-drawer-divider></paper-drawer-divider>
 
-                    <paper-drawer-subheader>Items without icon</paper-drawer-subheader>
-                    <paper-drawer-item>All mail</paper-drawer-item>
-                    <paper-drawer-item>Trash</paper-drawer-item>
-                    <paper-drawer-item>Spam</paper-drawer-item>
-                </paper-drawer>
-            </app-drawer>
-            <g2moku-board></g2moku-board>
-            <bottom-nav>
-                <bottom-toolbar selected="0">
-                    <bottom-tab selected-class="grey" label="home" icon="icons:home"></bottom-tab>
-                    <bottom-tab selected-class="green" show-label label="lists" icon="icons:menu"></bottom-tab>
-                    <bottom-tab selected-class="brown" label="closers" icon="icons:close"></bottom-tab>
-                    <bottom-tab selected-class="darkbrown" label="next" icon="icons:chevron-right"></bottom-tab>
-                </bottom-toolbar>
-            </bottom-nav>
+                        <paper-drawer-subheader>Items without icon</paper-drawer-subheader>
+                        <paper-drawer-item>All mail</paper-drawer-item>
+                        <paper-drawer-item>Trash</paper-drawer-item>
+                        <paper-drawer-item>Spam</paper-drawer-item>
+                    </paper-drawer>
+                </app-drawer>
+                <g2moku-game></g2moku-game>
+                <bottom-nav>
+                    <bottom-toolbar selected="0">
+                        <bottom-tab selected-class="grey" label="home" icon="icons:home"></bottom-tab>
+                        <bottom-tab selected-class="green" show-label label="lists" icon="icons:menu"></bottom-tab>
+                        <bottom-tab selected-class="brown" label="closers" icon="icons:close"></bottom-tab>
+                        <bottom-tab selected-class="darkbrown" label="next" icon="icons:chevron-right"></bottom-tab>
+                    </bottom-toolbar>
+                </bottom-nav>
+            </play-screen>
             <iron-pages
                     selected="[[page]]"
                     attr-for-selected="name"
@@ -107,7 +114,6 @@
                     role="main">
             </iron-pages>
     </template>
-
     <script>
         Polymer({
             is: 'g2moku-app',
@@ -116,11 +122,24 @@
                     type: String,
                     reflectToAttribute: true,
                     observer: '_pageChanged'
+                },
+                inited: {
+                    type: Boolean,
+                    reflectToAttribute: true,
+                    observer: '_initDeinit'
                 }
             },
             listeners: {
+                //'inited-changed' : '_initDeinit',
                 'left_menu.tap': 'openMenu'
                 //'_routePageChanged(routeData.page)',
+            },
+            ready: function() {
+                this.async(function() {
+                    document.dispatchEvent(
+                            new CustomEvent('G2mokuAppReady', {bubbles: true})
+                    );
+                });
             },
             openMenu: function(e){
                 this.$.drawer.toggle();
