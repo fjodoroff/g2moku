@@ -47,10 +47,13 @@
     "mocha": "^3.2.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "~3.7.0",
+    "web-component-tester": "^5.0.0",
+    "web-component-tester-istanbul": "^0.10.0",
     "yargs": "^4.6.0"
   },
   "dependencies": {
     "phaser": "^2.4.7",
+    "redux": "^3.6.0",
     "sequelize-cli": "^2.5.1"
   }
 }

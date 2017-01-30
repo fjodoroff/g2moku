@@ -1,7 +1,7 @@
 node_modules
 .tern-port
 .tern-project
-.coverage
+coverage
 *.log
 *.tmp
 notes.org

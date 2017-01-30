@@ -1,3 +1,4 @@
+<link rel="import" href="./redux-store.html">
 <dom-module id="main-screen">
     <template>
         <style>
@@ -29,6 +30,7 @@
         </div>
         <paper-drawer>
             <paper-menu id="menu" selected="{{menuSelectedIndex}}">
+                <h1>[[currentScreen]]</h1>
                 <paper-item>Classical Gamoku Game</paper-item>
                 <paper-item>Singleplayer</paper-item>
                 <paper-item>Multiplayer</paper-item>
@@ -42,6 +44,15 @@
     <script>
         Polymer({
             is: 'main-screen',
+            behaviors: [ ReduxBehavior ],
+//            actions: {
+//                changeMainMenu: function(indexes){
+//                    return  {
+//                        type: 'CHANGE_MAIN_MENU',
+//                        values: indexes
+//                    }
+//                }
+//            },
             properties: {
                 menuSelectedIndex: {
                     type: Number,
@@ -55,15 +66,22 @@
 //                },
             },
             _menuSelectedIndexChanged: function(newIndex, oldIndex) {
-                this.$.menu.dispatchEvent(
-                    new CustomEvent('MainScreenMenuChange', {
-                        bubbles: true,
-                        cancelable: false,
-                        detail: {
-                            newIndex, oldIndex
-                        }
-                    })
-                );
+                this.dispatch({
+                    type: 'CHANGE_MAIN_MENU',
+                    values: [newIndex, oldIndex]
+                });
+//                this.$.menu.dispatchEvent(
+//                    new CustomEvent('MainScreenMenuChange', {
+//                        bubbles: true,
+//                        cancelable: false,
+//                        detail: {
+//                            newIndex, oldIndex
+//                        }
+//                    })
+//                );
+            },
+            ready: function(){
+
             },
             observers: [
 

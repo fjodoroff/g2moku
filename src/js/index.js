@@ -1,16 +1,32 @@
 import config from './config';
+import Utils from './objects/Utils';
 
-var app = {
-    initialize: function() {
+export default class G2mokuApp {
+
+    /**
+     * Constructor
+     */
+    constructor() {
+        this.initialize();
+        //debugInfo("");
+    }
+
+    /**
+     * Initialize method
+     */
+    initialize() {
         this.bindEvents();
         window.Polymer = {
             dom: 'shadow',
             lazyRegister: true
         };
-    },
+    }
 
-    bindEvents: function() {
-        if (config.isCordova) {
+    /**
+     * Binding events
+     */
+    bindEvents() {
+        if (config.isCordova) {//if cordova loaded
             document.addEventListener("deviceready", this.deviceReady, false);
         } else {
             document.addEventListener("DOMContentLoaded", this.deviceReady, false);
@@ -20,24 +36,27 @@ var app = {
         });
         document.addEventListener('MainScreenMenuChange', function(e){
             //app.gameStart();
-            console.info(e);
+            debugInfo(e);
         });
-    },
+    }
 
-    deviceReady: function() {
+    /**
+     * Called after device is ready
+     */
+    deviceReady() {
         console.log("cordova", config.device, window.cordova);
         var onload = function() {
             // For native Imports, manually fire WebComponentsReady so user code
             // can use the same code path for native and polyfill'd imports.
             if (!window.HTMLImports) {
-                console.log('!window.HTMLImports');
+                debugInfo('!window.HTMLImports');
                 document.dispatchEvent(
                     new CustomEvent('WebComponentsReady', {bubbles: true})
                 );
             } else {
-                console.info('window.HTMLImports');
+                debugInfo('window.HTMLImports');
             }
-            console.log('onload');
+            debugInfo('onload');
         };
         var webComponentsSupported = (
             'registerElement' in document
@@ -50,23 +69,26 @@ var app = {
             script.src = 'lib/webcomponentsjs/webcomponents-lite.min.js';
             script.onload = onload;
             document.getElementsByTagName("head")[0].appendChild(script);
-            console.log('!webComponentsSupported');
+            debugInfo('!webComponentsSupported');
         } else {
-            console.info('webComponentsSupported!');
+            debugInfo('webComponentsSupported!');
             onload();
         }
         app.deviceSetup();
-    },
+    }
 
-    deviceSetup: function(){
+    /**
+     * Setting up device
+     */
+    deviceSetup(){
         //window.screen.lockOrientation('landscape');
         // if(StatusBar.isVisible) {
         //     StatusBar.hide();
         // }
-        if(window.AndroidFullScreen) {
+        if(window.AndroidFullScreen) { //can call after device setup
             AndroidFullScreen.isSupported(function () {
                 AndroidFullScreen.immersiveMode(function () {
-                    console.log('entered into fullscreen');
+                    debugInfo('entered into fullscreen');
                 }, function () {
                     console.error(new Error('AndroidFullScreen immersiveMode'));
                 });
@@ -74,16 +96,16 @@ var app = {
                 console.error(new Error('AndroidFullScreen'));
             });
         }
-        if(navigator.splashscreen) {
+        if(navigator.splashscreen) { //can call after device setup
             navigator.splashscreen.hide();
         }
-    },
+    }
 
     // gameStart: function() {
     //     config.init();
     //     window.game = new Game();
     //     window.config = config;
     // }
-};
+}
 
-app.initialize();
+window.g2mokuApp = new G2mokuApp();

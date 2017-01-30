@@ -96,6 +96,7 @@ function buildHtml() {
 function copyLibs() {
 
     var srcList = [
+        './node_modules/redux/dist/redux.min.js',
         PHASER_PATH + 'phaser.min.js',
         STATE_MACHINE_PATH + 'state-machine.min.js'
     ];

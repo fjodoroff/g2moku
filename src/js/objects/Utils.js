@@ -1,6 +1,24 @@
 import config from '../config';
 
-class Bounds {
+/**
+ * Log to console if not in production.
+ * @param {...*} var_args
+ * @param {string} [type=log] console type
+ */
+window.debugLog = function debugLog(var_args, type = 'log') {
+    if (window.ENV !== 'prod') {
+        Array.prototype.reverse.apply(arguments);
+        console[type].apply(console, arguments);
+    }
+};
+
+window.debugInfo = function debugLog(var_args) {
+    let args = arguments;
+    if(args.length == 1) args = args[0];
+    return window.debugLog(args, 'info');
+};
+
+export class Bounds {
     constructor(top, right, bottom, left){
         this.top = top;
         this.right = right;
@@ -8,7 +26,7 @@ class Bounds {
         this.left = left;
     }
 }
-class DeepDiffMapper {
+export class DeepDiffMapper {
     constructor(){
         this.VALUE_CREATED = 'created';
         this.VALUE_UPDATED = 'updated';
@@ -75,6 +93,56 @@ class DeepDiffMapper {
 }
 
 export default {
+    isIOS() {
+        return (/(iPhone|iPad|iPod)/gi).test(navigator.platform);
+    },
+    isAndroid() {
+        return (/Android/gi).test(navigator.userAgent);
+    },
+    isSafari() {
+        var userAgent = navigator.userAgent;
+        return (/Safari/gi).test(userAgent) &&
+            !(/Chrome/gi).test(userAgent);
+    },
+    isIE() {
+        var userAgent = navigator.userAgent;
+        return (/Trident/gi).test(userAgent);
+    },
+    isEdge() {
+        return /Edge/i.test(navigator.userAgent);
+    },
+    isFF() {
+        var userAgent = navigator.userAgent;
+        return (/Firefox/gi).test(userAgent);
+    },
+    isTouchScreen() {
+        return ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
+    },
+
+    /**
+     * Returns the static base URL of the running app.
+     * file://app/game/12345 -> file://app/game/123456/
+     */
+    getStaticBaseURL() {
+        var url = location.href.replace(location.hash, '');
+        return url.substring(0, url.lastIndexOf('/') + 1);
+    },
+
+    /**
+     * Reports an error to Google Analytics.
+     * Normally, this is done in the window.onerror handler, but this helper method can be used in the
+     * catch() of a promise to log rejections.
+     * @param {Error|string} error The error to report.
+     */
+    reportError(error) {
+        // Google Analytics has a max size of 500 bytes for the event location field.
+        // If we have an error with a stack trace, the trailing 500 bytes are likely to be the most
+        // relevant, so grab those.
+        var location = (error && typeof error.stack === 'string') ?
+            error.stack.slice(-500) : 'Unknown Location';
+        Analytics.trackError(location, error);
+    },
+
     isObject(val) {
         if (val === null) { return false;}
         return ( (typeof val === 'function') || (typeof val === 'object') );

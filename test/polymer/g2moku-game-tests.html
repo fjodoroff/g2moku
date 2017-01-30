@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="../../static/lib/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../static/lib/web-component-tester/browser.js"></script>
+    <link rel="import" href="../../static/html/g2moku-game.html">
+</head>
+<body>
+<g2moku-game id="fixture"></g2moku-game>
+<script>
+    suite('<awesome-element>', function() {
+        test('is awesomest', function() {
+            assert.isTrue(document.getElementById('fixture').awesomest);
+        });
+    });
+</script>
+</body>
+</html>

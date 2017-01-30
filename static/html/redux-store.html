@@ -1,0 +1,25 @@
+<link rel="import" href="../lib/polymer-redux/polymer-redux.html">
+
+<script>
+    const initialState = {
+        currentScreen: 'main-screen',
+        mainMenuValues: {},
+        games: []
+    };
+
+    const reducer = function(state, action){
+        if(!state) return initialState;
+        console.info('change state', state);
+        switch(action.type) {
+            case 'CHANGE_MAIN_MENU':
+                return Object.assign({}, state, {mainMenuValues: action.values});
+            case 'ADD_GAME':
+                const games = state.games.slice(0);//copying games array
+                games.push(action.game);
+                return Object.assign({}, state, {games});
+        }
+    };
+
+    const store = Redux.createStore(reducer);
+    const ReduxBehavior = PolymerRedux(store);
+</script>
