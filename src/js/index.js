@@ -1,5 +1,7 @@
 import config from './config';
 import Utils from './objects/Utils';
+import Elements from './helpers/Elements';
+import Router from './helpers/Router';
 
 export default class G2mokuApp {
 
@@ -26,13 +28,38 @@ export default class G2mokuApp {
      * Binding events
      */
     bindEvents() {
-        if (config.isCordova) {//if cordova loaded
-            document.addEventListener("deviceready", this.deviceReady, false);
-        } else {
-            document.addEventListener("DOMContentLoaded", this.deviceReady, false);
-        }
-        document.addEventListener('G2mokuAppReady', function(){
+        let event = config.isCordova ? 'deviceready' : 'DOMContentLoaded';
+
+        document.addEventListener(event, () => {
+            this.deviceReady(() => {
+                this.deviceSetup();
+            });
+            this.Router = new Router();
+            this.Elements = new Elements();
+            this.Elements.init();
+            console.log('template', this.Elements);
+            this.Router.init(this.Elements.Template);
+            // Wait for critical.html to load if we don't have native HTML imports.
+            // Can't use Polymer.RenderStatus.whenReady() b/c potentially, we have
+            // to wait for the polyfills to load (above) and the critical.html to
+            // load so Polymer is defined. Instead, wait for HTMLImportsLoaded if
+            // we're in a polyfilled browser (but go right away if Imports are native).
+            if (Utils.supportsHTMLImports) {
+                this.afterCriticalImports();
+            } else {
+                document.addEventListener('HTMLImportsLoaded', this.afterCriticalImports);
+            }
+        }, false);
+
+        document.addEventListener('MainScreenReady', function(e){
+            debugInfo(e);
             //app.gameStart();
+            //console.log(e);
+            e.target.addEventListener('transitionend', function(){
+                if(navigator.splashscreen) { //can call after device setup
+                    navigator.splashscreen.hide();
+                }
+            });
         });
         document.addEventListener('MainScreenMenuChange', function(e){
             //app.gameStart();
@@ -43,7 +70,7 @@ export default class G2mokuApp {
     /**
      * Called after device is ready
      */
-    deviceReady() {
+    deviceReady(callback = null) {
         console.log("cordova", config.device, window.cordova);
         var onload = function() {
             // For native Imports, manually fire WebComponentsReady so user code
@@ -59,10 +86,10 @@ export default class G2mokuApp {
             debugInfo('onload');
         };
         var webComponentsSupported = (
-            'registerElement' in document
-            && 'import' in document.createElement('link')
-            && 'content' in document.createElement('template')
-        );
+        'registerElement' in document &&
+        'import' in document.createElement('link') &&
+        'content' in document.createElement('template'));
+
         if(!webComponentsSupported) {
             var script = document.createElement('script');
             script.async = true;
@@ -74,7 +101,22 @@ export default class G2mokuApp {
             debugInfo('webComponentsSupported!');
             onload();
         }
-        app.deviceSetup();
+        console.log(this);
+    }
+
+    afterCriticalImports() {
+        Polymer.Base.importHref('/html/elements.html', function() {
+            g2mokuApp.Elements.onElementsBundleLoaded();
+
+            //removeSplashScreen();
+
+            var fp = g2mokuApp.Util.getFPIfSupported();
+            if (fp) {
+                debugLog('first paint:', fp, 'ms');
+                // g2mokuApp.Analytics.trackPerf(
+                //     'load', 'firstpaint', fp, null, g2mokuApp.Analytics.FP_TIMEOUT_);
+            }
+        }, null, true);
     }
 
     /**
@@ -96,9 +138,6 @@ export default class G2mokuApp {
                 console.error(new Error('AndroidFullScreen'));
             });
         }
-        if(navigator.splashscreen) { //can call after device setup
-            navigator.splashscreen.hide();
-        }
     }
 
     // gameStart: function() {
@@ -107,5 +146,6 @@ export default class G2mokuApp {
     //     window.config = config;
     // }
 }
-
-window.g2mokuApp = new G2mokuApp();
+var g2mokuApp = new G2mokuApp();
+window.g2moku = window.g2moku || {};
+window.g2moku.app = g2mokuApp;

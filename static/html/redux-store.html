@@ -9,7 +9,7 @@
 
     const reducer = function(state, action){
         if(!state) return initialState;
-        console.info('change state', state);
+        console.info(state);
         switch(action.type) {
             case 'CHANGE_MAIN_MENU':
                 return Object.assign({}, state, {mainMenuValues: action.values});

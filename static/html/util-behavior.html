@@ -1,0 +1,64 @@
+<script>
+    /**
+     `G2mokuBehaviors.UtilBehavior` provides common utility methods for elements.
+     @polymerBehavior IOBehaviors.UtilBehavior
+     */
+    (function() {
+        'use strict';
+        window.G2mokuBehaviors = window.G2mokuBehaviors || {};
+        G2mokuBehaviors.UtilBehavior = {
+            /**
+             * Returns a subset of an array
+             *
+             * @param {array} array The array.
+             * @param {number} howMany A full URL to a youtube video.
+             */
+            _limit: function(array, howMany) {
+                return array.slice(0, howMany);
+            },
+            _equal: function(key, val) {
+                return key === val;
+            },
+            _ternary: function(boolean, yes, no) {
+                return boolean ? yes : no;
+            },
+            _propOfArrayItem: function(array, index, prop) {
+                if (!array[index]) {
+                    return null;
+                }
+                return prop in array[index] ? array[index][prop] : null;
+            },
+            _addClass: function(name, prop) {
+                return prop ? name : '';
+            },
+            _enableTabIndex: function(val) {
+                return val ? 0 : -1;
+            },
+            _isPage: function(pageName, selectedPageName) {
+                return this._equal(pageName, selectedPageName);
+            },
+            _isSelectedSubpage: function(selectedSubpage, subpageName) {
+                return selectedSubpage === subpageName;
+            },
+            _applyActiveClassWhenSubpage: function(selectedSubpage, subpageName) {
+                return this._addClass('active', selectedSubpage === subpageName);
+            },
+            getFiltersFromURL: function(opt_parsedUrl) {
+                var parsedUrl = opt_parsedUrl || g2mokuApp.Router.parseUrl(window.location.toString());
+                var filters = [];
+                if (parsedUrl.params.filters) {
+                    filters = parsedUrl.params.filters.split(',');
+                }
+                return filters;
+            },
+            /**
+             * Navigates history back.
+             */
+            goBack: function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                window.history.go(-1);
+            },
+        };
+    })();
+</script>

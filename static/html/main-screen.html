@@ -30,8 +30,7 @@
         </div>
         <paper-drawer>
             <paper-menu id="menu" selected="{{menuSelectedIndex}}">
-                <h1>[[currentScreen]]</h1>
-                <paper-item>Classical Gamoku Game</paper-item>
+                <paper-item>Classical Gamoku Game</a></paper-item>
                 <paper-item>Singleplayer</paper-item>
                 <paper-item>Multiplayer</paper-item>
                 <paper-item>Options</paper-item>
@@ -68,7 +67,7 @@
             _menuSelectedIndexChanged: function(newIndex, oldIndex) {
                 this.dispatch({
                     type: 'CHANGE_MAIN_MENU',
-                    values: [newIndex, oldIndex]
+                    values: {newIndex, oldIndex}
                 });
 //                this.$.menu.dispatchEvent(
 //                    new CustomEvent('MainScreenMenuChange', {
@@ -80,8 +79,13 @@
 //                    })
 //                );
             },
-            ready: function(){
-
+            attached: function(){
+                this.dispatchEvent(
+                    new CustomEvent('MainScreenReady', {
+                        bubbles: true,
+                        cancelable: false
+                    })
+                );
             },
             observers: [
 

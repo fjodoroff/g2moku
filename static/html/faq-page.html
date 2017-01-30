@@ -1,0 +1,33 @@
+<dom-module id="faq-page">
+    <template>
+        <!--<style include="shared-app-styles">-->
+            <!--:host {-->
+                <!--display: block;-->
+            <!--}-->
+        <!--</style>-->
+        <h2>faq</h2>
+    </template>
+    <script>
+        (function () {
+            'use strict';
+            Polymer({
+                is: 'faq-page',
+                behaviors: [G2mokuBehaviors.PageBehavior],
+                title: 'FAQ',
+                name: 'faq',
+                onPageTransitionDone: function() {
+                    var hash = g2mokuApp.Router.parseUrl(location.href).hash;
+                    if (hash) {
+                        this._scrollToTarget(hash, -120);
+                    }
+                },
+                scrollToFaq: function(e, detail) {
+                    e.preventDefault();
+                    var anchor = g2mokuApp.Util.getEventSender(e, 'a');
+                    this._scrollToTarget(anchor.getAttribute('href'));
+                    history.replaceState({}, null, anchor.getAttribute('href'));
+                }
+            });
+        }());
+    </script>
+</dom-module>

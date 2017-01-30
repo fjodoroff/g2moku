@@ -143,6 +143,48 @@ export default {
         Analytics.trackError(location, error);
     },
 
+    /**
+     * Returns the target element that was clicked/tapped.
+     * @param {Event} e The click/tap event.
+     * @param {string} tagName The element tagName to stop at.
+     * @return {Element} The target element that was clicked/tapped.
+     */
+    getEventSender(e, tagName) {
+        var path = Polymer.dom(e).path;
+
+        var target = null;
+        for (var i = 0; i < path.length; ++i) {
+            var el = path[i];
+            if (el.localName === tagName) {
+                target = el;
+                break;
+            }
+        }
+
+        return target;
+    },
+
+    /**
+     * Returns the first paint metric (if available).
+     * @return {number} The first paint time in ms.
+     */
+    getFPIfSupported() {
+        if (window.chrome && window.chrome.loadTimes) {
+            let load = window.chrome.loadTimes();
+            let fp = (load.firstPaintTime - load.startLoadTime) * 1000;
+            return Math.round(fp);
+        } else if ('performance' in window) {
+            let navTiming = window.performance.timing;
+            // See http://msdn.microsoft.com/ff974719
+            if (navTiming && navTiming.msFirstPaint && navTiming.navigationStart !== 0) {
+                // See http://msdn.microsoft.com/ff974719
+                return navTiming.msFirstPaint - navTiming.navigationStart;
+            }
+        }
+
+        return null;
+    },
+
     isObject(val) {
         if (val === null) { return false;}
         return ( (typeof val === 'function') || (typeof val === 'object') );

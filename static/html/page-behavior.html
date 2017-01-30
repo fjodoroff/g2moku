@@ -1,0 +1,185 @@
+<link rel="import" href="util-behavior.html">
+<script>
+    /**
+     `G2mokuBehaviors.PageBehavior` provides common functionality and util methods for
+     page elements.
+     @polymerBehavior G2mokuBehaviors.PageBehavior
+     */
+    (function() {
+        'use strict';
+        window.G2mokuBehaviors = window.G2mokuBehaviors || {};
+        var PageBehavior = {
+            properties: {
+                /**
+                 * App logic
+                 */
+                app: {
+                    type: Object
+                },
+                /*
+                 * Slug name of the page.
+                 */
+                name: {
+                    type: String
+                },
+                /*
+                 * True if the page has a subnav. Should be override consumers of this behavior.
+                 */
+                hasSubnav: {
+                    type: Boolean,
+                    value: false
+                }
+            },
+            attached: function() {
+                if (this.onPageTransitionDone) {
+                    this.listen(document.body, 'page-transition-done', 'onPageTransitionDone');
+                }
+                // Update page meta data.
+                document.body.id = 'page-' + this.name;
+                document.title = this.title || 'G2moku';
+                // Scroll to top of new page.
+                if (IOWA.Elements.Scroller) {
+                    IOWA.Elements.Scroller.scrollTop = 0;
+                }
+                this.set('app.headerReveals', true); // reset header reveals on new page.
+                this.setupSubnavEffects();
+            },
+            detached: function() {
+                this.unlisten(document.body, 'page-transition-done', 'onPageTransitionDone');
+                this.teardownSubnavEffects();
+            },
+            /**
+             * Smooth scrolls page to a element with id hash.
+             * @param {string} hash The target to scroll to. For example, "#id".
+             * @param {opt_offset?} opt_offset Offset from the top of the element to
+             *     stop the scroll at. By default, 0.
+             */
+            _scrollToTarget: function(hash, opt_offset) {
+                var dest = g2mokuApp.Elements.Main.querySelector(hash);
+                if (dest) {
+                    var offset = opt_offset || 0;
+                    // The target that's passed to Polymer.AppLayout.scroll needs to be an
+                    // object with a style property.
+                    var target = 'style' in g2mokuApp.Elements.ScrollContainer ?
+                            g2mokuApp.Elements.ScrollContainer : g2mokuApp.Elements.Scroller;
+                    Polymer.AppLayout.scroll({
+                        top:  dest.getBoundingClientRect().top + offset,
+                        behavior: 'smooth',
+                        target: target
+                    });
+                }
+            },
+            /**
+             * Disables a container from user interaction (using pointer-events: none)
+             * when the page is scrolling. Enables it again
+             *
+             * @param {HTMLElement} container The container to
+             * @param {boolean} opt_enableAfter Optional number of ms to enable
+             *     interaction on the container after the user has stopped scrolling.
+             * @param {Function} opt_callback Optional callback, invoked when the user
+             *   has stopped scrolling after opt_enableAfter ms (or default 250ms).
+             */
+            disableElementOnScroll: function(container, opt_enableAfter, opt_callback) {
+                container.style.pointerEvents = 'none';
+                this.debounce('disable_container_interaction', function() {
+                    container.style.pointerEvents = 'auto';
+                    if (opt_callback) {
+                        opt_callback();
+                    }
+                }, opt_enableAfter || 250);
+            },
+            /**
+             * Attempt to move focus to the primary header for this page
+             * Useful for a11y when clicking menu links so screen reader users know
+             * page content has changed
+             */
+            manageFocus: function() {
+                var header = Polymer.dom(this.root).querySelector('.focus-target');
+                if (header) {
+                    header.focus();
+                }
+            },
+            setupSubnavEffects: function() {
+                if (!this.hasSubnav) {
+                    return;
+                }
+                // Wait one tick for app-header have stamped the page's ghost subnav.
+                this.async(function() {
+                    this._appHeader = document.querySelector('#header');
+                    this._mainSubnav = this._appHeader.querySelector('.header_subnav');
+                    // Double check page actually has a subnav.
+                    if (!this._mainSubnav) {
+                        return;
+                    }
+                    this.listen(g2mokuApp.Elements.ScrollContainer, 'scroll', '_runSubnavEffects');
+                });
+            },
+            teardownSubnavEffects: function() {
+                if (!this.hasSubnav) {
+                    return;
+                }
+                this.unlisten(g2mokuApp.Elements.ScrollContainer, 'scroll', '_runSubnavEffects');
+                this._appHeader = null;
+                this._mainSubnav = null;
+            },
+            _runSubnavEffects: function(e) {
+                this.debounce('_runSubnavEffects', function() {
+                    var scrollingUp = !this._appHeader._wasScrollingDown;
+                    var subnavScrollTop = this._appHeader._scrollTop -
+                            this._appHeader.clientHeight -
+                            this.$.mastheadContainer.clientHeight;
+                    var filtersPanel = this.$.scheduleEl && this.$.scheduleEl.filtersPanel.parentElement;
+                    if (filtersPanel) {
+                        filtersPanel.classList.toggle('down', this._appHeader.shadow);
+                    }
+                    // Scrolling down.
+                    if (subnavScrollTop >= 0) {
+                        // Hide the page's subnav when it reaches the top of the page.
+                        this._mainSubnav.classList.remove('offscreen');
+                        if (filtersPanel) {
+                            filtersPanel.classList.add('fixed');
+                        }
+                    } else if (scrollingUp && Math.abs(subnavScrollTop) >= this.$.subnav.clientHeight) {
+                        if (filtersPanel) {
+                            if (this.showFilters) {
+                                filtersPanel.style.transitionDuration = '0ms';
+                            }
+                            filtersPanel.classList.remove('fixed');
+                            filtersPanel.classList.remove('down');
+                            this.debounce('scroll-trans-duration', function() {
+                                filtersPanel.style.transitionDuration = '';
+                            }, 50);
+                        }
+                        // Scrolling up.
+                        // When the user is scrolling back up, return the page's visibility
+                        // when it's directly under fixed subnav. This make its it appear as
+                        // if the subnav returns to position: static, scrolling with the page.
+                        this._mainSubnav.classList.add('offscreen');
+                    }
+                });
+            },
+            /**
+             * Scrolls to the top of the subpage content.
+             *
+             * @param {number} opt_offset Optional scroll offset from the top of the sub
+             *     page content.
+             */
+            scrollToTopOfSubContainer: function(opt_offset) {
+                var offset = opt_offset || 0;
+                var scrollTop =  this.$.subnav.clientHeight +
+                        this.$.mastheadContainer.clientHeight + offset;
+                // Both navs are showing. Factor in top nav height in scrollTop calc.
+                var headerDown = this._appHeader.shadow;
+                if (headerDown) {
+                    offset -= this._appHeader.clientHeight;
+                }
+                // Scroll to top of subcontainer content if the user hasn't scrolled enough
+                // for the sticky nav to be visible.
+                if (this._mainSubnav && !this._mainSubnav.classList.contains('offscreen')) {
+                    IOWA.Elements.Scroller.scrollTop = scrollTop + offset;
+                }
+            }
+        };
+        G2mokuBehaviors.PageBehavior = [PageBehavior, G2mokuBehaviors.UtilBehavior];
+    })();
+</script>
